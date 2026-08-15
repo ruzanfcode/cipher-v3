@@ -1,0 +1,3224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cipher — Garment Sentiment Intelligence v10</title>
+<meta name="description" content="Animated garment sentiment intelligence homepage concept." />
+<style>
+/* =========================================================
+   DESIGN TOKENS — designer-friendly editing starts here
+   ========================================================= */
+:root{
+  --bg:#f3f0e8;
+  --paper:#fbfaf6;
+  --ink:#171715;
+  --muted:#6f6a62;
+  --line:rgba(23,23,21,.12);
+  --green:#2d7358;
+  --green-soft:#dcece4;
+  --violet:#a996ff;
+  --blue:#83c7ff;
+  --peach:#ffb48d;
+  --yellow:#ffd97d;
+  --ease:cubic-bezier(.2,.75,.2,1);
+  --max:1320px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:var(--bg);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+button{cursor:pointer}
+.serif{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.04em}
+.shell{width:min(calc(100% - 48px),var(--max));margin-inline:auto}
+
+/* =========================================================
+   FLOATING NAV
+   ========================================================= */
+nav{position:sticky;top:16px;z-index:50;padding-top:16px}
+.nav{
+  min-height:58px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  padding:9px 12px 9px 18px;
+  border:1px solid var(--line);
+  background:rgba(248,246,240,.78);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+  border-radius:999px;
+  box-shadow:0 12px 38px rgba(30,28,24,.07);
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:760;letter-spacing:-.02em}
+.mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#191917 5%,#486d5d 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.links{display:flex;align-items:center;justify-content:center;gap:34px;color:#555149;font-size:14px}
+.links a{transition:opacity .2s ease,transform .2s ease}
+.links a:hover{opacity:.62;transform:translateY(-1px)}
+.nav-cta{justify-self:end;border:0;background:var(--ink);color:#fff;border-radius:999px;padding:11px 18px;font-size:13px;font-weight:750}
+
+/* =========================================================
+   HERO / SEARCH STORY AREA
+   One aligned content block; no page grid background.
+   ========================================================= */
+.hero{padding:78px 0 54px}
+.hero-stage{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(23,23,21,.09);
+  border-radius:38px;
+  min-height:620px;
+  padding:78px 48px 56px;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(169,150,255,.30),transparent 28%),
+    radial-gradient(circle at 82% 24%,rgba(255,180,141,.28),transparent 31%),
+    radial-gradient(circle at 54% 88%,rgba(131,199,255,.22),transparent 34%),
+    rgba(250,248,242,.76);
+  box-shadow:0 24px 70px rgba(35,31,24,.08);
+}
+.hero-stage:before,
+.hero-stage:after{
+  content:"";
+  position:absolute;
+  width:520px;
+  aspect-ratio:1;
+  border-radius:50%;
+  filter:blur(70px);
+  opacity:.22;
+  pointer-events:none;
+  animation:floatGlow 14s ease-in-out infinite alternate;
+}
+.hero-stage:before{left:-170px;top:-250px;background:var(--violet)}
+.hero-stage:after{right:-180px;bottom:-280px;background:var(--peach);animation-delay:-6s}
+@keyframes floatGlow{to{transform:translate3d(55px,34px,0) scale(1.12)}}
+
+.hero-copy{position:relative;z-index:3;max-width:980px;margin:0 auto;text-align:center}
+.eyebrow{text-transform:uppercase;letter-spacing:.31em;color:#817c73;font-size:12px;font-weight:820;margin-bottom:24px}
+h1{margin:0;font-size:clamp(52px,6.2vw,94px);line-height:.95;font-weight:400}
+.cycle{display:inline-block;font-style:italic;min-width:3.7ch;transition:opacity .28s ease,transform .28s ease}
+.cycle.out{opacity:0;transform:translateY(-12px) rotate(-2deg)}
+.sub{max-width:760px;margin:26px auto 0;color:#514e48;font-size:clamp(16px,1.55vw,20px);line-height:1.55}
+
+/* animated vertical bar chart behind the headline */
+.graph-wrap{position:absolute;inset:34px 28px 92px;z-index:1;pointer-events:none;opacity:.68}
+.bar-chart{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:clamp(8px,1.1vw,16px);
+  padding:18px 3% 12px;
+}
+.bar-chart::after{
+  content:"";
+  position:absolute;
+  left:4%;right:4%;bottom:14px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(23,23,21,.11) 18%,rgba(23,23,21,.11) 82%,transparent);
+}
+.bar{
+  flex:1 1 0;
+  max-width:54px;
+  height:var(--h);
+  border-radius:14px 14px 5px 5px;
+  transform-origin:bottom;
+  transform:scaleY(.12);
+  opacity:.15;
+  background:linear-gradient(180deg,rgba(116,102,184,.50),rgba(78,128,108,.28) 58%,rgba(211,145,114,.18));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+  animation:barRise 5.8s var(--ease) infinite;
+  animation-delay:var(--d);
+}
+.bar:nth-child(3n+2){background:linear-gradient(180deg,rgba(78,128,108,.47),rgba(140,200,255,.20));}
+.bar:nth-child(3n){background:linear-gradient(180deg,rgba(211,145,114,.42),rgba(169,150,255,.20));}
+@keyframes barRise{
+  0%,10%{transform:scaleY(.10);opacity:.09}
+  28%,68%{transform:scaleY(1);opacity:.40}
+  88%,100%{transform:scaleY(.72);opacity:.20}
+}
+
+.search-wrap{position:relative;z-index:4;max-width:900px;margin:40px auto 0}
+.search-box{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  padding:10px;
+  border-radius:22px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(23,23,21,.13);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 64px rgba(51,43,35,.12);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+.search-box:focus-within{transform:translateY(-3px);box-shadow:0 30px 85px rgba(51,43,35,.16)}
+.field{display:flex;align-items:center;gap:12px;padding:0 12px;color:#827d75}
+.field svg{flex:0 0 auto}
+.field input{width:100%;height:58px;border:0;outline:0;background:transparent;color:var(--ink);font-size:17px}
+.field input::placeholder{color:#99958e}
+.primary{border:0;border-radius:15px;background:var(--ink);color:#fff;padding:0 27px;font-weight:750;min-width:124px;transition:transform .2s ease}
+.primary:hover{transform:translateY(-2px)}
+
+/* interactive result preview keeps product-led feel, but no suggestions */
+.answer{
+  max-width:760px;
+  margin:14px auto 0;
+  padding:0;
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transform:translateY(12px);
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:rgba(252,251,247,.88);
+  box-shadow:0 18px 48px rgba(38,33,27,.08);
+  transition:max-height .6s var(--ease),padding .5s var(--ease),opacity .35s ease,transform .45s var(--ease)
+}
+.answer.open{max-height:190px;padding:16px;opacity:1;transform:none}
+.answer-grid{display:grid;grid-template-columns:1.3fr repeat(2,.8fr);gap:10px}
+.mini{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.58);padding:13px;text-align:left}
+.mini small{color:var(--muted)}.mini b{display:block;margin-top:5px;font-size:17px}
+
+/* =========================================================
+   TWO-LINE ROTATING BRAND CAROUSEL — opposite directions
+   ========================================================= */
+.marquee-stack{position:relative;z-index:4;margin-top:42px;display:grid;gap:10px}
+.marquee{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.track{width:max-content;display:flex;gap:10px}
+.track.left{animation:marqueeLeft 23s linear infinite}
+.track.right{animation:marqueeRight 25s linear infinite;transform:translateX(-50%)}
+.pill{
+  min-width:148px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  padding:0 22px;
+  border-radius:16px;
+  border:1px solid rgba(23,23,21,.10);
+  background:rgba(255,255,255,.64);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:18px;
+  box-shadow:0 7px 25px rgba(30,25,20,.04)
+}
+@keyframes marqueeLeft{to{transform:translateX(-50%)}}
+@keyframes marqueeRight{to{transform:translateX(0)}}
+
+
+/* =========================================================
+   V4 — headline-only animated bar chart + interactive marquee controls
+   ========================================================= */
+.headline-visual{
+  position:relative;
+  isolation:isolate;
+  max-width:1080px;
+  margin:-4px auto 0;
+  padding:24px 0 22px;
+}
+.headline-visual h1{position:relative;z-index:2}
+.graph-wrap{
+  position:absolute;
+  inset:-26px -72px -22px;
+  z-index:1;
+  pointer-events:none;
+  opacity:.76;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
+}
+.bar-chart{position:relative;z-index:1}
+.sub{position:relative;z-index:3;margin-top:18px}
+
+.marquee-stack{margin-top:36px}
+.marquee-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 4px 6px;
+  color:#777168;
+  font-size:12px;
+  font-weight:780;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.marquee-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid rgba(23,23,21,.11);
+  background:rgba(255,255,255,.58);
+  color:#555149;
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:760;
+  letter-spacing:0;
+  text-transform:none;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.marquee-toggle:hover{background:rgba(255,255,255,.9);border-color:rgba(23,23,21,.2);transform:translateY(-1px)}
+.toggle-icon{font-size:11px;line-height:1}
+
+.pill{
+  appearance:none;
+  -webkit-appearance:none;
+  color:var(--ink);
+  cursor:pointer;
+  transition:transform .22s var(--ease),background .22s ease,border-color .22s ease,box-shadow .22s ease,color .22s ease;
+}
+.pill:hover{
+  transform:translateY(-3px);
+  border-color:rgba(23,23,21,.22);
+  background:rgba(255,255,255,.94);
+  box-shadow:0 12px 30px rgba(30,25,20,.08);
+}
+.pill.selected{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+  box-shadow:0 10px 28px rgba(23,23,21,.15);
+}
+
+/* When motion is paused, each row becomes a normal horizontal scroller. */
+.marquee-stack.paused .marquee{
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-mask-image:none;
+  mask-image:none;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(23,23,21,.28) transparent;
+  overscroll-behavior-inline:contain;
+  scroll-snap-type:x proximity;
+  padding-bottom:6px;
+}
+.marquee-stack.paused .marquee::-webkit-scrollbar{height:6px}
+.marquee-stack.paused .marquee::-webkit-scrollbar-track{background:transparent}
+.marquee-stack.paused .marquee::-webkit-scrollbar-thumb{background:rgba(23,23,21,.22);border-radius:999px}
+.marquee-stack.paused .track{
+  animation:none!important;
+  transform:none!important;
+  width:max-content;
+}
+.marquee-stack.paused .pill{scroll-snap-align:start}
+.marquee-stack.paused .pill.duplicate{display:none}
+
+@media (max-width:760px){
+  .headline-visual{padding:18px 0 16px}
+  .graph-wrap{inset:-8px -20px -12px;opacity:.58}
+  .marquee-toolbar{align-items:flex-start}
+  .marquee-toggle{flex:0 0 auto}
+}
+
+/* =========================================================
+   KPI COUNTERS
+   ========================================================= */
+.kpis{padding:18px 0 92px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.48);overflow:hidden}
+.kpi{padding:28px 26px;border-right:1px solid var(--line)}
+.kpi:last-child{border-right:0}
+.kpi-value{display:block;font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,4vw,58px);letter-spacing:-.045em;line-height:1}
+.kpi-label{display:block;margin-top:9px;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:800}
+
+/* =========================================================
+   RECENTLY ANALYZED — aligned to exactly the same shell
+   ========================================================= */
+.recent{padding:0 0 120px}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.sectionHead h2{margin:0;font-size:clamp(40px,5vw,68px);font-weight:400;line-height:1}
+.sectionHead p{max-width:470px;margin:0;color:var(--muted);line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{border-radius:26px;border:1px solid var(--line);background:rgba(255,255,255,.68);overflow:hidden;box-shadow:0 12px 34px rgba(36,31,24,.055);transform:translateY(35px);opacity:0;transition:transform .72s var(--ease),opacity .72s,box-shadow .3s,border-color .3s;transition-delay:var(--delay)}
+.card.in{transform:none;opacity:1}
+.card:hover{transform:translateY(-8px);box-shadow:0 28px 70px rgba(36,31,24,.13);border-color:rgba(24,24,22,.22)}
+.photo{aspect-ratio:4/4.55;overflow:hidden;position:relative;background:#ddd9d0}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);transition:transform .8s var(--ease)}
+.card:hover img{transform:scale(1.06)}
+.num{position:absolute;top:14px;right:14px;border-radius:999px;padding:8px 10px;background:rgba(250,250,247,.8);backdrop-filter:blur(10px);font-size:11px;font-weight:800}
+.body{padding:20px}.meta{display:flex;justify-content:space-between;gap:12px;color:#817c73;font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:800}
+.card h3{margin:12px 0 18px;font-size:20px;line-height:1.18;letter-spacing:-.035em;min-height:47px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sent{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 10px;background:var(--green-soft);color:var(--green);font-weight:750;font-size:12px}
+.sent:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.reviews{color:#8b867e;font-size:12px}
+footer{padding:0 0 48px;color:#78736b;font-size:13px}
+
+@media(max-width:1050px){
+  .hero-stage{padding-inline:30px}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi:nth-child(2){border-right:0}
+  .kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media(max-width:760px){
+  .shell{width:min(calc(100% - 24px),var(--max))}
+  nav{top:10px;padding-top:10px}
+  .nav{grid-template-columns:1fr auto;padding-left:13px}
+  .links{display:none}
+  .nav-cta{font-size:12px;padding:10px 14px}
+  .hero{padding-top:44px}
+  .hero-stage{min-height:auto;padding:58px 16px 28px;border-radius:28px}
+  h1{font-size:clamp(49px,14vw,70px)}
+  .sub{font-size:16px}
+  .graph-wrap{inset:20px 0 145px;opacity:.48}
+  .search-wrap{margin-top:30px}
+  .search-box{grid-template-columns:1fr;border-radius:19px}
+  .primary{height:52px;width:100%}
+  .marquee-stack{margin-top:30px}
+  .pill{min-width:128px;height:50px;font-size:16px}
+  .answer-grid{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr}
+  .kpi,.kpi:nth-child(2){border-right:0;border-bottom:1px solid var(--line)}
+  .kpi:last-child{border-bottom:0}
+  .sectionHead{align-items:flex-start;flex-direction:column}
+  .cards{grid-template-columns:1fr}
+  .photo{aspect-ratio:5/4}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+}
+
+
+/* =========================================================
+   V5 — first-screen hero fit
+   Keep title, subtitle, search and both marquee rows visible
+   without scrolling on standard desktop/laptop viewports.
+   ========================================================= */
+@media (min-width: 761px){
+  nav{top:10px;padding-top:10px}
+  .nav{min-height:52px;padding-top:7px;padding-bottom:7px}
+
+  .hero{
+    padding:22px 0 24px;
+  }
+  .hero-stage{
+    min-height:0;
+    height:calc(100svh - 102px);
+    max-height:760px;
+    padding:30px 42px 24px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .hero-copy{
+    max-width:940px;
+  }
+  .eyebrow{
+    margin-bottom:12px;
+    font-size:10px;
+    letter-spacing:.27em;
+  }
+  .headline-visual{
+    max-width:1000px;
+    margin:0 auto;
+    padding:10px 0 8px;
+  }
+  h1{
+    font-size:clamp(48px,5.25vw,78px);
+    line-height:.92;
+  }
+  .graph-wrap{
+    inset:-12px -54px -10px;
+    opacity:.62;
+  }
+  .bar-chart{
+    gap:clamp(6px,.8vw,11px);
+    padding:8px 4% 6px;
+  }
+  .bar{max-width:42px;border-radius:11px 11px 4px 4px}
+
+  .sub{
+    max-width:720px;
+    margin-top:10px;
+    font-size:clamp(14px,1.25vw,17px);
+    line-height:1.42;
+  }
+  .search-wrap{
+    max-width:850px;
+    margin-top:18px;
+  }
+  .search-box{
+    padding:8px;
+    border-radius:19px;
+  }
+  .field input{height:48px;font-size:15px}
+  .primary{min-height:48px;min-width:112px;padding:0 23px}
+  .answer{margin-top:8px}
+
+  .marquee-stack{
+    margin-top:16px;
+    gap:7px;
+  }
+  .marquee-toolbar{
+    min-height:28px;
+    padding:0 4px 2px;
+    font-size:10px;
+  }
+  .marquee-toggle{
+    padding:6px 10px;
+    font-size:11px;
+  }
+  .track{gap:8px}
+  .pill{
+    min-width:126px;
+    height:43px;
+    padding:0 17px;
+    border-radius:13px;
+    font-size:15px;
+  }
+}
+
+/* Extra compression for shorter laptop displays. */
+@media (min-width:761px) and (max-height:760px){
+  .hero{padding-top:14px;padding-bottom:18px}
+  .hero-stage{
+    height:calc(100svh - 90px);
+    padding:20px 34px 18px;
+    border-radius:32px;
+  }
+  .eyebrow{margin-bottom:8px}
+  .headline-visual{padding:5px 0 4px}
+  h1{font-size:clamp(44px,4.9vw,68px)}
+  .sub{margin-top:7px;font-size:14px;line-height:1.35}
+  .search-wrap{margin-top:13px}
+  .field input{height:44px}
+  .primary{min-height:44px}
+  .marquee-stack{margin-top:11px;gap:5px}
+  .marquee-toolbar{min-height:24px;padding-bottom:0}
+  .pill{height:38px;min-width:116px;font-size:14px}
+}
+
+/* Very short screens: preserve visibility over decorative whitespace. */
+@media (min-width:761px) and (max-height:650px){
+  nav{position:absolute;left:0;right:0}
+  .hero{padding-top:78px}
+  .hero-stage{height:calc(100svh - 86px);padding-top:12px;padding-bottom:12px}
+  .eyebrow{display:none}
+  h1{font-size:clamp(40px,4.5vw,60px)}
+  .headline-visual{padding:0}
+  .sub{font-size:13px;margin-top:5px}
+  .search-wrap{margin-top:9px}
+  .marquee-stack{margin-top:8px}
+  .marquee-toolbar{min-height:20px}
+  .marquee-toggle{padding:4px 8px;font-size:10px}
+  .pill{height:34px;min-width:108px;font-size:13px}
+}
+
+
+/* =========================================================
+   V6 — compact hero refinements
+   ========================================================= */
+.hero-stage{
+  padding-top:22px;
+}
+.hero-copy{max-width:1040px}
+.headline-visual{
+  max-width:1100px;
+  padding:4px 0 4px;
+}
+.headline-visual .sub{
+  max-width:760px;
+  margin:7px auto 0;
+}
+/* Decorative bars now sit behind both title and subtitle. */
+.headline-visual .graph-wrap{
+  inset:-18px -62px -18px;
+  opacity:.58;
+}
+.search-wrap{
+  max-width:1040px;
+  margin-top:12px;
+}
+.search-box{
+  padding:6px;
+  border-radius:18px;
+}
+.field{
+  min-width:0;
+  gap:10px;
+  padding:0 12px;
+}
+.field-copy{
+  min-width:0;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:1px;
+}
+.field-helper{
+  color:#7c776f;
+  font-size:9px;
+  line-height:1.05;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.field input{
+  height:30px;
+  font-size:15px;
+  line-height:1.2;
+  padding:0;
+}
+.primary{
+  min-height:44px;
+  min-width:118px;
+  border-radius:13px;
+  padding:0 22px;
+}
+.marquee-stack{
+  margin-top:10px;
+  gap:7px;
+}
+.marquee-bottom-control{
+  display:flex;
+  justify-content:flex-end;
+  padding:1px 4px 0;
+}
+.marquee-toggle{
+  padding:5px 9px;
+  font-size:10px;
+  background:rgba(255,255,255,.48);
+}
+
+@media (min-width:761px){
+  .hero{padding-top:14px}
+  .hero-stage{
+    padding-top:18px;
+    padding-bottom:18px;
+  }
+  .headline-visual{padding:2px 0}
+  .headline-visual .sub{margin-top:6px}
+  .search-wrap{max-width:1060px;margin-top:10px}
+  .search-box{padding:5px}
+  .field input{height:28px}
+  .primary{min-height:42px}
+  .marquee-stack{margin-top:8px;gap:6px}
+  .pill{height:40px}
+}
+
+@media (min-width:761px) and (max-height:760px){
+  .hero-stage{padding-top:10px;padding-bottom:10px}
+  .headline-visual .sub{margin-top:4px}
+  .search-wrap{margin-top:7px}
+  .field-helper{font-size:8px}
+  .field input{height:25px;font-size:14px}
+  .primary{min-height:38px}
+  .marquee-stack{margin-top:6px;gap:5px}
+  .pill{height:36px}
+}
+
+@media (max-width:760px){
+  .hero-stage{padding-top:42px}
+  .headline-visual .graph-wrap{inset:-8px -18px -16px;opacity:.46}
+  .search-wrap{max-width:none;margin-top:18px}
+  .search-box{padding:6px}
+  .field{min-height:48px}
+  .field input{height:27px}
+  .marquee-stack{margin-top:15px}
+  .marquee-bottom-control{padding-top:2px}
+}
+
+
+/* =========================================================
+   V7 — filled hero composition
+   Larger 3-line title + relaxed spacing while preserving first-view fit.
+   ========================================================= */
+.hero{
+  padding:12px 0 22px;
+}
+.hero-stage{
+  min-height:650px;
+  height:calc(100svh - 118px);
+  max-height:790px;
+  padding:30px 50px 24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.hero-copy{
+  max-width:1180px;
+  width:100%;
+}
+.headline-visual{
+  max-width:1180px;
+  width:100%;
+  margin:0 auto;
+  padding:8px 0 10px;
+}
+.hero-title{
+  display:grid;
+  justify-items:center;
+  gap:0;
+  font-size:clamp(62px,5.55vw,88px);
+  line-height:.86;
+}
+.title-line{
+  display:block;
+  white-space:nowrap;
+}
+.title-cycle{
+  min-height:.92em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.07em;
+}
+.title-cycle .cycle{
+  min-width:4.2ch;
+}
+.headline-visual .sub{
+  max-width:820px;
+  margin:20px auto 0;
+  font-size:clamp(17px,1.35vw,21px);
+  line-height:1.48;
+}
+.headline-visual .graph-wrap{
+  inset:-22px -52px -20px;
+  opacity:.54;
+}
+.search-wrap{
+  width:min(100%,1120px);
+  max-width:1120px;
+  margin:28px auto 0;
+}
+.search-box{
+  padding:7px;
+  border-radius:19px;
+}
+.field{
+  padding:0 15px;
+}
+.field-copy{
+  display:block;
+}
+.field input{
+  height:38px;
+  font-size:16px;
+  line-height:1.2;
+}
+.field input::placeholder{
+  color:#8d887f;
+  opacity:1;
+}
+.primary{
+  min-height:50px;
+  min-width:132px;
+  padding:0 25px;
+}
+.marquee-stack{
+  width:100%;
+  margin-top:28px;
+  gap:10px;
+}
+.pill{
+  height:48px;
+  min-width:142px;
+  font-size:17px;
+}
+.marquee-bottom-control{
+  padding:4px 4px 0;
+}
+.marquee-toggle{
+  padding:7px 11px;
+  font-size:11px;
+}
+
+/* Shorter laptop displays: preserve the same composition, just scale it slightly. */
+@media (min-width:761px) and (max-height:820px){
+  .hero-stage{
+    min-height:0;
+    height:calc(100svh - 112px);
+    padding:20px 40px 18px;
+  }
+  .hero-title{font-size:clamp(56px,5.2vw,76px);line-height:.84}
+  .headline-visual .sub{margin-top:14px;font-size:16px}
+  .search-wrap{margin-top:20px}
+  .field input{height:34px}
+  .primary{min-height:46px}
+  .marquee-stack{margin-top:20px;gap:8px}
+  .pill{height:42px;min-width:132px;font-size:15px}
+  .marquee-toggle{padding:5px 9px;font-size:10px}
+}
+
+@media (min-width:761px) and (max-height:690px){
+  .hero-stage{height:auto;min-height:575px;padding:14px 32px}
+  .hero-title{font-size:clamp(50px,4.75vw,66px)}
+  .headline-visual .sub{margin-top:10px;font-size:15px}
+  .search-wrap{margin-top:14px}
+  .search-box{padding:5px}
+  .field input{height:30px;font-size:15px}
+  .primary{min-height:42px}
+  .marquee-stack{margin-top:14px;gap:6px}
+  .pill{height:38px;min-width:120px;font-size:14px}
+  .marquee-bottom-control{padding-top:1px}
+}
+
+@media (max-width:900px) and (min-width:761px){
+  .title-line{white-space:normal}
+  .hero-title{font-size:clamp(54px,7vw,72px)}
+}
+
+@media (max-width:760px){
+  .hero{padding-top:12px}
+  .hero-stage{
+    height:auto;
+    min-height:auto;
+    max-height:none;
+    padding:44px 16px 28px;
+    display:block;
+  }
+  .headline-visual{padding:0}
+  .hero-title{
+    font-size:clamp(48px,14vw,68px);
+    line-height:.88;
+  }
+  .title-line{white-space:normal}
+  .title-cycle{font-size:1.04em}
+  .headline-visual .sub{
+    margin-top:18px;
+    font-size:16px;
+  }
+  .search-wrap{margin-top:24px}
+  .search-box{grid-template-columns:1fr;padding:7px}
+  .field{min-height:50px}
+  .field input{height:36px;font-size:16px}
+  .primary{min-height:48px;width:100%}
+  .marquee-stack{margin-top:24px}
+  .pill{height:44px;min-width:130px;font-size:15px}
+}
+
+
+/* =========================================================
+   V12 — V7 bar chart, static by default + cursor response
+   ========================================================= */
+
+/* Remove the horizontal baseline under the title/subtitle area. */
+.bar-chart::after{
+  display:none !important;
+}
+
+/* Keep the V7 columns fully static until the user interacts. */
+.headline-visual .bar{
+  animation:none !important;
+  animation-delay:0s !important;
+  transform:scaleY(1);
+  opacity:.30;
+  transition:
+    transform .34s cubic-bezier(.2,.75,.2,1),
+    opacity .34s ease,
+    filter .34s ease;
+  will-change:transform,opacity;
+}
+
+/* Slight overall emphasis only while the cursor is over title/subtitle. */
+.headline-visual:hover .bar{
+  opacity:.33;
+  filter:saturate(1.04);
+}
+
+@media (max-width:760px){
+  .headline-visual .bar{
+    opacity:.24;
+  }
+}
+
+
+/* =========================================================
+   V12 — KPI bubble background behind title/subtitle
+   ========================================================= */
+
+/* Hide the original title-background graph for this concept */
+.headline-visual > .graph-wrap{
+  display:none !important;
+}
+
+.headline-visual{
+  position:relative;
+  isolation:isolate;
+}
+
+/* Keep text above the bubbles */
+.headline-visual .hero-title,
+.headline-visual .sub{
+  position:relative;
+  z-index:5 !important;
+}
+
+/* Bubble field only behind title + subtitle area */
+.kpi-bubble-background{
+  position:absolute;
+  inset:-28px -80px -12px;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+  border-radius:34px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
+}
+
+/* Resting state: very blended, soft, almost part of the background */
+.kpi-bubble{
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,.22), rgba(255,255,255,.05) 34%, rgba(255,255,255,.02) 56%, rgba(255,255,255,.00) 74%),
+    radial-gradient(circle at 60% 65%, rgba(141,121,215,.08), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -8px 18px rgba(255,255,255,.03),
+    0 8px 24px rgba(55,50,44,.03);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+  color:rgba(24,24,22,.10);
+  opacity:.48;
+  transform:scale(.92) translateZ(0);
+  transition:
+    transform .55s cubic-bezier(.2,.75,.2,1),
+    opacity .45s ease,
+    box-shadow .45s ease,
+    background .45s ease,
+    border-color .45s ease,
+    color .45s ease;
+}
+
+.kpi-num{
+  font:400 clamp(24px,2.3vw,42px)/1 Georgia,"Times New Roman",serif;
+  letter-spacing:-.05em;
+}
+.kpi-label{
+  margin-top:4px;
+  font:700 10px/1.1 Inter,ui-sans-serif,sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  opacity:.55;
+}
+
+/* Bubble sizes + positions */
+.bubble-1{
+  width:170px;height:170px;
+  left:4%;
+  top:6%;
+}
+.bubble-2{
+  width:150px;height:150px;
+  left:20%;
+  bottom:6%;
+}
+.bubble-3{
+  width:188px;height:188px;
+  right:12%;
+  top:4%;
+}
+.bubble-4{
+  width:162px;height:162px;
+  right:2%;
+  bottom:9%;
+}
+
+/* Different tint blending while resting */
+.bubble-1{
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.24), rgba(255,255,255,.06) 36%, transparent 76%),
+    radial-gradient(circle at 60% 64%, rgba(141,121,215,.10), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+}
+.bubble-2{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.23), rgba(255,255,255,.05) 34%, transparent 74%),
+    radial-gradient(circle at 58% 68%, rgba(79,123,103,.09), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+}
+.bubble-3{
+  background:
+    radial-gradient(circle at 31% 22%, rgba(255,255,255,.25), rgba(255,255,255,.05) 34%, transparent 74%),
+    radial-gradient(circle at 61% 66%, rgba(201,140,109,.10), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+}
+.bubble-4{
+  background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.23), rgba(255,255,255,.05) 34%, transparent 74%),
+    radial-gradient(circle at 58% 65%, rgba(122,170,197,.10), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+}
+
+/* Hover zone: when the user hovers the title/subtitle area,
+   the bubbles pop forward and become clearly visible */
+.headline-visual:hover .kpi-bubble{
+  opacity:.98;
+  color:rgba(24,24,22,.84);
+  border-color:rgba(255,255,255,.54);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -12px 22px rgba(255,255,255,.08),
+    0 22px 55px rgba(41,36,30,.10);
+}
+
+.headline-visual:hover .bubble-1{
+  transform:translate(-6px,-8px) scale(1.06);
+}
+.headline-visual:hover .bubble-2{
+  transform:translate(-4px,2px) scale(1.05);
+}
+.headline-visual:hover .bubble-3{
+  transform:translate(4px,-6px) scale(1.08);
+}
+.headline-visual:hover .bubble-4{
+  transform:translate(6px,0) scale(1.05);
+}
+
+/* Make them look more like real glass bubbles on hover */
+.headline-visual:hover .bubble-1,
+.headline-visual:hover .bubble-2,
+.headline-visual:hover .bubble-3,
+.headline-visual:hover .bubble-4{
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.headline-visual:hover .bubble-1{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.56), rgba(255,255,255,.13) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(141,121,215,.22), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.10));
+}
+.headline-visual:hover .bubble-2{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.54), rgba(255,255,255,.12) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(79,123,103,.22), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.10));
+}
+.headline-visual:hover .bubble-3{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.58), rgba(255,255,255,.14) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(201,140,109,.24), transparent 45%),
+    linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.10));
+}
+.headline-visual:hover .bubble-4{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.56), rgba(255,255,255,.12) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(122,170,197,.24), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.10));
+}
+
+/* Slightly lower visual noise on mobile */
+@media(max-width:760px){
+  .kpi-bubble-background{
+    inset:-18px -18px -8px;
+  }
+  .bubble-1{width:118px;height:118px;left:-1%;top:10%}
+  .bubble-2{width:108px;height:108px;left:14%;bottom:8%}
+  .bubble-3{width:128px;height:128px;right:4%;top:8%}
+  .bubble-4{width:114px;height:114px;right:-2%;bottom:11%}
+  .kpi-num{
+    font-size:clamp(18px,4.7vw,30px);
+  }
+  .kpi-label{
+    font-size:8px;
+  }
+}
+
+
+/* =========================================================
+   V2 — bubbles start behind the text area, then move outward
+   ========================================================= */
+
+/* Keep the bubble field centered behind the title/subtitle area */
+.kpi-bubble-background{
+  inset:-24px -48px -10px !important;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 0 62%,transparent 92%) !important;
+  mask-image:radial-gradient(ellipse at center,#000 0 62%,transparent 92%) !important;
+}
+
+/* Initial state: clustered in the text area, blended into background */
+.kpi-bubble{
+  opacity:.26 !important;
+  color:rgba(24,24,22,.06) !important;
+  border-color:rgba(255,255,255,.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -6px 12px rgba(255,255,255,.02),
+    0 4px 10px rgba(55,50,44,.02) !important;
+  backdrop-filter:blur(1px) !important;
+  -webkit-backdrop-filter:blur(1px) !important;
+}
+
+/* Reposition bubbles so they sit in / behind the central text zone initially */
+.bubble-1{
+  width:154px !important;
+  height:154px !important;
+  left:16% !important;
+  top:8% !important;
+  transform:translate(0,0) scale(.88) !important;
+}
+.bubble-2{
+  width:136px !important;
+  height:136px !important;
+  left:30% !important;
+  bottom:4% !important;
+  transform:translate(0,0) scale(.86) !important;
+}
+.bubble-3{
+  width:168px !important;
+  height:168px !important;
+  right:19% !important;
+  top:6% !important;
+  transform:translate(0,0) scale(.90) !important;
+}
+.bubble-4{
+  width:146px !important;
+  height:146px !important;
+  right:31% !important;
+  bottom:5% !important;
+  transform:translate(0,0) scale(.87) !important;
+}
+
+/* Hover: bubbles come out from behind the text and move left/right */
+.headline-visual:hover .kpi-bubble{
+  opacity:.96 !important;
+  color:rgba(24,24,22,.86) !important;
+  border-color:rgba(255,255,255,.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -12px 22px rgba(255,255,255,.08),
+    0 22px 55px rgba(41,36,30,.10) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+}
+
+.headline-visual:hover .bubble-1{
+  transform:translate(-86px,-12px) scale(1.06) !important;
+}
+.headline-visual:hover .bubble-2{
+  transform:translate(-128px,16px) scale(1.04) !important;
+}
+.headline-visual:hover .bubble-3{
+  transform:translate(98px,-10px) scale(1.08) !important;
+}
+.headline-visual:hover .bubble-4{
+  transform:translate(136px,14px) scale(1.05) !important;
+}
+
+/* Slightly richer visible bubble treatment on hover */
+.headline-visual:hover .bubble-1{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.56), rgba(255,255,255,.13) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(141,121,215,.22), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.10)) !important;
+}
+.headline-visual:hover .bubble-2{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.54), rgba(255,255,255,.12) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(79,123,103,.22), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.10)) !important;
+}
+.headline-visual:hover .bubble-3{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.58), rgba(255,255,255,.14) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(201,140,109,.24), transparent 45%),
+    linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.10)) !important;
+}
+.headline-visual:hover .bubble-4{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.56), rgba(255,255,255,.12) 28%, rgba(255,255,255,.06) 46%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(122,170,197,.24), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.10)) !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble-background{
+    inset:-14px -12px -8px !important;
+  }
+  .bubble-1{
+    width:108px !important;
+    height:108px !important;
+    left:14% !important;
+    top:15% !important;
+  }
+  .bubble-2{
+    width:98px !important;
+    height:98px !important;
+    left:27% !important;
+    bottom:7% !important;
+  }
+  .bubble-3{
+    width:114px !important;
+    height:114px !important;
+    right:15% !important;
+    top:12% !important;
+  }
+  .bubble-4{
+    width:102px !important;
+    height:102px !important;
+    right:28% !important;
+    bottom:8% !important;
+  }
+
+  .headline-visual:hover .bubble-1{transform:translate(-32px,-8px) scale(1.04) !important;}
+  .headline-visual:hover .bubble-2{transform:translate(-42px,10px) scale(1.03) !important;}
+  .headline-visual:hover .bubble-3{transform:translate(38px,-7px) scale(1.05) !important;}
+  .headline-visual:hover .bubble-4{transform:translate(46px,10px) scale(1.04) !important;}
+}
+
+
+/* =========================================================
+   V3 — 3-line subtitle + bubbles move fully outside text
+   ========================================================= */
+
+/* Force the subtitle to read as three clean lines on desktop. */
+.sub-three-lines{
+  max-width:760px !important;
+  text-align:center;
+}
+.sub-three-lines span{
+  display:block;
+}
+
+/* Give the bubble field extra horizontal room so bubbles can leave the text zone. */
+.kpi-bubble-background{
+  inset:-26px -190px -14px !important;
+  overflow:visible !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+}
+
+/* On hover, push the two left bubbles clearly past the text block
+   and the two right bubbles equally far to the opposite side. */
+.headline-visual:hover .bubble-1{
+  transform:translate(-205px,-22px) scale(1.08) !important;
+}
+.headline-visual:hover .bubble-2{
+  transform:translate(-235px,42px) scale(1.06) !important;
+}
+.headline-visual:hover .bubble-3{
+  transform:translate(215px,-22px) scale(1.10) !important;
+}
+.headline-visual:hover .bubble-4{
+  transform:translate(245px,42px) scale(1.07) !important;
+}
+
+/* Slightly stagger their vertical destinations so all four remain readable. */
+.headline-visual:hover .bubble-1{
+  top:2% !important;
+}
+.headline-visual:hover .bubble-2{
+  bottom:-1% !important;
+}
+.headline-visual:hover .bubble-3{
+  top:1% !important;
+}
+.headline-visual:hover .bubble-4{
+  bottom:0 !important;
+}
+
+/* Keep the text clearly above the blended resting bubbles. */
+.headline-visual .hero-title,
+.headline-visual .sub{
+  z-index:8 !important;
+}
+
+/* Mobile: keep explicit lines from becoming awkward and use shorter travel. */
+@media(max-width:760px){
+  .sub-three-lines span{
+    display:inline;
+  }
+  .sub-three-lines span::after{
+    content:" ";
+  }
+
+  .kpi-bubble-background{
+    inset:-15px -58px -10px !important;
+  }
+
+  .headline-visual:hover .bubble-1{
+    transform:translate(-64px,-12px) scale(1.05) !important;
+  }
+  .headline-visual:hover .bubble-2{
+    transform:translate(-76px,20px) scale(1.04) !important;
+  }
+  .headline-visual:hover .bubble-3{
+    transform:translate(68px,-12px) scale(1.06) !important;
+  }
+  .headline-visual:hover .bubble-4{
+    transform:translate(80px,20px) scale(1.05) !important;
+  }
+}
+
+
+/* =========================================================
+   V4 — keep bubbles within the hero area + more visible at rest
+   ========================================================= */
+
+/* Keep the bubble movement inside the title/subtitle visual zone */
+.kpi-bubble-background{
+  inset:-24px -92px -12px !important;
+  overflow:hidden !important;
+  -webkit-mask-image:linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  ) !important;
+  mask-image:linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  ) !important;
+}
+
+/* Make the resting/background bubbles easier to notice,
+   while still feeling blended behind the copy. */
+.kpi-bubble{
+  opacity:.38 !important;
+  color:rgba(24,24,22,.095) !important;
+  border-color:rgba(255,255,255,.16) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -7px 14px rgba(255,255,255,.035),
+    0 7px 18px rgba(55,50,44,.028) !important;
+}
+
+/* Less travel than V3: enough to clear the text,
+   but still fully contained within the hero area. */
+.headline-visual:hover .bubble-1{
+  transform:translate(-132px,-16px) scale(1.07) !important;
+  top:5% !important;
+}
+.headline-visual:hover .bubble-2{
+  transform:translate(-148px,24px) scale(1.05) !important;
+  bottom:2% !important;
+}
+.headline-visual:hover .bubble-3{
+  transform:translate(138px,-15px) scale(1.08) !important;
+  top:4% !important;
+}
+.headline-visual:hover .bubble-4{
+  transform:translate(154px,24px) scale(1.06) !important;
+  bottom:2% !important;
+}
+
+/* Keep hover state clear, but slightly softer than the previous version. */
+.headline-visual:hover .kpi-bubble{
+  opacity:.91 !important;
+  color:rgba(24,24,22,.78) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.40),
+    inset 0 -10px 20px rgba(255,255,255,.07),
+    0 18px 42px rgba(41,36,30,.085) !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble-background{
+    inset:-14px -28px -8px !important;
+  }
+
+  .kpi-bubble{
+    opacity:.34 !important;
+  }
+
+  .headline-visual:hover .bubble-1{
+    transform:translate(-42px,-8px) scale(1.04) !important;
+  }
+  .headline-visual:hover .bubble-2{
+    transform:translate(-50px,12px) scale(1.03) !important;
+  }
+  .headline-visual:hover .bubble-3{
+    transform:translate(44px,-8px) scale(1.05) !important;
+  }
+  .headline-visual:hover .bubble-4{
+    transform:translate(52px,12px) scale(1.04) !important;
+  }
+}
+
+
+/* V5 — subtitle reduced to two lines */
+.sub-two-lines{
+  max-width:760px !important;
+  text-align:center;
+}
+.sub-two-lines span{
+  display:block;
+}
+
+@media(max-width:760px){
+  .sub-two-lines span{
+    display:inline;
+  }
+  .sub-two-lines span::after{
+    content:" ";
+  }
+}
+
+
+/* V6 — bubble position refinements */
+
+/* Give a bit more breathing room above and below the bubble field */
+.kpi-bubble-background{
+  inset:-34px -92px -4px !important;
+}
+
+/* Move the resting bubbles slightly to avoid crop zones */
+.bubble-1{
+  top:12% !important;
+}
+.bubble-2{
+  bottom:12% !important;
+  left:28% !important;
+}
+.bubble-3{
+  top:11% !important;
+}
+.bubble-4{
+  bottom:12% !important;
+  right:29% !important;
+}
+
+/* On hover:
+   - top bubbles stay comfortably inside the top area
+   - bottom bubbles rise higher and move a bit farther away from the center/search bar */
+.headline-visual:hover .bubble-1{
+  transform:translate(-132px,-10px) scale(1.07) !important;
+  top:10% !important;
+}
+.headline-visual:hover .bubble-2{
+  transform:translate(-162px,-4px) scale(1.05) !important;
+  bottom:12% !important;
+}
+.headline-visual:hover .bubble-3{
+  transform:translate(138px,-10px) scale(1.08) !important;
+  top:9% !important;
+}
+.headline-visual:hover .bubble-4{
+  transform:translate(168px,-4px) scale(1.06) !important;
+  bottom:12% !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble-background{
+    inset:-20px -28px -2px !important;
+  }
+
+  .bubble-1{ top:16% !important; }
+  .bubble-2{ bottom:15% !important; }
+  .bubble-3{ top:15% !important; }
+  .bubble-4{ bottom:15% !important; }
+
+  .headline-visual:hover .bubble-1{
+    transform:translate(-42px,-5px) scale(1.04) !important;
+    top:14% !important;
+  }
+  .headline-visual:hover .bubble-2{
+    transform:translate(-54px,-1px) scale(1.03) !important;
+    bottom:15% !important;
+  }
+  .headline-visual:hover .bubble-3{
+    transform:translate(44px,-5px) scale(1.05) !important;
+    top:13% !important;
+  }
+  .headline-visual:hover .bubble-4{
+    transform:translate(56px,-1px) scale(1.04) !important;
+    bottom:15% !important;
+  }
+}
+
+
+/* V7 — precise bubble position tuning */
+
+/* Resting positions */
+.bubble-1{
+  top:10% !important;   /* left top: bit up */
+}
+
+.bubble-3{
+  top:9% !important;    /* right top: bit up */
+  right:17% !important; /* and right */
+}
+
+.bubble-2{
+  bottom:10% !important; /* left bottom: bit down */
+  left:26% !important;   /* and left */
+}
+
+.bubble-4{
+  bottom:10% !important; /* right bottom: bit down */
+  right:27% !important;  /* and right */
+}
+
+/* Hover positions */
+.headline-visual:hover .bubble-1{
+  transform:translate(-132px,-16px) scale(1.07) !important;
+  top:8% !important;
+}
+
+.headline-visual:hover .bubble-3{
+  transform:translate(150px,-16px) scale(1.08) !important;
+  top:7% !important;
+  right:16% !important;
+}
+
+.headline-visual:hover .bubble-2{
+  transform:translate(-172px,8px) scale(1.05) !important;
+  bottom:10% !important;
+  left:25% !important;
+}
+
+.headline-visual:hover .bubble-4{
+  transform:translate(178px,8px) scale(1.06) !important;
+  bottom:10% !important;
+  right:26% !important;
+}
+
+@media(max-width:760px){
+  .bubble-1{ top:14% !important; }
+  .bubble-3{ top:13% !important; right:13% !important; }
+  .bubble-2{ bottom:13% !important; left:24% !important; }
+  .bubble-4{ bottom:13% !important; right:25% !important; }
+
+  .headline-visual:hover .bubble-1{
+    transform:translate(-44px,-8px) scale(1.04) !important;
+  }
+  .headline-visual:hover .bubble-3{
+    transform:translate(48px,-8px) scale(1.05) !important;
+  }
+  .headline-visual:hover .bubble-2{
+    transform:translate(-58px,5px) scale(1.03) !important;
+  }
+  .headline-visual:hover .bubble-4{
+    transform:translate(60px,5px) scale(1.04) !important;
+  }
+}
+
+
+/* =========================================================
+   V8 — shadow clipping fix + right-bottom bubble slightly down
+   ========================================================= */
+
+/* Allow bubble shadows to render naturally outside the internal
+   title-background layer instead of being cut at its edges. */
+.headline-visual{
+  overflow:visible !important;
+}
+
+.kpi-bubble-background{
+  /* Add shadow breathing room above and below without moving the text. */
+  inset:-46px -92px -32px !important;
+  overflow:visible !important;
+
+  /* Remove the hard clipping/fade that was cutting the shadows. */
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+}
+
+/* Keep the bubble artwork behind title/subtitle, while the search bar remains above it. */
+.kpi-bubble-background{
+  z-index:1 !important;
+}
+
+.headline-visual .hero-title,
+.headline-visual .sub{
+  position:relative;
+  z-index:8 !important;
+}
+
+.search-wrap{
+  position:relative;
+  z-index:12 !important;
+}
+
+/* Right-bottom bubble: slightly lower only. */
+.bubble-4{
+  bottom:8% !important;
+}
+
+.headline-visual:hover .bubble-4{
+  bottom:8% !important;
+  transform:translate(178px,12px) scale(1.06) !important;
+}
+
+/* Keep enough top clearance for enlarged top bubbles and their shadows. */
+.headline-visual:hover .bubble-1,
+.headline-visual:hover .bubble-3{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.40),
+    inset 0 -10px 20px rgba(255,255,255,.07),
+    0 20px 46px rgba(41,36,30,.085) !important;
+}
+
+/* Slightly tighten the bottom shadow so it can sit near the search area
+   without visually colliding with the search-bar border. */
+.headline-visual:hover .bubble-2,
+.headline-visual:hover .bubble-4{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.40),
+    inset 0 -10px 20px rgba(255,255,255,.07),
+    0 16px 36px rgba(41,36,30,.075) !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble-background{
+    inset:-28px -28px -22px !important;
+    overflow:visible !important;
+    -webkit-mask-image:none !important;
+    mask-image:none !important;
+  }
+
+  .bubble-4{
+    bottom:11% !important;
+  }
+
+  .headline-visual:hover .bubble-4{
+    bottom:11% !important;
+    transform:translate(60px,7px) scale(1.04) !important;
+  }
+}
+
+
+/* =========================================================
+   V9 — stronger background bubbles + softer bubble text
+   ========================================================= */
+
+/* Make the bubble shapes more visible in the resting/background state. */
+.kpi-bubble{
+  opacity:.50 !important;
+  border-color:rgba(255,255,255,.24) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.23),
+    inset 0 -9px 18px rgba(255,255,255,.055),
+    0 9px 24px rgba(55,50,44,.04) !important;
+  backdrop-filter:blur(2.5px) !important;
+  -webkit-backdrop-filter:blur(2.5px) !important;
+}
+
+/* Slightly stronger glass/tint while still blended into the hero. */
+.bubble-1{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.34), rgba(255,255,255,.09) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(141,121,215,.15), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.045)) !important;
+}
+.bubble-2{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.32), rgba(255,255,255,.08) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(79,123,103,.14), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)) !important;
+}
+.bubble-3{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.35), rgba(255,255,255,.09) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(201,140,109,.15), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,.045)) !important;
+}
+.bubble-4{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.33), rgba(255,255,255,.08) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(122,170,197,.15), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)) !important;
+}
+
+/* Make the KPI text quieter than the bubble itself. */
+.kpi-num{
+  color:rgba(24,24,22,.16) !important;
+}
+.kpi-label{
+  color:rgba(24,24,22,.20) !important;
+  opacity:.72 !important;
+}
+
+/* On hover, keep the bubbles clear but keep text a little translucent. */
+.headline-visual:hover .kpi-num{
+  color:rgba(24,24,22,.68) !important;
+}
+.headline-visual:hover .kpi-label{
+  color:rgba(24,24,22,.60) !important;
+  opacity:.88 !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble{
+    opacity:.46 !important;
+  }
+  .kpi-num{
+    color:rgba(24,24,22,.14) !important;
+  }
+  .kpi-label{
+    color:rgba(24,24,22,.18) !important;
+  }
+}
+
+
+/* =========================================================
+   V10 — stronger background bubbles + quieter internal text
+   ========================================================= */
+
+/* Bubble shapes more visible in resting/background state */
+.kpi-bubble{
+  opacity:.62 !important;
+  border-color:rgba(255,255,255,.30) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -10px 20px rgba(255,255,255,.07),
+    0 10px 28px rgba(55,50,44,.05) !important;
+  backdrop-filter:blur(3px) !important;
+  -webkit-backdrop-filter:blur(3px) !important;
+}
+
+/* Slightly richer bubble fills so the form is easier to notice */
+.bubble-1{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.40), rgba(255,255,255,.10) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(141,121,215,.19), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.05)) !important;
+}
+.bubble-2{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.38), rgba(255,255,255,.10) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(79,123,103,.18), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.17), rgba(255,255,255,.05)) !important;
+}
+.bubble-3{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.41), rgba(255,255,255,.11) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(201,140,109,.19), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.05)) !important;
+}
+.bubble-4{
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.39), rgba(255,255,255,.10) 31%, transparent 75%),
+    radial-gradient(circle at 60% 66%, rgba(122,170,197,.19), transparent 46%),
+    linear-gradient(180deg, rgba(255,255,255,.17), rgba(255,255,255,.05)) !important;
+}
+
+/* Text inside bubbles less visible in background */
+.kpi-num{
+  color:rgba(24,24,22,.10) !important;
+}
+.kpi-label{
+  color:rgba(24,24,22,.12) !important;
+  opacity:.58 !important;
+}
+
+/* Keep hover readable, but still softer than the bubble itself */
+.headline-visual:hover .kpi-num{
+  color:rgba(24,24,22,.58) !important;
+}
+.headline-visual:hover .kpi-label{
+  color:rgba(24,24,22,.50) !important;
+  opacity:.78 !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble{
+    opacity:.56 !important;
+  }
+  .kpi-num{
+    color:rgba(24,24,22,.09) !important;
+  }
+  .kpi-label{
+    color:rgba(24,24,22,.11) !important;
+  }
+}
+
+
+/* =========================================================
+   V11 — make bubble structure more visible, keep text subtle
+   ========================================================= */
+
+/* Stronger bubble body / glass effect in the resting state */
+.kpi-bubble{
+  opacity:.78 !important;
+  border:1px solid rgba(255,255,255,.42) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.42),
+    inset 0 -14px 28px rgba(255,255,255,.09),
+    inset 10px 10px 28px rgba(255,255,255,.06),
+    0 12px 34px rgba(55,50,44,.065) !important;
+  backdrop-filter:blur(4px) !important;
+  -webkit-backdrop-filter:blur(4px) !important;
+}
+
+/* More visible glossy surface and colored tint */
+.bubble-1{
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255,255,255,.58) 0,
+      rgba(255,255,255,.23) 17%,
+      rgba(255,255,255,.08) 36%,
+      transparent 66%),
+    radial-gradient(circle at 62% 67%,rgba(141,121,215,.26),transparent 48%),
+    linear-gradient(150deg,rgba(255,255,255,.25),rgba(255,255,255,.07)) !important;
+}
+.bubble-2{
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255,255,255,.56) 0,
+      rgba(255,255,255,.22) 17%,
+      rgba(255,255,255,.08) 36%,
+      transparent 66%),
+    radial-gradient(circle at 62% 67%,rgba(79,123,103,.25),transparent 48%),
+    linear-gradient(150deg,rgba(255,255,255,.24),rgba(255,255,255,.07)) !important;
+}
+.bubble-3{
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255,255,255,.60) 0,
+      rgba(255,255,255,.24) 17%,
+      rgba(255,255,255,.08) 36%,
+      transparent 66%),
+    radial-gradient(circle at 62% 67%,rgba(201,140,109,.26),transparent 48%),
+    linear-gradient(150deg,rgba(255,255,255,.25),rgba(255,255,255,.07)) !important;
+}
+.bubble-4{
+  background:
+    radial-gradient(circle at 28% 22%,
+      rgba(255,255,255,.57) 0,
+      rgba(255,255,255,.22) 17%,
+      rgba(255,255,255,.08) 36%,
+      transparent 66%),
+    radial-gradient(circle at 62% 67%,rgba(122,170,197,.26),transparent 48%),
+    linear-gradient(150deg,rgba(255,255,255,.24),rgba(255,255,255,.07)) !important;
+}
+
+/* Add a clearer glass highlight/rim */
+.kpi-bubble::before{
+  content:"";
+  position:absolute;
+  left:16%;
+  top:11%;
+  width:42%;
+  height:20%;
+  border-radius:50%;
+  background:radial-gradient(
+    ellipse at center,
+    rgba(255,255,255,.58),
+    rgba(255,255,255,.18) 52%,
+    transparent 75%
+  );
+  transform:rotate(-23deg);
+  opacity:.78;
+  filter:blur(.5px);
+  pointer-events:none;
+}
+
+.kpi-bubble::after{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-radius:inherit;
+  border:1px solid rgba(255,255,255,.18);
+  pointer-events:none;
+}
+
+/* Keep only the text very subtle in the background */
+.kpi-num{
+  color:rgba(24,24,22,.065) !important;
+  opacity:.62 !important;
+}
+.kpi-label{
+  color:rgba(24,24,22,.075) !important;
+  opacity:.50 !important;
+}
+
+/* On hover the bubble remains strong; text becomes readable but not dominant */
+.headline-visual:hover .kpi-bubble{
+  opacity:1 !important;
+  border-color:rgba(255,255,255,.60) !important;
+}
+
+.headline-visual:hover .kpi-num{
+  color:rgba(24,24,22,.54) !important;
+  opacity:1 !important;
+}
+.headline-visual:hover .kpi-label{
+  color:rgba(24,24,22,.46) !important;
+  opacity:.82 !important;
+}
+
+@media(max-width:760px){
+  .kpi-bubble{
+    opacity:.72 !important;
+  }
+  .kpi-num{
+    color:rgba(24,24,22,.055) !important;
+  }
+  .kpi-label{
+    color:rgba(24,24,22,.065) !important;
+  }
+}
+
+
+/* =========================================================
+   Combined page — capability tiles replacing KPI strip
+   ========================================================= */
+.analysis-capabilities-shell{
+  padding:30px 0 82px;
+}
+analysis-capabilities{
+  display:block;
+  width:100%;
+}
+@media(max-width:760px){
+  .analysis-capabilities-shell{
+    padding:20px 0 56px;
+  }
+}
+
+
+/* =========================================================
+   Cipher integration + requested refinements
+   ========================================================= */
+.nav{
+  grid-template-columns:auto 1fr !important;
+  padding-left:18px !important;
+  padding-right:18px !important;
+}
+.cipher-brand{
+  display:flex;
+  align-items:center;
+}
+.cipher-logo{
+  display:block;
+  width:auto;
+  height:34px;
+  max-width:150px;
+  object-fit:contain;
+  mix-blend-mode:multiply;
+}
+.links{
+  justify-self:end !important;
+  justify-content:flex-end !important;
+}
+.nav-cta{display:none !important;}
+
+/* More space between floating nav and hero */
+.hero{padding-top:38px !important;}
+@media (min-width:761px) and (max-height:690px){
+  .hero{padding-top:30px !important;}
+}
+@media (max-width:760px){
+  .hero{padding-top:28px !important;}
+  .nav{grid-template-columns:1fr !important;}
+  .cipher-logo{height:31px;}
+}
+
+/* Pause = freeze in place + manual horizontal scrolling */
+.marquee-stack.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+  cursor:grab;
+  scroll-snap-type:none !important;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(23,23,21,.24) transparent;
+  overscroll-behavior-inline:contain;
+  touch-action:pan-x;
+  padding-bottom:6px;
+}
+.marquee-stack.paused .marquee:active{cursor:grabbing;}
+.marquee-stack.paused .track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+}
+.marquee-stack.paused .pill.duplicate{
+  display:grid !important;
+}
+.marquee-stack.paused .pill{
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+/* Recently analyzed — clothing icons instead of product photography */
+.sectionHead{
+  justify-content:flex-start !important;
+}
+.sectionHead h2{margin-right:auto;}
+.sectionHead p{display:none !important;}
+.photo{
+  aspect-ratio:4/3.1 !important;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 30% 25%,rgba(169,150,255,.13),transparent 34%),
+    radial-gradient(circle at 72% 72%,rgba(78,128,108,.09),transparent 34%),
+    rgba(250,249,245,.78) !important;
+}
+.garment-avatar{
+  width:122px;
+  height:122px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(23,23,21,.08);
+  background:rgba(255,255,255,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 16px 38px rgba(35,31,24,.08);
+  transition:transform .6s var(--ease),box-shadow .35s ease;
+}
+.garment-avatar svg{width:66px;height:66px;}
+.card:hover .garment-avatar{
+  transform:translateY(-5px) scale(1.045);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 22px 48px rgba(35,31,24,.12);
+}
+.avatar-violet{background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.88),transparent 32%),rgba(169,150,255,.15);color:#756c9b;}
+.avatar-green{background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.88),transparent 32%),rgba(78,128,108,.14);color:#577565;}
+.avatar-peach{background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.88),transparent 32%),rgba(211,145,114,.14);color:#8a6958;}
+.avatar-blue{background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.88),transparent 32%),rgba(131,199,255,.14);color:#5f7583;}
+@media(max-width:760px){
+  .photo{aspect-ratio:5/3.3 !important;}
+  .garment-avatar{width:108px;height:108px;}
+  .garment-avatar svg{width:58px;height:58px;}
+}
+
+
+/* =========================================================
+   Navbar refinement — center navigation links
+   ========================================================= */
+.nav{
+  position:relative !important;
+  grid-template-columns:auto 1fr auto !important;
+}
+
+.cipher-brand{
+  justify-self:start !important;
+  z-index:2;
+}
+
+.links{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  justify-self:auto !important;
+  justify-content:center !important;
+  width:max-content !important;
+  z-index:1;
+}
+
+@media(max-width:760px){
+  .nav{
+    grid-template-columns:auto 1fr !important;
+  }
+
+  .links{
+    position:static !important;
+    transform:none !important;
+    justify-self:end !important;
+    width:auto !important;
+  }
+}
+
+
+/* =========================================================
+   V3 — Corner Glass marquee control
+   ========================================================= */
+.marquee-stack{
+  position:relative !important;
+  padding-bottom:10px;
+}
+
+.marquee-bottom-control{
+  position:absolute !important;
+  right:8px !important;
+  bottom:-8px !important;
+  z-index:20;
+  padding:0 !important;
+  display:block !important;
+}
+
+.marquee-toggle{
+  width:42px !important;
+  height:42px !important;
+  padding:0 !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.58) !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.58),rgba(255,255,255,.22)) !important;
+  color:#37342f !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    0 9px 24px rgba(35,31,24,.10) !important;
+  backdrop-filter:blur(12px) saturate(1.08) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(1.08) !important;
+  transition:
+    transform .25s var(--ease),
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease !important;
+}
+
+.marquee-toggle:hover{
+  transform:translateY(-2px) !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,255,255,.34)) !important;
+  border-color:rgba(255,255,255,.82) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 13px 30px rgba(35,31,24,.13) !important;
+}
+
+.marquee-toggle[aria-pressed="true"]{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.76),rgba(169,150,255,.18)) !important;
+}
+
+.marquee-toggle .toggle-icon{
+  font-size:14px !important;
+  line-height:1 !important;
+  font-weight:800;
+}
+
+.marquee-toggle .toggle-label{
+  /* Keep the accessible label in the DOM, but visually hide it. */
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+}
+
+/* Paused rows become a paired manual scroller. */
+.marquee-stack.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(23,23,21,.20) transparent;
+  cursor:grab;
+  touch-action:pan-x;
+  overscroll-behavior-inline:contain;
+}
+
+.marquee-stack.paused .marquee.dragging{
+  cursor:grabbing;
+  user-select:none;
+}
+
+.marquee-stack.paused .track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+}
+
+.marquee-stack.paused .pill{
+  pointer-events:auto !important;
+  cursor:pointer;
+}
+
+.marquee-stack.paused .pill.duplicate{
+  display:grid !important;
+}
+
+@media(max-width:760px){
+  .marquee-bottom-control{
+    right:6px !important;
+    bottom:-7px !important;
+  }
+  .marquee-toggle{
+    width:39px !important;
+    height:39px !important;
+    border-radius:13px !important;
+  }
+}
+
+
+/* =========================================================
+   V4 — both marquee rows move in the same direction
+   ========================================================= */
+.track.left,
+.track.right{
+  animation:marqueeLeft 23s linear infinite !important;
+}
+
+/* While paused, both rows remain linked and move together. */
+.marquee-stack.paused .marquee{
+  scroll-behavior:auto !important;
+}
+
+
+/* =========================================================
+   V5 — marquee motion fix + lower glass button + stable pause UI
+   ========================================================= */
+
+/* Both rows move in the same direction.
+   Important: do NOT force transform here, because that prevents
+   the keyframe animation from changing transform. */
+.track.left,
+.track.right{
+  animation-name:marqueeLeft !important;
+  animation-duration:23s !important;
+  animation-timing-function:linear !important;
+  animation-iteration-count:infinite !important;
+}
+
+/* Move the Corner Glass button slightly farther down. */
+.marquee-bottom-control{
+  bottom:-15px !important;
+}
+
+/* Keep the marquee row height identical in motion and paused states. */
+.marquee{
+  box-sizing:border-box;
+  padding-bottom:6px !important;
+}
+
+/* While paused, rows stay manually scrollable without showing a
+   scrollbar that changes the layout height. */
+.marquee-stack.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  scrollbar-width:none !important;          /* Firefox */
+  -ms-overflow-style:none !important;       /* Legacy Edge */
+  padding-bottom:6px !important;
+}
+
+.marquee-stack.paused .marquee::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+}
+
+/* Keep the track at its natural width while paused. */
+.marquee-stack.paused .track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+}
+
+@media(max-width:760px){
+  .marquee-bottom-control{
+    bottom:-13px !important;
+  }
+}
+
+
+/* =========================================================
+   V6 — one continuous brand ribbon
+   ========================================================= */
+
+.marquee-stack.one-ribbon{
+  position:relative !important;
+  display:block !important;
+  gap:0 !important;
+  margin-top:36px !important;
+  padding:7px 7px 22px !important;
+  border:1px solid rgba(23,23,21,.08);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 10% 50%,rgba(141,121,215,.055),transparent 25%),
+    radial-gradient(circle at 88% 50%,rgba(201,140,109,.05),transparent 26%),
+    rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    0 10px 30px rgba(35,31,24,.025);
+}
+
+.one-ribbon .marquee{
+  width:100%;
+  overflow:hidden;
+  padding:5px 0 6px !important;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+}
+
+.one-ribbon .track{
+  display:flex;
+  width:max-content;
+  gap:10px;
+}
+
+/* One ribbon, always right-to-left */
+.one-ribbon .track.left{
+  animation:marqueeLeft 32s linear infinite !important;
+}
+
+/* Keep pause/manual-scroll state visually stable */
+.one-ribbon.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  cursor:grab;
+  touch-action:pan-x;
+  overscroll-behavior-inline:contain;
+}
+
+.one-ribbon.paused .marquee::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+}
+
+.one-ribbon.paused .marquee.dragging{
+  cursor:grabbing;
+}
+
+.one-ribbon.paused .track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+}
+
+/* Lower the corner-glass button slightly more */
+.one-ribbon .marquee-bottom-control{
+  right:10px !important;
+  bottom:-21px !important;
+}
+
+/* Move 10M+ Sentiments bubble upward */
+.bubble-4{
+  bottom:13% !important;
+}
+.headline-visual:hover .bubble-4{
+  bottom:13% !important;
+  transform:translate(178px,6px) scale(1.06) !important;
+}
+
+@media(max-width:760px){
+  .marquee-stack.one-ribbon{
+    padding-bottom:20px !important;
+  }
+
+  .one-ribbon .marquee-bottom-control{
+    right:8px !important;
+    bottom:-18px !important;
+  }
+
+  .bubble-4{
+    bottom:15% !important;
+  }
+
+  .headline-visual:hover .bubble-4{
+    bottom:15% !important;
+    transform:translate(60px,3px) scale(1.04) !important;
+  }
+}
+
+
+/* =========================================================
+   V7 — two synchronized marquee rows + nav selection state
+   ========================================================= */
+
+/* Navigation labels: slightly larger and selectable underline */
+.links .nav-choice{
+  position:relative;
+  font-size:14px !important;
+  font-weight:650 !important;
+  letter-spacing:-.01em;
+  padding:7px 2px 9px !important;
+  color:rgba(23,23,21,.72) !important;
+  text-decoration:none !important;
+  transition:color .2s ease;
+}
+
+.links .nav-choice::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:3px;
+  height:1.5px;
+  border-radius:999px;
+  background:#1c1c19;
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .22s var(--ease);
+}
+
+.links .nav-choice:hover{
+  color:#171715 !important;
+}
+
+.links .nav-choice.selected{
+  color:#171715 !important;
+}
+
+.links .nav-choice.selected::after{
+  transform:scaleX(1);
+}
+
+/* Two rows, one visual ribbon */
+.marquee-stack.two-row-ribbon{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  margin-top:36px !important;
+  padding:10px 7px 34px !important;
+  border:1px solid rgba(23,23,21,.08);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 10% 25%,rgba(141,121,215,.05),transparent 28%),
+    radial-gradient(circle at 90% 78%,rgba(201,140,109,.045),transparent 30%),
+    rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    0 10px 30px rgba(35,31,24,.025);
+}
+
+.two-row-ribbon .marquee{
+  width:100%;
+  overflow:hidden;
+  padding:2px 0 !important;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+}
+
+.two-row-ribbon .track{
+  display:flex;
+  width:max-content;
+  gap:10px;
+}
+
+/* Both rows move right-to-left in the same direction and same speed */
+.two-row-ribbon .track.left{
+  animation:marqueeLeft 30s linear infinite !important;
+}
+
+/* Pause button lower, fully outside the brand rows */
+.two-row-ribbon .marquee-bottom-control{
+  right:10px !important;
+  bottom:-18px !important;
+}
+
+/* Paused = both rows manually scrollable, no visible scrollbar */
+.two-row-ribbon.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  cursor:grab;
+  touch-action:pan-x;
+  overscroll-behavior-inline:contain;
+}
+
+.two-row-ribbon.paused .marquee::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+}
+
+.two-row-ribbon.paused .marquee.dragging{
+  cursor:grabbing;
+}
+
+.two-row-ribbon.paused .track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+}
+
+@media(max-width:760px){
+  .links .nav-choice{
+    font-size:13px !important;
+  }
+
+  .marquee-stack.two-row-ribbon{
+    padding-bottom:31px !important;
+  }
+
+  .two-row-ribbon .marquee-bottom-control{
+    right:8px !important;
+    bottom:-16px !important;
+  }
+}
+
+
+/* =========================================================
+   V8 — keep ribbon width fixed when paused
+   ========================================================= */
+
+/* The outer ribbon must always stay inside its hero container. */
+.marquee-stack.two-row-ribbon{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  contain:inline-size;
+}
+
+/* Flex children must be allowed to shrink instead of forcing
+   the ribbon wider when the tracks switch to manual scrolling. */
+.two-row-ribbon .marquee{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Only the inner track may be wider than the visible ribbon. */
+.two-row-ribbon .track{
+  flex:none !important;
+  max-width:none !important;
+}
+
+/* Pausing must not change any outer dimensions. */
+.two-row-ribbon.paused{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+}
+
+.two-row-ribbon.paused .marquee{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+}
+
+/* Prevent long track content from affecting surrounding layout. */
+.hero-inner,
+.hero-box,
+.hero,
+#discover{
+  min-width:0;
+}
+
+
+/* =========================================================
+   V9 — absolutely stable ribbon size + identical paused edges
+   ========================================================= */
+
+/* Outer ribbon appearance never changes between play/pause. */
+.marquee-stack.two-row-ribbon,
+.marquee-stack.two-row-ribbon.paused{
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  border:1px solid rgba(23,23,21,.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.5),
+    0 10px 30px rgba(35,31,24,.025) !important;
+}
+
+/* Rows keep the exact same visible box in both states. */
+.two-row-ribbon .marquee,
+.two-row-ribbon.paused .marquee{
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  padding:2px 0 !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+/* Keep the same edge fade while paused.
+   This avoids the brand pills suddenly extending visually into the border. */
+.two-row-ribbon .marquee,
+.two-row-ribbon.paused .marquee{
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent) !important;
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent) !important;
+}
+
+/* Manual scroll stays internal with no visible scrollbar or layout shift. */
+.two-row-ribbon.paused .marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+}
+
+.two-row-ribbon.paused .marquee::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+}
+
+/* Inner track may be wide; outer ribbon never grows with it. */
+.two-row-ribbon .track,
+.two-row-ribbon.paused .track{
+  width:max-content !important;
+  max-width:none !important;
+  min-width:max-content !important;
+}
+
+
+/* =========================================================
+   V10 — soft overlay scrollbar when paused
+   ========================================================= */
+
+/* Reserve no layout space: the scrollbar overlays inside the ribbon. */
+.marquee-soft-scrollbar{
+  position:absolute;
+  left:20px;
+  right:64px;
+  bottom:9px;
+  height:5px;
+  border-radius:999px;
+  background:rgba(23,23,21,.055);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease;
+  z-index:12;
+}
+
+.marquee-soft-scrollbar .soft-scroll-thumb{
+  position:absolute;
+  top:0;
+  left:0;
+  height:100%;
+  min-width:42px;
+  border-radius:999px;
+  background:rgba(23,23,21,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    0 1px 4px rgba(23,23,21,.05);
+  cursor:grab;
+  pointer-events:auto;
+  transition:background .18s ease;
+}
+
+.marquee-soft-scrollbar .soft-scroll-thumb:hover{
+  background:rgba(23,23,21,.30);
+}
+
+.marquee-soft-scrollbar .soft-scroll-thumb.dragging{
+  cursor:grabbing;
+  background:rgba(23,23,21,.36);
+}
+
+/* Only show it in paused state. */
+.two-row-ribbon.paused .marquee-soft-scrollbar{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* Keep native scrollbars hidden so they never affect size. */
+.two-row-ribbon.paused .marquee{
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+}
+
+.two-row-ribbon.paused .marquee::-webkit-scrollbar{
+  width:0 !important;
+  height:0 !important;
+  display:none !important;
+}
+
+/* The custom bar is an overlay and never changes ribbon width. */
+.marquee-stack.two-row-ribbon,
+.marquee-stack.two-row-ribbon.paused{
+  overflow:visible !important;
+}
+
+@media(max-width:760px){
+  .marquee-soft-scrollbar{
+    left:14px;
+    right:58px;
+    bottom:8px;
+    height:4px;
+  }
+}
+
+</style>
+</head>
+<body>
+<nav class="shell">
+  <div class="nav">
+    <a href="#" class="logo cipher-brand" aria-label="Cipher home">
+      <img class="cipher-logo" src="data:image/png;base64,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" alt="Cipher" />
+    </a>
+    <div class="links">
+      <a href="#" class="nav-choice" data-nav="discover">Discover</a>
+      <a href="#" class="nav-choice" data-nav="collections">Collections</a>
+      <a href="#" class="nav-choice" data-nav="activities">Activities</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero shell" id="discover">
+    <div class="hero-stage">
+      <div class="hero-copy">
+        
+<div class="headline-visual">
+  <div class="kpi-bubble-background" aria-hidden="true">
+    <div class="kpi-bubble bubble-1">
+      <div class="kpi-num">200+</div>
+      <div class="kpi-label">Users</div>
+    </div>
+    <div class="kpi-bubble bubble-2">
+      <div class="kpi-num">200K+</div>
+      <div class="kpi-label">Analyses</div>
+    </div>
+    <div class="kpi-bubble bubble-3">
+      <div class="kpi-num">5K+</div>
+      <div class="kpi-label">Products</div>
+    </div>
+    <div class="kpi-bubble bubble-4">
+      <div class="kpi-num">10M+</div>
+      <div class="kpi-label">Sentiments</div>
+    </div>
+  </div>
+
+          <div class="graph-wrap" aria-hidden="true">
+            <div class="bar-chart">
+              <span class="bar" style="--h:38%;--d:-.2s"></span>
+              <span class="bar" style="--h:57%;--d:-.5s"></span>
+              <span class="bar" style="--h:44%;--d:-.8s"></span>
+              <span class="bar" style="--h:72%;--d:-1.1s"></span>
+              <span class="bar" style="--h:61%;--d:-1.4s"></span>
+              <span class="bar" style="--h:83%;--d:-1.7s"></span>
+              <span class="bar" style="--h:69%;--d:-2.0s"></span>
+              <span class="bar" style="--h:92%;--d:-2.3s"></span>
+              <span class="bar" style="--h:76%;--d:-2.6s"></span>
+              <span class="bar" style="--h:88%;--d:-2.9s"></span>
+              <span class="bar" style="--h:64%;--d:-3.2s"></span>
+              <span class="bar" style="--h:79%;--d:-3.5s"></span>
+              <span class="bar" style="--h:55%;--d:-3.8s"></span>
+              <span class="bar" style="--h:70%;--d:-4.1s"></span>
+              <span class="bar" style="--h:49%;--d:-4.4s"></span>
+              <span class="bar" style="--h:62%;--d:-4.7s"></span>
+            </div>
+          </div>
+          <h1 class="serif hero-title">
+            <span class="title-line">Discover what customers</span>
+            <span class="title-line title-cycle"><span class="cycle" id="cycle">really</span></span>
+            <span class="title-line">think about garments</span>
+          </h1>
+          <p class="sub sub-two-lines">
+  <span>Search products, analyze review sentiment and uncover</span>
+  <span>design insights across different attributes.</span>
+</p>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <form class="search-box" id="searchForm">
+          <label class="field" aria-label="Search garment reviews">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M16.2 16.2L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span class="field-copy">
+              <input id="searchInput" placeholder="Select brands to analyze" />
+            </span>
+          </label>
+          <button class="primary" type="submit">Analyze</button>
+        </form>
+        <div class="answer" id="answer">
+          <div class="answer-grid">
+            <div class="mini"><small>Overall sentiment</small><b>84% positive</b></div>
+            <div class="mini"><small>Top praise</small><b>Comfort</b></div>
+            <div class="mini"><small>Top concern</small><b>Waistband</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="marquee-stack two-row-ribbon" id="collections" aria-label="Popular brands">
+        <div class="marquee marquee-row-top" aria-label="Popular brands">
+          <div class="track left">
+            <button type="button" class="pill" data-brand="Nike" aria-pressed="false">Nike</button>
+            <button type="button" class="pill" data-brand="Adidas" aria-pressed="false">Adidas</button>
+            <button type="button" class="pill" data-brand="H&amp;M" aria-pressed="false">H&amp;M</button>
+            <button type="button" class="pill" data-brand="Zara" aria-pressed="false">Zara</button>
+            <button type="button" class="pill" data-brand="Uniqlo" aria-pressed="false">Uniqlo</button>
+            <button type="button" class="pill" data-brand="Gymshark" aria-pressed="false">Gymshark</button>
+            <button type="button" class="pill" data-brand="Lululemon" aria-pressed="false">Lululemon</button>
+            <button type="button" class="pill" data-brand="Champion" aria-pressed="false">Champion</button>
+
+            <button type="button" class="pill duplicate" data-brand="Nike" aria-pressed="false">Nike</button>
+            <button type="button" class="pill duplicate" data-brand="Adidas" aria-pressed="false">Adidas</button>
+            <button type="button" class="pill duplicate" data-brand="H&amp;M" aria-pressed="false">H&amp;M</button>
+            <button type="button" class="pill duplicate" data-brand="Zara" aria-pressed="false">Zara</button>
+            <button type="button" class="pill duplicate" data-brand="Uniqlo" aria-pressed="false">Uniqlo</button>
+            <button type="button" class="pill duplicate" data-brand="Gymshark" aria-pressed="false">Gymshark</button>
+            <button type="button" class="pill duplicate" data-brand="Lululemon" aria-pressed="false">Lululemon</button>
+            <button type="button" class="pill duplicate" data-brand="Champion" aria-pressed="false">Champion</button>
+          </div>
+        </div>
+        <div class="marquee marquee-row-bottom" aria-label="Popular brands">
+          <div class="track left">
+            <button type="button" class="pill" data-brand="Puma" aria-pressed="false">Puma</button>
+            <button type="button" class="pill" data-brand="Under Armour" aria-pressed="false">Under Armour</button>
+            <button type="button" class="pill" data-brand="Victoria’s Secret" aria-pressed="false">Victoria’s Secret</button>
+            <button type="button" class="pill" data-brand="New Balance" aria-pressed="false">New Balance</button>
+            <button type="button" class="pill" data-brand="Levi’s" aria-pressed="false">Levi’s</button>
+            <button type="button" class="pill" data-brand="Alo" aria-pressed="false">Alo</button>
+            <button type="button" class="pill" data-brand="Mango" aria-pressed="false">Mango</button>
+            <button type="button" class="pill" data-brand="Reebok" aria-pressed="false">Reebok</button>
+
+            <button type="button" class="pill duplicate" data-brand="Puma" aria-pressed="false">Puma</button>
+            <button type="button" class="pill duplicate" data-brand="Under Armour" aria-pressed="false">Under Armour</button>
+            <button type="button" class="pill duplicate" data-brand="Victoria’s Secret" aria-pressed="false">Victoria’s Secret</button>
+            <button type="button" class="pill duplicate" data-brand="New Balance" aria-pressed="false">New Balance</button>
+            <button type="button" class="pill duplicate" data-brand="Levi’s" aria-pressed="false">Levi’s</button>
+            <button type="button" class="pill duplicate" data-brand="Alo" aria-pressed="false">Alo</button>
+            <button type="button" class="pill duplicate" data-brand="Mango" aria-pressed="false">Mango</button>
+            <button type="button" class="pill duplicate" data-brand="Reebok" aria-pressed="false">Reebok</button>
+          </div>
+        </div>
+
+        <div class="marquee-soft-scrollbar" aria-hidden="true">
+          <div class="soft-scroll-thumb"></div>
+        </div>
+
+        <div class="marquee-bottom-control">
+          <button class="marquee-toggle" id="marqueeToggle" type="button" aria-pressed="false" aria-label="Pause brand carousel motion">
+            <span class="toggle-icon" aria-hidden="true">Ⅱ</span>
+            <span class="toggle-label">Pause motion</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  
+  <section class="analysis-capabilities-shell shell" id="activities" aria-label="Analysis capabilities">
+    <analysis-capabilities></analysis-capabilities>
+  </section>
+
+<section class="recent shell">
+    <div class="sectionHead"><h2 class="serif">Recently analyzed</h2></div>
+    <div class="cards"><article class="card" style="--delay:0ms"><div class="photo"><div class="garment-avatar avatar-violet"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M43 18h34l3 30-10 54H55L49 61l-5 41H29L39 48z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M42 31h36" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div><span class="num">01</span></div><div class="body"><div class="meta"><span>Lululemon</span><span>Legging</span></div><h3>Align High-Rise Pant</h3><div class="foot"><span class="sent">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div></article><article class="card" style="--delay:90ms"><div class="photo"><div class="garment-avatar avatar-green"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M44 17h32l5 29-7 56H59L54 60l-8 42H31l10-56z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M42 31h36M53 60l4-16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div><span class="num">02</span></div><div class="body"><div class="meta"><span>Nike</span><span>Legging</span></div><h3>Dri-FIT High-Waist Running Legging</h3><div class="foot"><span class="sent">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div></article><article class="card" style="--delay:180ms"><div class="photo"><div class="garment-avatar avatar-peach"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M43 22c5 8 29 8 34 0l24 17-14 19-10-7v51H43V51l-10 7-14-19z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M48 24c3 9 21 9 24 0" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div><span class="num">03</span></div><div class="body"><div class="meta"><span>Uniqlo</span><span>T-Shirt</span></div><h3>AIRism Cotton Crew Neck T-Shirt</h3><div class="foot"><span class="sent">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div></article><article class="card" style="--delay:270ms"><div class="photo"><div class="garment-avatar avatar-blue"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M45 27c2-11 28-11 30 0l18 13 9 31-17 6-7-18v43H42V59l-7 18-17-6 9-31z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M45 29c3 18 27 18 30 0M49 80h22" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div><span class="num">04</span></div><div class="body"><div class="meta"><span>Champion</span><span>Hoodie</span></div><h3>Reverse Weave Pullover Hoodie</h3><div class="foot"><span class="sent">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div></article></div>
+  </section>
+</main>
+<script>
+// Hero word rotation
+const cycle=document.getElementById('cycle');
+const words=['really','actually','truly','quietly'];
+let wordIndex=0;
+setInterval(()=>{
+  cycle.classList.add('out');
+  setTimeout(()=>{wordIndex=(wordIndex+1)%words.length;cycle.textContent=words[wordIndex];cycle.classList.remove('out')},260);
+},2900);
+
+// Product search demo
+const searchForm=document.getElementById('searchForm');
+const answer=document.getElementById('answer');
+searchForm.addEventListener('submit',e=>{
+  e.preventDefault();
+  answer.classList.remove('open');
+  requestAnimationFrame(()=>setTimeout(()=>answer.classList.add('open'),70));
+});
+
+// Scroll reveal for recent product cards
+const cardObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(entry.isIntersecting){entry.target.classList.add('in');cardObserver.unobserve(entry.target)}
+}),{threshold:.14});
+document.querySelectorAll('.card').forEach(card=>cardObserver.observe(card));
+
+
+// Interactive two-row brand ribbon: Corner Glass pause + synchronized scrolling
+const marqueeStack=document.getElementById('collections');
+const marqueeToggle=document.getElementById('marqueeToggle');
+const marqueeToggleIcon=marqueeToggle.querySelector('.toggle-icon');
+const marqueeToggleLabel=marqueeToggle.querySelector('.toggle-label');
+const searchInput=document.getElementById('searchInput');
+const selectedBrands=new Set();
+const marqueeRows=[...marqueeStack.querySelectorAll('.marquee')];
+const softScrollbar=marqueeStack.querySelector('.marquee-soft-scrollbar');
+const softScrollThumb=softScrollbar.querySelector('.soft-scroll-thumb');
+const MARQUEE_DURATION=30;
+
+let pauseBasePositions=new Map();
+let syncingRows=false;
+
+function currentOffset(row){
+  const track=row.querySelector('.track');
+  const rowRect=row.getBoundingClientRect();
+  const trackRect=track.getBoundingClientRect();
+  return Math.max(0,rowRect.left-trackRect.left);
+}
+
+
+function updateSoftScrollbar(){
+  const source=marqueeRows[0];
+  const track=source.querySelector('.track');
+
+  const viewportWidth=source.clientWidth;
+  const contentWidth=Math.max(viewportWidth,track.scrollWidth);
+  const maxScroll=Math.max(1,contentWidth-viewportWidth);
+
+  const barWidth=softScrollbar.clientWidth;
+  const thumbWidth=Math.max(42,barWidth*(viewportWidth/contentWidth));
+  const maxThumbTravel=Math.max(0,barWidth-thumbWidth);
+
+  const progress=Math.min(1,Math.max(0,source.scrollLeft/maxScroll));
+
+  softScrollThumb.style.width=`${thumbWidth}px`;
+  softScrollThumb.style.transform=`translateX(${maxThumbTravel*progress}px)`;
+}
+
+function scrollBothRowsToProgress(progress){
+  progress=Math.min(1,Math.max(0,progress));
+
+  syncingRows=true;
+
+  marqueeRows.forEach(row=>{
+    const track=row.querySelector('.track');
+    const maxScroll=Math.max(0,track.scrollWidth-row.clientWidth);
+    row.scrollLeft=maxScroll*progress;
+  });
+
+  syncingRows=false;
+  updateSoftScrollbar();
+}
+
+function pauseMarquee(){
+  const offsets=marqueeRows.map(row=>({row,offset:currentOffset(row)}));
+
+  // Freeze the exact rendered ribbon width before changing state.
+  // This guarantees Pause cannot change the outer box even by 1px.
+  const lockedWidth=marqueeStack.getBoundingClientRect().width;
+  marqueeStack.style.width=`${lockedWidth}px`;
+  marqueeStack.style.maxWidth=`${lockedWidth}px`;
+  marqueeStack.style.minWidth=`${lockedWidth}px`;
+
+  marqueeStack.classList.add('paused');
+
+  offsets.forEach(({row,offset})=>{
+    row.scrollLeft=offset;
+  });
+
+  pauseBasePositions=new Map(
+    marqueeRows.map(row=>[row,row.scrollLeft])
+  );
+
+  requestAnimationFrame(updateSoftScrollbar);
+
+  marqueeToggle.setAttribute('aria-pressed','true');
+  marqueeToggle.setAttribute('aria-label','Resume brand carousel motion');
+  marqueeToggle.setAttribute('title','Resume motion');
+  marqueeToggleLabel.textContent='Play motion';
+  marqueeToggleIcon.textContent='▶';
+}
+
+function resumeMarquee(){
+  marqueeRows.forEach(row=>{
+    const track=row.querySelector('.track');
+    const halfWidth=Math.max(1,track.scrollWidth/2);
+    const normalized=((row.scrollLeft%halfWidth)+halfWidth)%halfWidth;
+    const progress=normalized/halfWidth;
+
+    track.style.animationDelay=`${-(progress*MARQUEE_DURATION)}s`;
+    row.scrollLeft=0;
+  });
+
+  pauseBasePositions.clear();
+  marqueeStack.classList.remove('paused');
+
+  // Return sizing control to the responsive layout after motion resumes.
+  marqueeStack.style.width='';
+  marqueeStack.style.maxWidth='';
+  marqueeStack.style.minWidth='';
+
+  marqueeToggle.setAttribute('aria-pressed','false');
+  marqueeToggle.setAttribute('aria-label','Pause brand carousel motion');
+  marqueeToggle.setAttribute('title','Pause motion');
+  marqueeToggleLabel.textContent='Pause motion';
+  marqueeToggleIcon.textContent='Ⅱ';
+}
+
+marqueeToggle.setAttribute('title','Pause motion');
+
+marqueeToggle.addEventListener('click',()=>{
+  if(marqueeStack.classList.contains('paused')) resumeMarquee();
+  else pauseMarquee();
+});
+
+/* When paused, both rows behave as one linked scroller:
+   scrolling or dragging either row moves the other by the same delta. */
+function syncPausedRows(source){
+  if(
+    !marqueeStack.classList.contains('paused') ||
+    syncingRows ||
+    !pauseBasePositions.has(source)
+  ) return;
+
+  syncingRows=true;
+
+  const delta=source.scrollLeft-pauseBasePositions.get(source);
+
+  marqueeRows.forEach(row=>{
+    if(row===source || !pauseBasePositions.has(row)) return;
+    row.scrollLeft=pauseBasePositions.get(row)+delta;
+  });
+
+  syncingRows=false;
+  updateSoftScrollbar();
+}
+
+marqueeRows.forEach(row=>{
+  row.addEventListener('scroll',()=>syncPausedRows(row));
+
+  row.addEventListener('wheel',event=>{
+    if(!marqueeStack.classList.contains('paused')) return;
+
+    const movement=Math.abs(event.deltaX)>Math.abs(event.deltaY)
+      ? event.deltaX
+      : event.deltaY;
+
+    if(movement){
+      row.scrollLeft+=movement;
+      event.preventDefault();
+    }
+  },{passive:false});
+
+  let dragging=false;
+  let dragMoved=false;
+  let startX=0;
+  let startScroll=0;
+
+  row.addEventListener('pointerdown',event=>{
+    if(!marqueeStack.classList.contains('paused')) return;
+    if(event.pointerType==='mouse' && event.button!==0) return;
+
+    dragging=true;
+    dragMoved=false;
+    startX=event.clientX;
+    startScroll=row.scrollLeft;
+    row.classList.add('dragging');
+    row.setPointerCapture?.(event.pointerId);
+  });
+
+  row.addEventListener('pointermove',event=>{
+    if(!dragging) return;
+
+    const dx=event.clientX-startX;
+    if(Math.abs(dx)>4) dragMoved=true;
+    row.scrollLeft=startScroll-dx;
+  });
+
+  const endDrag=event=>{
+    if(!dragging) return;
+    dragging=false;
+    row.classList.remove('dragging');
+    try{row.releasePointerCapture?.(event.pointerId)}catch(e){}
+  };
+
+  row.addEventListener('pointerup',endDrag);
+  row.addEventListener('pointercancel',endDrag);
+
+  row.addEventListener('click',event=>{
+    if(!dragMoved) return;
+    event.preventDefault();
+    event.stopPropagation();
+    dragMoved=false;
+  },true);
+});
+
+
+// Custom overlay scrollbar — visual only when paused, never affects layout size.
+let thumbDragging=false;
+let thumbStartX=0;
+let thumbStartProgress=0;
+
+softScrollThumb.addEventListener('pointerdown',event=>{
+  if(!marqueeStack.classList.contains('paused')) return;
+
+  thumbDragging=true;
+  thumbStartX=event.clientX;
+
+  const source=marqueeRows[0];
+  const track=source.querySelector('.track');
+  const maxScroll=Math.max(1,track.scrollWidth-source.clientWidth);
+  thumbStartProgress=source.scrollLeft/maxScroll;
+
+  softScrollThumb.classList.add('dragging');
+  softScrollThumb.setPointerCapture?.(event.pointerId);
+  event.preventDefault();
+});
+
+softScrollThumb.addEventListener('pointermove',event=>{
+  if(!thumbDragging) return;
+
+  const barWidth=softScrollbar.clientWidth;
+  const thumbWidth=softScrollThumb.getBoundingClientRect().width;
+  const maxTravel=Math.max(1,barWidth-thumbWidth);
+
+  const nextProgress=thumbStartProgress+(event.clientX-thumbStartX)/maxTravel;
+  scrollBothRowsToProgress(nextProgress);
+});
+
+function endThumbDrag(event){
+  if(!thumbDragging) return;
+  thumbDragging=false;
+  softScrollThumb.classList.remove('dragging');
+  try{softScrollThumb.releasePointerCapture?.(event.pointerId)}catch(e){}
+}
+
+softScrollThumb.addEventListener('pointerup',endThumbDrag);
+softScrollThumb.addEventListener('pointercancel',endThumbDrag);
+
+softScrollbar.addEventListener('pointerdown',event=>{
+  if(
+    !marqueeStack.classList.contains('paused') ||
+    event.target===softScrollThumb
+  ) return;
+
+  const rect=softScrollbar.getBoundingClientRect();
+  const thumbWidth=softScrollThumb.getBoundingClientRect().width;
+  const maxTravel=Math.max(1,rect.width-thumbWidth);
+  const clickX=event.clientX-rect.left-thumbWidth/2;
+
+  scrollBothRowsToProgress(clickX/maxTravel);
+});
+
+window.addEventListener('resize',()=>{
+  if(marqueeStack.classList.contains('paused')){
+    requestAnimationFrame(updateSoftScrollbar);
+  }
+});
+
+function syncBrandButtons(){
+  document.querySelectorAll('.pill[data-brand]').forEach(btn=>{
+    const selected=selectedBrands.has(btn.dataset.brand);
+    btn.classList.toggle('selected',selected);
+    btn.setAttribute('aria-pressed',String(selected));
+  });
+}
+
+function updateSearchFromBrands(){
+  searchInput.value=[...selectedBrands].join(', ');
+  searchInput.placeholder='Select brands to analyze';
+}
+
+document.querySelectorAll('.pill[data-brand]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const brand=btn.dataset.brand;
+
+    if(selectedBrands.has(brand)) selectedBrands.delete(brand);
+    else selectedBrands.add(brand);
+
+    syncBrandButtons();
+    updateSearchFromBrands();
+  });
+});
+
+/* Navbar choices are visual selectors only.
+   They intentionally do not scroll, navigate, or change page sections. */
+document.querySelectorAll('.nav-choice').forEach(link=>{
+  link.addEventListener('click',event=>{
+    event.preventDefault();
+
+    document.querySelectorAll('.nav-choice').forEach(item=>{
+      item.classList.toggle('selected',item===link);
+    });
+  });
+});
+
+
+// =========================================================
+    // V12) Static V7 bars with subtle pointer-responsive movement
+    // =========================================================
+    const headlineVisualV12 = document.querySelector(".headline-visual");
+    const heroBarsV12 = [...document.querySelectorAll(".headline-visual .bar")];
+
+    if (headlineVisualV12 && heroBarsV12.length) {
+      const resetBarsV12 = () => {
+        heroBarsV12.forEach((bar) => {
+          bar.style.transform = "scaleY(1)";
+          bar.style.opacity = "";
+        });
+      };
+
+      headlineVisualV12.addEventListener("mousemove", (event) => {
+        heroBarsV12.forEach((bar) => {
+          const rect = bar.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const distance = Math.abs(event.clientX - centerX);
+
+          // Small interaction radius and restrained motion.
+          const influence = Math.max(0, 1 - distance / 190);
+          const lift = -5.5 * influence;
+          const stretch = 1 + (0.055 * influence);
+          const opacity = 0.30 + (0.10 * influence);
+
+          bar.style.transform =
+            `translateY(${lift.toFixed(2)}px) scaleY(${stretch.toFixed(3)})`;
+          bar.style.opacity = opacity.toFixed(3);
+        });
+      });
+
+      headlineVisualV12.addEventListener("mouseleave", resetBarsV12);
+    }
+
+</script>
+
+<script>
+(() => {
+  const capabilityCss = "\n    :host{\n      --bg:#f3f1eb;\n      --surface:rgba(255,255,255,.70);\n      --surface-strong:#fbfaf7;\n      --text:#171715;\n      --muted:#6f706f;\n      --line:rgba(24,24,22,.12);\n      --line-strong:rgba(24,24,22,.18);\n      --green:#4f7b67;\n      --violet:#8d79d7;\n      --peach:#c98c6d;\n      --blue:#7aaac5;\n      --shadow:0 24px 70px rgba(38,34,27,.08);\n      --radius-xl:34px;\n      --radius-lg:26px;\n      --radius-md:18px;\n      --ease:cubic-bezier(.2,.75,.2,1);\n    }\n\n    *{box-sizing:border-box}\n    html,body{margin:0}\n    body{\n      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;\n      color:var(--text);\n      background:\n        radial-gradient(circle at 15% 0%, rgba(141,121,215,.12), transparent 26%),\n        radial-gradient(circle at 85% 18%, rgba(201,140,109,.10), transparent 25%),\n        radial-gradient(circle at 50% 100%, rgba(79,123,103,.08), transparent 30%),\n        var(--bg);\n      min-height:100vh;\n    }\n\n    .wrap{\n      width:min(1260px, calc(100% - 36px));\n      margin:auto;\n      padding:40px 0 56px;\n    }\n\n    .head{\n      display:flex;\n      justify-content:space-between;\n      align-items:end;\n      gap:28px;\n      margin-bottom:22px;\n    }\n\n    .head h1{\n      margin:0;\n      font:400 clamp(42px,5vw,74px)/.94 Georgia,\"Times New Roman\",serif;\n      letter-spacing:-.05em;\n    }\n\n    .head p{\n      margin:0;\n      max-width:480px;\n      color:var(--muted);\n      line-height:1.55;\n      font-size:16px;\n    }\n\n    .hint{\n      display:inline-flex;\n      align-items:center;\n      gap:8px;\n      margin:0 0 18px;\n      color:var(--muted);\n      font-size:13px;\n      padding:8px 12px;\n      border:1px solid var(--line);\n      border-radius:999px;\n      background:rgba(255,255,255,.58);\n    }\n\n    .tiles{\n      display:grid;\n      grid-template-columns:repeat(3,1fr);\n      gap:16px;\n    }\n\n    .tile{\n      position:relative;\n      border:1px solid var(--line);\n      border-radius:var(--radius-xl);\n      background:var(--surface);\n      backdrop-filter:blur(16px);\n      -webkit-backdrop-filter:blur(16px);\n      box-shadow:var(--shadow);\n      overflow:hidden;\n      transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s ease;\n      cursor:pointer;\n      min-height:540px;\n    }\n\n    .tile:hover{\n      transform:translateY(-6px);\n      box-shadow:0 32px 90px rgba(38,34,27,.12);\n      border-color:var(--line-strong);\n    }\n\n    .tile-top{\n      padding:22px 22px 0;\n    }\n\n    .tag{\n      display:inline-flex;\n      align-items:center;\n      gap:8px;\n      border:1px solid var(--line);\n      background:rgba(255,255,255,.66);\n      color:var(--muted);\n      border-radius:999px;\n      padding:8px 12px;\n      font-size:11px;\n      text-transform:uppercase;\n      letter-spacing:.16em;\n      font-weight:800;\n    }\n\n    .tag::before{\n      content:\"\";\n      width:7px;\n      height:7px;\n      border-radius:50%;\n      background:currentColor;\n      opacity:.55;\n    }\n\n    .preview{\n      position:relative;\n      height:270px;\n      margin:16px 22px 10px;\n      border:1px solid var(--line);\n      border-radius:28px;\n      background:\n        radial-gradient(circle at 35% 25%, rgba(141,121,215,.12), transparent 34%),\n        radial-gradient(circle at 75% 65%, rgba(79,123,103,.10), transparent 33%),\n        linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.48));\n      overflow:hidden;\n      isolation:isolate;\n    }\n\n    .preview::after{\n      content:\"\";\n      position:absolute;\n      inset:auto 8% 12px;\n      height:18px;\n      background:radial-gradient(ellipse, rgba(30,30,25,.10), transparent 70%);\n      filter:blur(8px);\n      z-index:0;\n      pointer-events:none;\n    }\n\n    .copy{\n      padding:0 22px 24px;\n    }\n\n    .copy h2{\n      margin:8px 0 10px;\n      font-size:24px;\n      letter-spacing:-.03em;\n    }\n\n    .copy p{\n      margin:0;\n      color:var(--muted);\n      line-height:1.56;\n      font-size:15px;\n    }\n\n    .replay{\n      margin-top:18px;\n      display:inline-flex;\n      align-items:center;\n      gap:8px;\n      border:1px solid var(--line);\n      background:rgba(255,255,255,.55);\n      color:var(--text);\n      border-radius:999px;\n      padding:9px 12px;\n      font-size:12px;\n      font-weight:700;\n      cursor:pointer;\n      transition:background .25s ease, transform .25s var(--ease);\n    }\n\n    .replay:hover{\n      background:rgba(255,255,255,.92);\n      transform:translateY(-2px);\n    }\n\n    .muted-label{\n      position:absolute;\n      right:18px;\n      bottom:18px;\n      font-size:10px;\n      letter-spacing:.16em;\n      text-transform:uppercase;\n      font-weight:800;\n      color:rgba(24,24,22,.35);\n      z-index:2;\n    }\n\n    /* -----------------------------------\n       Tile 1 \u2014 Product Analysis\n       pop-up / one product focus\n       ----------------------------------- */\n    .product-stack{\n      position:absolute;\n      inset:0;\n    }\n\n    .p-card{\n      position:absolute;\n      left:50%;\n      top:55%;\n      width:128px;\n      height:170px;\n      border:1px solid rgba(24,24,22,.12);\n      border-radius:18px;\n      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.74));\n      box-shadow:0 20px 30px rgba(30,27,24,.08);\n      transform:translate(-50%,-50%);\n    }\n\n    .p-card::before,\n    .p-card::after{\n      content:\"\";\n      position:absolute;\n      left:16px;\n      right:16px;\n      height:8px;\n      border-radius:999px;\n      background:rgba(24,24,22,.10);\n    }\n\n    .p-card::before{ top:22px; }\n    .p-card::after{ top:40px; width:58%; }\n\n    .p-card i{\n      position:absolute;\n      left:16px;\n      right:16px;\n      bottom:16px;\n      height:58px;\n      border-radius:14px;\n      background:linear-gradient(145deg, rgba(141,121,215,.15), rgba(79,123,103,.16));\n    }\n\n    .p-back-1{ z-index:1; opacity:.78; }\n    .p-back-2{ z-index:2; opacity:.86; }\n    .p-front{ z-index:4; }\n    .p-glow{\n      position:absolute;\n      left:50%;\n      top:52%;\n      width:180px;\n      height:180px;\n      transform:translate(-50%,-50%);\n      border-radius:50%;\n      background:radial-gradient(circle, rgba(141,121,215,.18), transparent 62%);\n      z-index:0;\n      filter:blur(6px);\n      opacity:.8;\n    }\n\n    .tile[data-kind=\"product\"].active .p-back-1{\n      animation:productBackOne 1.2s var(--ease) both;\n    }\n    .tile[data-kind=\"product\"].active .p-back-2{\n      animation:productBackTwo 1.2s var(--ease) both;\n    }\n    .tile[data-kind=\"product\"].active .p-front{\n      animation:productFrontPop 1.35s var(--ease) both;\n    }\n\n    @keyframes productBackOne{\n      0%{ transform:translate(-50%,-50%) translateY(42px) scale(.92); opacity:0; }\n      100%{ transform:translate(-50%,-50%) translate(-34px,18px) scale(.92) rotate(-8deg); opacity:.66; }\n    }\n    @keyframes productBackTwo{\n      0%{ transform:translate(-50%,-50%) translateY(26px) scale(.95); opacity:0; }\n      100%{ transform:translate(-50%,-50%) translate(28px,20px) scale(.95) rotate(7deg); opacity:.82; }\n    }\n    @keyframes productFrontPop{\n      0%{ transform:translate(-50%,-50%) translateY(54px) scale(.76); opacity:0; }\n      62%{ transform:translate(-50%,-50%) translateY(-16px) scale(1.06); opacity:1; }\n      100%{ transform:translate(-50%,-50%) translateY(-2px) scale(1); opacity:1; }\n    }\n\n    /* -----------------------------------\n       Tile 2 \u2014 Comparison Analysis\n       first item pinned + others scroll horizontally\n       ----------------------------------- */\n    .compare-scene{\n      position:absolute;\n      inset:0;\n      padding:26px;\n    }\n\n    .compare-scene::before{\n      content:\"\";\n      position:absolute;\n      top:24px;\n      bottom:24px;\n      left:174px;\n      width:1px;\n      background:rgba(24,24,22,.09);\n    }\n\n    .pin-area{\n      position:absolute;\n      left:26px;\n      top:26px;\n      bottom:26px;\n      width:122px;\n      display:flex;\n      flex-direction:column;\n      align-items:center;\n      justify-content:center;\n      gap:16px;\n      z-index:3;\n    }\n\n    .pin-label{\n      font-size:10px;\n      text-transform:uppercase;\n      letter-spacing:.16em;\n      font-weight:800;\n      color:rgba(24,24,22,.40);\n    }\n\n    .c-card{\n      flex:0 0 auto;\n      width:118px;\n      height:154px;\n      border:1px solid rgba(24,24,22,.12);\n      border-radius:18px;\n      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.72));\n      box-shadow:0 18px 26px rgba(30,27,24,.07);\n      position:relative;\n    }\n\n    .c-card::before,\n    .c-card::after{\n      content:\"\";\n      position:absolute;\n      left:14px;\n      right:14px;\n      border-radius:999px;\n      background:rgba(24,24,22,.10);\n      height:8px;\n    }\n\n    .c-card::before{ top:18px; }\n    .c-card::after{ top:36px; width:52%; }\n    .c-card i{\n      position:absolute;\n      left:14px;\n      right:14px;\n      bottom:14px;\n      height:48px;\n      border-radius:12px;\n      background:linear-gradient(145deg, rgba(141,121,215,.18), rgba(122,170,197,.14));\n    }\n\n    .pin-card{\n      transform:translateX(0);\n      z-index:4;\n    }\n\n    .scroll-window{\n      position:absolute;\n      left:204px;\n      right:26px;\n      top:50%;\n      transform:translateY(-50%);\n      height:178px;\n      overflow:hidden;\n      display:flex;\n      align-items:center;\n    }\n\n    .scroll-track{\n      display:flex;\n      gap:14px;\n      width:max-content;\n      transform:translateX(0);\n    }\n\n    .scroll-track .c-card{\n      width:112px;\n      height:146px;\n      opacity:.92;\n    }\n\n    .tile[data-kind=\"comparison\"].active .scroll-track{\n      animation:compareScroll 6.8s linear both;\n    }\n\n    .tile[data-kind=\"comparison\"].active .pin-card{\n      animation:pinSettle 1s var(--ease) both;\n    }\n\n    @keyframes pinSettle{\n      0%{ transform:translateY(24px) scale(.93); opacity:0; }\n      100%{ transform:translateY(0) scale(1); opacity:1; }\n    }\n\n    @keyframes compareScroll{\n      0%{ transform:translateX(12px); }\n      14%{ transform:translateX(12px); }\n      100%{ transform:translateX(-382px); }\n    }\n\n    /* -----------------------------------\n       Tile 3 \u2014 Aggregate Analysis\n       many boxes become one box\n       ----------------------------------- */\n    .aggregate-scene{\n      position:absolute;\n      inset:0;\n    }\n\n    .agg-center{\n      position:absolute;\n      left:50%;\n      top:50%;\n      width:142px;\n      height:176px;\n      border:1px solid rgba(24,24,22,.12);\n      border-radius:20px;\n      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.78));\n      box-shadow:0 20px 28px rgba(30,27,24,.08);\n      transform:translate(-50%,-50%) scale(.75);\n      opacity:0;\n      z-index:5;\n    }\n\n    .agg-center::before,\n    .agg-center::after{\n      content:\"\";\n      position:absolute;\n      left:16px;\n      right:16px;\n      height:8px;\n      border-radius:999px;\n      background:rgba(24,24,22,.10);\n    }\n    .agg-center::before{ top:22px; }\n    .agg-center::after{ top:40px; width:58%; }\n    .agg-center i{\n      position:absolute;\n      left:16px;\n      right:16px;\n      bottom:16px;\n      height:56px;\n      border-radius:14px;\n      background:linear-gradient(145deg, rgba(79,123,103,.16), rgba(201,140,109,.16));\n    }\n\n    .agg-piece{\n      position:absolute;\n      width:64px;\n      height:84px;\n      border:1px solid rgba(24,24,22,.10);\n      border-radius:14px;\n      background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.64));\n      opacity:.92;\n      transform:translate(0,0) scale(1);\n    }\n\n    .agg-piece::before{\n      content:\"\";\n      position:absolute;\n      left:10px;\n      right:10px;\n      bottom:10px;\n      height:24px;\n      border-radius:10px;\n      background:linear-gradient(145deg, rgba(141,121,215,.12), rgba(79,123,103,.14));\n    }\n\n    .a1{ left:28px; top:34px; }\n    .a2{ left:104px; top:78px; }\n    .a3{ left:58px; top:158px; }\n    .a4{ right:112px; top:44px; }\n    .a5{ right:40px; top:116px; }\n    .a6{ right:94px; bottom:34px; }\n    .a7{ left:156px; bottom:24px; }\n    .a8{ right:172px; bottom:72px; }\n\n    .tile[data-kind=\"aggregate\"].active .a1{ animation:mergeA1 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a2{ animation:mergeA2 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a3{ animation:mergeA3 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a4{ animation:mergeA4 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a5{ animation:mergeA5 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a6{ animation:mergeA6 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a7{ animation:mergeA7 1.7s var(--ease) both; }\n    .tile[data-kind=\"aggregate\"].active .a8{ animation:mergeA8 1.7s var(--ease) both; }\n\n    .tile[data-kind=\"aggregate\"].active .agg-center{\n      animation:aggregateReveal 1.65s var(--ease) .45s both;\n    }\n\n    @keyframes mergeCommonEnd{\n      100%{ transform:translate(0,0) scale(.18); opacity:0; }\n    }\n    @keyframes mergeA1{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(188px,108px) scale(.18);opacity:0} }\n    @keyframes mergeA2{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(112px,64px) scale(.18);opacity:0} }\n    @keyframes mergeA3{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(158px,-14px) scale(.18);opacity:0} }\n    @keyframes mergeA4{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(-98px,96px) scale(.18);opacity:0} }\n    @keyframes mergeA5{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(-170px,26px) scale(.18);opacity:0} }\n    @keyframes mergeA6{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(-116px,-92px) scale(.18);opacity:0} }\n    @keyframes mergeA7{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(26px,-94px) scale(.18);opacity:0} }\n    @keyframes mergeA8{ 0%{transform:translate(0,0) scale(1);opacity:.92} 100%{transform:translate(-6px,-44px) scale(.18);opacity:0} }\n\n    @keyframes aggregateReveal{\n      0%{ transform:translate(-50%,-50%) scale(.70); opacity:0; }\n      60%{ transform:translate(-50%,-50%) scale(1.04); opacity:1; }\n      100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }\n    }\n\n    /* -----------------------------------\n       Responsive\n       ----------------------------------- */\n    @media (max-width: 1050px){\n      .tiles{\n        grid-template-columns:1fr;\n      }\n      .tile{\n        min-height:500px;\n      }\n    }\n\n    @media (max-width: 680px){\n      .wrap{\n        width:min(100% - 18px, 1260px);\n        padding-top:24px;\n      }\n      .head{\n        flex-direction:column;\n        align-items:flex-start;\n      }\n      .preview{\n        height:240px;\n        margin:14px 16px 8px;\n      }\n      .tile-top,\n      .copy{\n        padding-left:16px;\n        padding-right:16px;\n      }\n      .copy h2{\n        font-size:22px;\n      }\n      .compare-scene::before{\n        left:150px;\n      }\n      .pin-area{\n        width:100px;\n        left:18px;\n      }\n      .scroll-window{\n        left:170px;\n        right:16px;\n      }\n    }\n  \n/* =========================================================\n   V2 refinements\n   ========================================================= */\n\n/* Product Analysis \u2014 one file only */\n.single-only .p-back-1,\n.single-only .p-back-2{\n  display:none !important;\n}\n.single-file{\n  width:138px;\n  height:182px;\n}\n.tile[data-kind=\"product\"].active .single-file{\n  animation:singleProductPop 1.2s var(--ease) both;\n}\n@keyframes singleProductPop{\n  0%{\n    transform:translate(-50%,-50%) translateY(28px) scale(.88);\n    opacity:0;\n  }\n  60%{\n    transform:translate(-50%,-50%) translateY(-8px) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) translateY(0) scale(1);\n    opacity:1;\n  }\n}\n\n/* Comparison Analysis \u2014 pinned item sits above the scrolling row.\n   The moving cards travel underneath it instead of being separated. */\n.compare-overlap{\n  padding:0;\n}\n.compare-overlap::before{\n  display:none !important;\n}\n.full-scroll{\n  left:24px !important;\n  right:24px !important;\n  top:50% !important;\n  height:178px;\n  overflow:hidden;\n  z-index:1;\n}\n.compare-overlap .scroll-track{\n  gap:16px;\n  padding-left:108px;\n}\n.compare-overlap .scroll-track .c-card{\n  width:112px;\n  height:146px;\n  opacity:.82;\n}\n.pinned-overlay{\n  position:absolute;\n  left:50%;\n  top:50%;\n  transform:translate(-50%,-50%);\n  width:126px;\n  height:164px;\n  display:grid;\n  place-items:center;\n  z-index:5;\n  pointer-events:none;\n}\n.pinned-overlay::before{\n  content:\"\";\n  position:absolute;\n  inset:-14px -12px;\n  border-radius:24px;\n  background:rgba(250,249,246,.86);\n  backdrop-filter:blur(6px);\n  box-shadow:0 12px 28px rgba(30,27,24,.08);\n  border:1px solid rgba(24,24,22,.08);\n  z-index:-1;\n}\n.pinned-overlay .pin-card{\n  width:118px;\n  height:154px;\n  box-shadow:0 18px 32px rgba(30,27,24,.12);\n}\n.tile[data-kind=\"comparison\"].active .scroll-track{\n  animation:compareScrollUnder 7.4s linear both;\n}\n.tile[data-kind=\"comparison\"].active .pin-card{\n  animation:pinnedLift 1s var(--ease) both;\n}\n@keyframes compareScrollUnder{\n  0%{transform:translateX(0)}\n  10%{transform:translateX(0)}\n  100%{transform:translateX(-470px)}\n}\n@keyframes pinnedLift{\n  0%{transform:translateY(10px) scale(.96);opacity:0}\n  100%{transform:translateY(0) scale(1);opacity:1}\n}\n\n/* Aggregate Analysis \u2014 clearer, smoother merge */\n.tile[data-kind=\"aggregate\"].active .agg-piece{\n  filter:saturate(.98);\n}\n.tile[data-kind=\"aggregate\"].active .a1{ animation:mergeA1v2 2.8s var(--ease) both; }\n.tile[data-kind=\"aggregate\"].active .a2{ animation:mergeA2v2 2.8s var(--ease) .06s both; }\n.tile[data-kind=\"aggregate\"].active .a3{ animation:mergeA3v2 2.8s var(--ease) .12s both; }\n.tile[data-kind=\"aggregate\"].active .a4{ animation:mergeA4v2 2.8s var(--ease) .03s both; }\n.tile[data-kind=\"aggregate\"].active .a5{ animation:mergeA5v2 2.8s var(--ease) .09s both; }\n.tile[data-kind=\"aggregate\"].active .a6{ animation:mergeA6v2 2.8s var(--ease) .15s both; }\n.tile[data-kind=\"aggregate\"].active .a7{ animation:mergeA7v2 2.8s var(--ease) .075s both; }\n.tile[data-kind=\"aggregate\"].active .a8{ animation:mergeA8v2 2.8s var(--ease) .135s both; }\n\n.tile[data-kind=\"aggregate\"].active .agg-center{\n  animation:aggregateRevealV2 2.55s var(--ease) .95s both;\n}\n\n@keyframes mergeA1v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(188px,108px) scale(.30);opacity:.48}\n  100%{transform:translate(188px,108px) scale(.12);opacity:0}\n}\n@keyframes mergeA2v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(112px,64px) scale(.30);opacity:.48}\n  100%{transform:translate(112px,64px) scale(.12);opacity:0}\n}\n@keyframes mergeA3v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(158px,-14px) scale(.30);opacity:.48}\n  100%{transform:translate(158px,-14px) scale(.12);opacity:0}\n}\n@keyframes mergeA4v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(-98px,96px) scale(.30);opacity:.48}\n  100%{transform:translate(-98px,96px) scale(.12);opacity:0}\n}\n@keyframes mergeA5v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(-170px,26px) scale(.30);opacity:.48}\n  100%{transform:translate(-170px,26px) scale(.12);opacity:0}\n}\n@keyframes mergeA6v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(-116px,-92px) scale(.30);opacity:.48}\n  100%{transform:translate(-116px,-92px) scale(.12);opacity:0}\n}\n@keyframes mergeA7v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(26px,-94px) scale(.30);opacity:.48}\n  100%{transform:translate(26px,-94px) scale(.12);opacity:0}\n}\n@keyframes mergeA8v2{\n  0%,12%{transform:translate(0,0) scale(1);opacity:.92}\n  72%{transform:translate(-6px,-44px) scale(.30);opacity:.48}\n  100%{transform:translate(-6px,-44px) scale(.12);opacity:0}\n}\n@keyframes aggregateRevealV2{\n  0%,28%{\n    transform:translate(-50%,-50%) scale(.62);\n    opacity:0;\n  }\n  64%{\n    transform:translate(-50%,-50%) scale(1.07);\n    opacity:1;\n  }\n  82%{\n    transform:translate(-50%,-50%) scale(.98);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) scale(1);\n    opacity:1;\n  }\n}\n\n@media (max-width:680px){\n  .compare-overlap .scroll-track{padding-left:65px}\n  .pinned-overlay{left:50%}\n}\n\n\n/* =========================================================\n   V4 \u2014 Comparison + Aggregate animation refinements\n   ========================================================= */\n\n/* -----------------------------\n   COMPARISON\n   Pinned item is on the LEFT.\n   Moving cards only appear to the right of it.\n   ----------------------------- */\n.compare-overlap{\n  position:absolute;\n  inset:0;\n  padding:0;\n  overflow:hidden;\n}\n\n.compare-overlap::before{\n  display:none !important;\n}\n\n.pinned-left{\n  position:absolute;\n  left:24px;\n  top:50%;\n  transform:translateY(-50%);\n  width:132px;\n  height:172px;\n  display:grid;\n  place-items:center;\n  z-index:8;\n  pointer-events:none;\n}\n\n.pinned-left::before{\n  content:\"\";\n  position:absolute;\n  inset:-12px;\n  border-radius:24px;\n  background:rgba(250,249,246,.96);\n  border:1px solid rgba(24,24,22,.09);\n  box-shadow:0 15px 32px rgba(30,27,24,.10);\n  z-index:-1;\n}\n\n.pinned-left .pin-card{\n  width:118px;\n  height:154px;\n  box-shadow:0 18px 32px rgba(30,27,24,.12);\n}\n\n/* This mask guarantees scrolling items are never visible left of the pinned card. */\n.comparison-mask-left{\n  position:absolute;\n  left:0;\n  top:0;\n  bottom:0;\n  width:176px;\n  background:\n    linear-gradient(\n      90deg,\n      rgba(250,249,246,1) 0%,\n      rgba(250,249,246,1) 82%,\n      rgba(250,249,246,.94) 92%,\n      rgba(250,249,246,0) 100%\n    );\n  z-index:6;\n  pointer-events:none;\n}\n\n.full-scroll{\n  position:absolute;\n  left:160px !important;\n  right:18px !important;\n  top:50% !important;\n  transform:translateY(-50%);\n  height:174px;\n  overflow:hidden;\n  display:flex;\n  align-items:center;\n  z-index:2;\n  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 96%,transparent 100%);\n  mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 96%,transparent 100%);\n}\n\n.compare-overlap .scroll-track{\n  display:flex;\n  align-items:center;\n  gap:14px;\n  width:max-content;\n  padding-left:34px;\n}\n\n.compare-overlap .scroll-track .c-card{\n  width:112px;\n  height:146px;\n  flex:0 0 auto;\n  opacity:.86;\n}\n\n.tile[data-kind=\"comparison\"].active .scroll-track{\n  animation:comparePassUnderPinned 7.2s linear both;\n}\n\n.tile[data-kind=\"comparison\"].active .pin-card{\n  animation:pinnedLeftSettle .9s var(--ease) both;\n}\n\n@keyframes comparePassUnderPinned{\n  0%,8%{\n    transform:translateX(0);\n  }\n  100%{\n    transform:translateX(-455px);\n  }\n}\n\n@keyframes pinnedLeftSettle{\n  0%{\n    transform:translateY(9px) scale(.97);\n    opacity:0;\n  }\n  100%{\n    transform:translateY(0) scale(1);\n    opacity:1;\n  }\n}\n\n/* -----------------------------\n   AGGREGATE\n   Six items begin as a 2 \u00d7 3 grid,\n   move inward, attach into one block,\n   then resolve into one result card.\n   ----------------------------- */\n.aggregate-merge-six{\n  position:absolute;\n  inset:0;\n  overflow:hidden;\n}\n\n.agg-grid-six{\n  position:absolute;\n  left:50%;\n  top:50%;\n  width:196px;\n  height:218px;\n  transform:translate(-50%,-50%);\n  display:grid;\n  grid-template-columns:repeat(2, 86px);\n  grid-template-rows:repeat(3, 62px);\n  gap:14px 14px;\n  z-index:3;\n}\n\n.agg-tile{\n  position:relative;\n  width:86px;\n  height:62px;\n  border:1px solid rgba(24,24,22,.11);\n  border-radius:13px;\n  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.68));\n  box-shadow:0 8px 18px rgba(30,27,24,.055);\n  transform-origin:center;\n  will-change:transform,opacity,border-radius;\n}\n\n.agg-tile::before,\n.agg-tile::after{\n  content:\"\";\n  position:absolute;\n  left:11px;\n  height:5px;\n  border-radius:999px;\n  background:rgba(24,24,22,.09);\n}\n\n.agg-tile::before{\n  top:11px;\n  right:11px;\n}\n.agg-tile::after{\n  top:21px;\n  width:42%;\n}\n\n.agg-tile i{\n  position:absolute;\n  left:11px;\n  right:11px;\n  bottom:9px;\n  height:18px;\n  border-radius:8px;\n  background:linear-gradient(90deg,rgba(141,121,215,.12),rgba(79,123,103,.14));\n}\n\n.agg-result-card{\n  position:absolute;\n  left:50%;\n  top:50%;\n  width:188px;\n  height:196px;\n  transform:translate(-50%,-50%) scale(.82);\n  border:1px solid rgba(24,24,22,.12);\n  border-radius:22px;\n  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.78));\n  box-shadow:0 20px 34px rgba(30,27,24,.10);\n  opacity:0;\n  z-index:5;\n  overflow:hidden;\n}\n\n.agg-result-lines{\n  position:absolute;\n  left:18px;\n  right:18px;\n  top:21px;\n}\n.agg-result-lines span{\n  display:block;\n  height:7px;\n  border-radius:999px;\n  background:rgba(24,24,22,.10);\n  margin-bottom:9px;\n}\n.agg-result-lines span:last-child{\n  width:56%;\n}\n.agg-result-viz{\n  position:absolute;\n  left:18px;\n  right:18px;\n  bottom:18px;\n  height:86px;\n  border-radius:15px;\n  background:\n    linear-gradient(145deg,rgba(79,123,103,.16),rgba(141,121,215,.13) 50%,rgba(201,140,109,.13));\n}\n\n/* Step 1: Six cards start clearly separated.\n   Step 2: gaps close and cards physically attach.\n   Step 3: attached block softens into one result. */\n.tile[data-kind=\"aggregate\"].active .six-1{\n  animation:joinSix1 3.25s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .six-2{\n  animation:joinSix2 3.25s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .six-3{\n  animation:joinSix3 3.25s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .six-4{\n  animation:joinSix4 3.25s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .six-5{\n  animation:joinSix5 3.25s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .six-6{\n  animation:joinSix6 3.25s var(--ease) both;\n}\n\n.tile[data-kind=\"aggregate\"].active .agg-result-card{\n  animation:resultFromSix 3.25s var(--ease) both;\n}\n\n@keyframes joinSix1{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,7px) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(50px,78px) scale(.22);opacity:0}\n}\n@keyframes joinSix2{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,7px) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(-50px,78px) scale(.22);opacity:0}\n}\n@keyframes joinSix3{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,0) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(50px,0) scale(.22);opacity:0}\n}\n@keyframes joinSix4{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,0) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(-50px,0) scale(.22);opacity:0}\n}\n@keyframes joinSix5{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,-7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,-7px) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(50px,-78px) scale(.22);opacity:0}\n}\n@keyframes joinSix6{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,-7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,-7px) scale(.98);border-radius:4px;opacity:.95}\n  100%{transform:translate(-50px,-78px) scale(.22);opacity:0}\n}\n\n@keyframes resultFromSix{\n  0%,65%{\n    transform:translate(-50%,-50%) scale(.72);\n    opacity:0;\n  }\n  78%{\n    transform:translate(-50%,-50%) scale(.90);\n    opacity:.72;\n  }\n  91%{\n    transform:translate(-50%,-50%) scale(1.035);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) scale(1);\n    opacity:1;\n  }\n}\n\n@media (max-width:680px){\n  .comparison-mask-left{\n    width:146px;\n  }\n  .pinned-left{\n    left:16px;\n    width:116px;\n  }\n  .full-scroll{\n    left:130px !important;\n  }\n  .agg-grid-six{\n    transform:translate(-50%,-50%) scale(.86);\n  }\n}\n\n\n/* =========================================================\n   V5 \u2014 unified mini analysis item design\n   Every item uses the same pie + horizontal-bar language.\n   ========================================================= */\n\n.mini-card-ui{\n  position:absolute;\n  inset:10px;\n  display:flex;\n  flex-direction:column;\n  align-items:center;\n  justify-content:space-between;\n  pointer-events:none;\n}\n\n.mini-pie{\n  width:44px;\n  height:44px;\n  flex:0 0 auto;\n  border-radius:50%;\n  background:\n    conic-gradient(\n      rgba(79,123,103,.68) 0 44%,\n      rgba(141,121,215,.56) 44% 72%,\n      rgba(201,140,109,.48) 72% 88%,\n      rgba(38,38,34,.13) 88% 100%\n    );\n  position:relative;\n  margin-top:4px;\n  box-shadow:inset 0 0 0 1px rgba(24,24,22,.03);\n}\n\n.mini-pie::after{\n  content:\"\";\n  position:absolute;\n  inset:11px;\n  border-radius:50%;\n  background:rgba(250,249,246,.96);\n  box-shadow:0 0 0 1px rgba(24,24,22,.05);\n}\n\n.mini-bars{\n  width:100%;\n  display:flex;\n  flex-direction:column;\n  gap:6px;\n  padding:0 1px 2px;\n}\n\n.mini-bars span{\n  display:block;\n  width:var(--w,70%);\n  height:6px;\n  border-radius:999px;\n  background:linear-gradient(90deg,rgba(79,123,103,.54),rgba(141,121,215,.32));\n  position:relative;\n}\n\n.mini-bars span:nth-child(2){\n  background:linear-gradient(90deg,rgba(141,121,215,.46),rgba(201,140,109,.28));\n}\n\n.mini-bars span:nth-child(3){\n  background:rgba(24,24,22,.14);\n}\n\n/* Remove old placeholder decorations so every card looks identical. */\n.p-card::before,\n.p-card::after,\n.p-card > i,\n.c-card::before,\n.c-card::after,\n.c-card > i,\n.agg-tile::before,\n.agg-tile::after,\n.agg-tile > i{\n  display:none !important;\n}\n\n/* Product card */\n.single-file .mini-card-ui{\n  inset:13px;\n}\n.single-file .mini-pie{\n  width:55px;\n  height:55px;\n}\n.single-file .mini-pie::after{\n  inset:14px;\n}\n.single-file .mini-bars{\n  gap:7px;\n}\n.single-file .mini-bars span{\n  height:7px;\n}\n\n/* Comparison cards */\n.c-card .mini-card-ui{\n  inset:11px;\n}\n.c-card .mini-pie{\n  width:45px;\n  height:45px;\n}\n.c-card .mini-pie::after{\n  inset:11px;\n}\n.c-card .mini-bars span{\n  height:6px;\n}\n\n/* Aggregate six source items:\n   same composition, simply scaled to fit the smaller item size. */\n.agg-tile .mini-card-ui{\n  inset:6px 8px 7px;\n}\n.agg-tile .mini-pie{\n  width:25px;\n  height:25px;\n  margin-top:0;\n}\n.agg-tile .mini-pie::after{\n  inset:6px;\n}\n.agg-tile .mini-bars{\n  gap:3px;\n  padding-bottom:0;\n}\n.agg-tile .mini-bars span{\n  height:3px;\n}\n\n/* Aggregated result keeps the exact same visual language at a larger scale. */\n.agg-result-card .result-ui{\n  inset:18px;\n}\n.agg-result-card .mini-pie{\n  width:68px;\n  height:68px;\n  margin-top:5px;\n}\n.agg-result-card .mini-pie::after{\n  inset:17px;\n}\n.agg-result-card .mini-bars{\n  gap:8px;\n}\n.agg-result-card .mini-bars span{\n  height:8px;\n}\n\n/* Hide the old result internals if any remain through browser cache/versioning. */\n.agg-result-lines,\n.agg-result-viz{\n  display:none !important;\n}\n\n\n/* =========================================================\n   V6 \u2014 cleaner tiles + consistent card dimensions\n   ========================================================= */\n\n/* Remove space previously used by the capability tag */\n.tile-top{\n  display:none !important;\n}\n\n/* Remove helper labels and replay controls completely */\n.replay,\n.muted-label{\n  display:none !important;\n}\n\n/* Keep preview spacing balanced after removing top tag */\n.preview{\n  margin-top:22px;\n}\n\n/* ---------------------------------------------------------\n   STANDARD CARD SIZE\n   Product, Comparison and final Aggregate result:\n   exactly 138px \u00d7 182px\n   --------------------------------------------------------- */\n.single-file,\n.compare-overlap .c-card,\n.pinned-left .pin-card,\n.agg-result-card{\n  width:138px !important;\n  height:182px !important;\n}\n\n/* Product card remains centered */\n.single-file{\n  width:138px !important;\n  height:182px !important;\n}\n\n/* ---------------------------------------------------------\n   Comparison\n   All cards use the same dimensions as Product Analysis.\n   Pinned item stays on the left, moving items pass underneath.\n   --------------------------------------------------------- */\n.pinned-left{\n  left:24px;\n  width:152px;\n  height:196px;\n}\n\n.pinned-left .pin-card{\n  width:138px !important;\n  height:182px !important;\n}\n\n.pinned-left::before{\n  inset:-10px;\n}\n\n.comparison-mask-left{\n  width:188px;\n}\n\n.full-scroll{\n  left:172px !important;\n  right:18px !important;\n  height:202px;\n}\n\n.compare-overlap .scroll-track{\n  gap:16px;\n  padding-left:34px;\n}\n\n.compare-overlap .scroll-track .c-card{\n  width:138px !important;\n  height:182px !important;\n  flex:0 0 138px;\n  opacity:.88;\n}\n\n/* Keep the same analysis UI sizing across product + compare cards */\n.c-card .mini-card-ui{\n  inset:13px;\n}\n\n.c-card .mini-pie{\n  width:55px;\n  height:55px;\n}\n\n.c-card .mini-pie::after{\n  inset:14px;\n}\n\n.c-card .mini-bars{\n  gap:7px;\n}\n\n.c-card .mini-bars span{\n  height:7px;\n}\n\n@keyframes comparePassUnderPinned{\n  0%,8%{\n    transform:translateX(0);\n  }\n  100%{\n    transform:translateX(-610px);\n  }\n}\n\n/* ---------------------------------------------------------\n   Aggregate\n   Four cards form a 2 \u00d7 2 arrangement, move closer,\n   attach together, then become one standard-size card.\n   --------------------------------------------------------- */\n.aggregate-merge-four{\n  position:absolute;\n  inset:0;\n  overflow:hidden;\n}\n\n.agg-grid-four{\n  position:absolute;\n  left:50%;\n  top:50%;\n  width:196px;\n  height:196px;\n  transform:translate(-50%,-50%);\n  display:grid;\n  grid-template-columns:repeat(2, 86px);\n  grid-template-rows:repeat(2, 86px);\n  gap:24px;\n  z-index:3;\n}\n\n.aggregate-merge-four .agg-tile{\n  width:86px;\n  height:86px;\n  border:1px solid rgba(24,24,22,.11);\n  border-radius:14px;\n  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.68));\n  box-shadow:0 8px 18px rgba(30,27,24,.055);\n  position:relative;\n  transform-origin:center;\n  will-change:transform,opacity,border-radius;\n}\n\n.aggregate-merge-four .agg-tile .mini-card-ui{\n  inset:7px 9px 8px;\n}\n\n.aggregate-merge-four .agg-tile .mini-pie{\n  width:31px;\n  height:31px;\n  margin-top:0;\n}\n\n.aggregate-merge-four .agg-tile .mini-pie::after{\n  inset:7px;\n}\n\n.aggregate-merge-four .agg-tile .mini-bars{\n  gap:4px;\n}\n\n.aggregate-merge-four .agg-tile .mini-bars span{\n  height:4px;\n}\n\n/* Final aggregate card has exact same dimensions as Product Analysis */\n.aggregate-merge-four .agg-result-card{\n  width:138px !important;\n  height:182px !important;\n  border-radius:18px;\n}\n\n.aggregate-merge-four .agg-result-card .result-ui{\n  inset:13px;\n}\n\n.aggregate-merge-four .agg-result-card .mini-pie{\n  width:55px;\n  height:55px;\n  margin-top:4px;\n}\n\n.aggregate-merge-four .agg-result-card .mini-pie::after{\n  inset:14px;\n}\n\n.aggregate-merge-four .agg-result-card .mini-bars{\n  gap:7px;\n}\n\n.aggregate-merge-four .agg-result-card .mini-bars span{\n  height:7px;\n}\n\n/* Disable previous six-item animation rules */\n.aggregate-merge-four .six-1,\n.aggregate-merge-four .six-2,\n.aggregate-merge-four .six-3,\n.aggregate-merge-four .six-4,\n.aggregate-merge-four .six-5,\n.aggregate-merge-four .six-6{\n  display:none !important;\n}\n\n/* Four separated cards -> attached 2x2 block -> one card */\n.tile[data-kind=\"aggregate\"].active .four-1{\n  animation:mergeFour1 3.45s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .four-2{\n  animation:mergeFour2 3.45s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .four-3{\n  animation:mergeFour3 3.45s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .four-4{\n  animation:mergeFour4 3.45s var(--ease) both;\n}\n\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-four .agg-result-card{\n  animation:resultFromFour 3.45s var(--ease) both;\n}\n\n@keyframes mergeFour1{\n  0%,14%{\n    transform:translate(0,0) scale(1);\n    border-radius:14px;\n    opacity:1;\n  }\n  62%{\n    transform:translate(12px,12px) scale(1);\n    border-radius:4px;\n    opacity:1;\n  }\n  78%{\n    transform:translate(12px,12px) scale(.98);\n    opacity:.98;\n  }\n  100%{\n    transform:translate(55px,55px) scale(.20);\n    opacity:0;\n  }\n}\n\n@keyframes mergeFour2{\n  0%,14%{\n    transform:translate(0,0) scale(1);\n    border-radius:14px;\n    opacity:1;\n  }\n  62%{\n    transform:translate(-12px,12px) scale(1);\n    border-radius:4px;\n    opacity:1;\n  }\n  78%{\n    transform:translate(-12px,12px) scale(.98);\n    opacity:.98;\n  }\n  100%{\n    transform:translate(-55px,55px) scale(.20);\n    opacity:0;\n  }\n}\n\n@keyframes mergeFour3{\n  0%,14%{\n    transform:translate(0,0) scale(1);\n    border-radius:14px;\n    opacity:1;\n  }\n  62%{\n    transform:translate(12px,-12px) scale(1);\n    border-radius:4px;\n    opacity:1;\n  }\n  78%{\n    transform:translate(12px,-12px) scale(.98);\n    opacity:.98;\n  }\n  100%{\n    transform:translate(55px,-55px) scale(.20);\n    opacity:0;\n  }\n}\n\n@keyframes mergeFour4{\n  0%,14%{\n    transform:translate(0,0) scale(1);\n    border-radius:14px;\n    opacity:1;\n  }\n  62%{\n    transform:translate(-12px,-12px) scale(1);\n    border-radius:4px;\n    opacity:1;\n  }\n  78%{\n    transform:translate(-12px,-12px) scale(.98);\n    opacity:.98;\n  }\n  100%{\n    transform:translate(-55px,-55px) scale(.20);\n    opacity:0;\n  }\n}\n\n@keyframes resultFromFour{\n  0%,66%{\n    transform:translate(-50%,-50%) scale(.70);\n    opacity:0;\n  }\n  80%{\n    transform:translate(-50%,-50%) scale(.92);\n    opacity:.76;\n  }\n  92%{\n    transform:translate(-50%,-50%) scale(1.035);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) scale(1);\n    opacity:1;\n  }\n}\n\n@media (max-width:680px){\n  .comparison-mask-left{\n    width:162px;\n  }\n\n  .pinned-left{\n    left:12px;\n  }\n\n  .full-scroll{\n    left:146px !important;\n  }\n}\n\n\n/* =========================================================\n   V7 \u2014 refinements\n   - lighter/thinner pinned-item frame\n   - aggregate back to 6 items (2 col \u00d7 3 row)\n   - reduce extra white space after description text\n   ========================================================= */\n\n/* Reduce extra whitespace in the tile overall */\n.tile{\n  min-height: 500px !important;\n}\n.preview{\n  height: 248px !important;\n  margin-bottom: 8px !important;\n}\n.copy{\n  padding: 0 22px 18px !important;\n}\n.copy h2{\n  margin: 6px 0 8px !important;\n}\n.copy p{\n  margin-bottom: 0 !important;\n}\n\n/* Pinned comparison item: reduce the outer border/frame feel */\n.pinned-left{\n  width: 146px !important;\n  height: 190px !important;\n}\n.pinned-left::before{\n  inset: -6px !important;\n  border: 1px solid rgba(24,24,22,.05) !important;\n  background: rgba(250,249,246,.88) !important;\n  box-shadow: 0 10px 22px rgba(30,27,24,.06) !important;\n}\n.comparison-mask-left{\n  width: 180px !important;\n}\n.full-scroll{\n  left: 166px !important;\n}\n\n/* ---------------------------------------------------------\n   Aggregate: 6 items in a 2\u00d73 grid becoming one item\n   --------------------------------------------------------- */\n.aggregate-merge-six{\n  position:absolute;\n  inset:0;\n  overflow:hidden;\n}\n\n.agg-grid-six{\n  position:absolute;\n  left:50%;\n  top:50%;\n  width:196px;\n  height:242px;\n  transform:translate(-50%,-50%);\n  display:grid;\n  grid-template-columns:repeat(2, 86px);\n  grid-template-rows:repeat(3, 62px);\n  gap:14px 14px;\n  z-index:3;\n}\n\n.aggregate-merge-six .agg-tile{\n  width:86px;\n  height:62px;\n  border:1px solid rgba(24,24,22,.11);\n  border-radius:13px;\n  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.68));\n  box-shadow:0 8px 18px rgba(30,27,24,.055);\n  position:relative;\n  transform-origin:center;\n  will-change:transform,opacity,border-radius;\n}\n\n.aggregate-merge-six .agg-tile .mini-card-ui{\n  inset:6px 8px 7px;\n}\n.aggregate-merge-six .agg-tile .mini-pie{\n  width:25px;\n  height:25px;\n  margin-top:0;\n}\n.aggregate-merge-six .agg-tile .mini-pie::after{\n  inset:6px;\n}\n.aggregate-merge-six .agg-tile .mini-bars{\n  gap:3px;\n  padding-bottom:0;\n}\n.aggregate-merge-six .agg-tile .mini-bars span{\n  height:3px;\n}\n\n/* Final aggregate result same size as the single product item */\n.aggregate-merge-six .agg-result-card{\n  width:138px !important;\n  height:182px !important;\n  border-radius:18px;\n}\n.aggregate-merge-six .agg-result-card .result-ui{\n  inset:13px;\n}\n.aggregate-merge-six .agg-result-card .mini-pie{\n  width:55px;\n  height:55px;\n  margin-top:4px;\n}\n.aggregate-merge-six .agg-result-card .mini-pie::after{\n  inset:14px;\n}\n.aggregate-merge-six .agg-result-card .mini-bars{\n  gap:7px;\n}\n.aggregate-merge-six .agg-result-card .mini-bars span{\n  height:7px;\n}\n\n/* Hide old 4-item layout if it still exists anywhere */\n.aggregate-merge-six .four-1,\n.aggregate-merge-six .four-2,\n.aggregate-merge-six .four-3,\n.aggregate-merge-six .four-4,\n.agg-grid-four{\n  display:none !important;\n}\n\n/* 6 cards \u2192 attach as 2x3 block \u2192 resolve into one result card */\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-1{\n  animation:joinSix1b 3.35s var(--ease) both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-2{\n  animation:joinSix2b 3.35s var(--ease) .04s both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-3{\n  animation:joinSix3b 3.35s var(--ease) .08s both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-4{\n  animation:joinSix4b 3.35s var(--ease) .02s both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-5{\n  animation:joinSix5b 3.35s var(--ease) .06s both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-6{\n  animation:joinSix6b 3.35s var(--ease) .10s both;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .agg-result-card{\n  animation:resultFromSixB 3.35s var(--ease) both;\n}\n\n@keyframes joinSix1b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,7px) scale(.98);opacity:.95}\n  100%{transform:translate(50px,78px) scale(.20);opacity:0}\n}\n@keyframes joinSix2b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,7px) scale(.98);opacity:.95}\n  100%{transform:translate(-50px,78px) scale(.20);opacity:0}\n}\n@keyframes joinSix3b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,0) scale(.98);opacity:.95}\n  100%{transform:translate(50px,0) scale(.20);opacity:0}\n}\n@keyframes joinSix4b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,0) scale(.98);opacity:.95}\n  100%{transform:translate(-50px,0) scale(.20);opacity:0}\n}\n@keyframes joinSix5b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(7px,-7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(7px,-7px) scale(.98);opacity:.95}\n  100%{transform:translate(50px,-78px) scale(.20);opacity:0}\n}\n@keyframes joinSix6b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-7px,-7px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-7px,-7px) scale(.98);opacity:.95}\n  100%{transform:translate(-50px,-78px) scale(.20);opacity:0}\n}\n\n@keyframes resultFromSixB{\n  0%,65%{\n    transform:translate(-50%,-50%) scale(.72);\n    opacity:0;\n  }\n  78%{\n    transform:translate(-50%,-50%) scale(.90);\n    opacity:.72;\n  }\n  91%{\n    transform:translate(-50%,-50%) scale(1.035);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) scale(1);\n    opacity:1;\n  }\n}\n\n@media (max-width:680px){\n  .tile{\n    min-height: 470px !important;\n  }\n  .preview{\n    height: 230px !important;\n  }\n  .copy{\n    padding: 0 16px 16px !important;\n  }\n  .comparison-mask-left{\n    width: 154px !important;\n  }\n  .pinned-left{\n    left: 12px !important;\n  }\n  .full-scroll{\n    left: 144px !important;\n  }\n}\n\n\n/* =========================================================\n   V8 \u2014 aggregate resting state\n   Show 6 items close together when not animating.\n   ========================================================= */\n.agg-grid-six{\n  width: 180px !important;\n  height: 202px !important;\n  grid-template-columns: repeat(2, 86px) !important;\n  grid-template-rows: repeat(3, 62px) !important;\n  gap: 8px 8px !important;\n}\n\n/* Keep the final result hidden in resting state so the aggregate tile\n   reads as a collection, not as a single product. */\n.aggregate-merge-six .agg-result-card{\n  opacity: 0;\n}\n\n/* Slightly tighten the merge path now that the resting layout is closer. */\n@keyframes joinSix1b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(4px,4px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(4px,4px) scale(.98);opacity:.95}\n  100%{transform:translate(47px,70px) scale(.20);opacity:0}\n}\n@keyframes joinSix2b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-4px,4px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-4px,4px) scale(.98);opacity:.95}\n  100%{transform:translate(-47px,70px) scale(.20);opacity:0}\n}\n@keyframes joinSix3b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(4px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(4px,0) scale(.98);opacity:.95}\n  100%{transform:translate(47px,0) scale(.20);opacity:0}\n}\n@keyframes joinSix4b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-4px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-4px,0) scale(.98);opacity:.95}\n  100%{transform:translate(-47px,0) scale(.20);opacity:0}\n}\n@keyframes joinSix5b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(4px,-4px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(4px,-4px) scale(.98);opacity:.95}\n  100%{transform:translate(47px,-70px) scale(.20);opacity:0}\n}\n@keyframes joinSix6b{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:13px;opacity:1}\n  62%{transform:translate(-4px,-4px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-4px,-4px) scale(.98);opacity:.95}\n  100%{transform:translate(-47px,-70px) scale(.20);opacity:0}\n}\n\n\n/* =========================================================\n   V9 \u2014 final refinements\n   - product card slightly higher and centered\n   - lighter pinned-item frame\n   - 6-item aggregate cluster fits inside single-card dimensions\n   ========================================================= */\n\n/* Product Analysis: keep the single item a bit higher while remaining centered */\n.product-stack.single-only .p-card{\n  top:50% !important;\n}\n.tile[data-kind=\"product\"].active .single-file{\n  animation:singleProductPopV9 1.2s var(--ease) both !important;\n}\n@keyframes singleProductPopV9{\n  0%{\n    transform:translate(-50%,-50%) translateY(24px) scale(.88);\n    opacity:0;\n  }\n  60%{\n    transform:translate(-50%,-50%) translateY(-10px) scale(1.045);\n    opacity:1;\n  }\n  100%{\n    transform:translate(-50%,-50%) translateY(-6px) scale(1);\n    opacity:1;\n  }\n}\n\n/* Side-by-side pinned item: reduce the outer border/frame even more */\n.pinned-left{\n  width:144px !important;\n  height:188px !important;\n}\n.pinned-left::before{\n  inset:-3px !important;\n  border:1px solid rgba(24,24,22,.03) !important;\n  background:rgba(250,249,246,.74) !important;\n  box-shadow:0 6px 16px rgba(30,27,24,.045) !important;\n}\n\n/* Aggregate resting state: the whole 6-doc cluster should occupy\n   about the same footprint as a single product card (138 \u00d7 182). */\n.agg-grid-six{\n  width:138px !important;\n  height:182px !important;\n  grid-template-columns:repeat(2, 64px) !important;\n  grid-template-rows:repeat(3, 56px) !important;\n  gap:7px 10px !important;\n}\n\n.aggregate-merge-six .agg-tile{\n  width:64px !important;\n  height:56px !important;\n  border-radius:11px !important;\n}\n\n.aggregate-merge-six .agg-tile .mini-card-ui{\n  inset:5px 7px 6px !important;\n}\n.aggregate-merge-six .agg-tile .mini-pie{\n  width:22px !important;\n  height:22px !important;\n}\n.aggregate-merge-six .agg-tile .mini-pie::after{\n  inset:5px !important;\n}\n.aggregate-merge-six .agg-tile .mini-bars{\n  gap:3px !important;\n}\n.aggregate-merge-six .agg-tile .mini-bars span{\n  height:3px !important;\n}\n\n/* New merge path tuned to the tighter resting cluster */\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-1{\n  animation:joinSix1c 3.35s var(--ease) both !important;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-2{\n  animation:joinSix2c 3.35s var(--ease) .04s both !important;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-3{\n  animation:joinSix3c 3.35s var(--ease) .08s both !important;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-4{\n  animation:joinSix4c 3.35s var(--ease) .02s both !important;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-5{\n  animation:joinSix5c 3.35s var(--ease) .06s both !important;\n}\n.tile[data-kind=\"aggregate\"].active .aggregate-merge-six .six-6{\n  animation:joinSix6c 3.35s var(--ease) .10s both !important;\n}\n\n@keyframes joinSix1c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(6px,8px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(6px,8px) scale(.98);opacity:.95}\n  100%{transform:translate(37px,63px) scale(.20);opacity:0}\n}\n@keyframes joinSix2c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(-6px,8px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-6px,8px) scale(.98);opacity:.95}\n  100%{transform:translate(-37px,63px) scale(.20);opacity:0}\n}\n@keyframes joinSix3c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(6px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(6px,0) scale(.98);opacity:.95}\n  100%{transform:translate(37px,2px) scale(.20);opacity:0}\n}\n@keyframes joinSix4c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(-6px,0) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-6px,0) scale(.98);opacity:.95}\n  100%{transform:translate(-37px,2px) scale(.20);opacity:0}\n}\n@keyframes joinSix5c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(6px,-8px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(6px,-8px) scale(.98);opacity:.95}\n  100%{transform:translate(37px,-59px) scale(.20);opacity:0}\n}\n@keyframes joinSix6c{\n  0%,14%{transform:translate(0,0) scale(1);border-radius:11px;opacity:1}\n  62%{transform:translate(-6px,-8px) scale(1);border-radius:4px;opacity:1}\n  78%{transform:translate(-6px,-8px) scale(.98);opacity:.95}\n  100%{transform:translate(-37px,-59px) scale(.20);opacity:0}\n}\n\n@media (max-width:680px){\n  .agg-grid-six{\n    width:130px !important;\n    height:172px !important;\n    grid-template-columns:repeat(2, 60px) !important;\n    grid-template-rows:repeat(3, 52px) !important;\n    gap:6px 8px !important;\n  }\n  .aggregate-merge-six .agg-tile{\n    width:60px !important;\n    height:52px !important;\n  }\n}\n\n\n/* =========================================================\n   V10 \u2014 text spacing refinements\n   ========================================================= */\n\n/* More breathing room between animation preview and text */\n.preview{\n  margin-bottom: 20px !important;\n}\n\n/* Increase text margins/padding inside each main tile */\n.copy{\n  padding: 0 30px 28px !important;\n}\n\n/* More space between title and description */\n.copy h2{\n  margin: 0 0 16px !important;\n}\n\n/* Keep description comfortable and readable */\n.copy p{\n  margin: 0 !important;\n  line-height: 1.62 !important;\n}\n\n/* Slightly increase the separation from the visual area */\n.copy{\n  margin-top: 4px;\n}\n\n@media (max-width:680px){\n  .preview{\n    margin-bottom: 16px !important;\n  }\n\n  .copy{\n    padding: 0 22px 24px !important;\n  }\n\n  .copy h2{\n    margin-bottom: 13px !important;\n  }\n}\n\n\n:host{\n  display:block;\n  width:100%;\n  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;\n}\n.tiles{width:100%}\n";
+  const capabilityMarkup = "<section class=\"tiles\">\n      <!-- Product Analysis -->\n      <article class=\"tile active\" tabindex=\"0\" data-kind=\"product\">\n        \n\n        <div class=\"preview\">\n          <div class=\"product-stack single-only\">\n            <div class=\"p-glow\"></div>\n            <div class=\"p-card p-front single-file\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n          </div>\n        </div>\n\n        <div class=\"copy\">\n          <h2>Product Analysis</h2>\n          <p>\n            Analyze an individual product, including sentiment, reviews,\n            and key product insights.\n          </p>\n        </div>\n      </article>\n\n      <!-- Comparison Analysis -->\n      <article class=\"tile active\" tabindex=\"0\" data-kind=\"comparison\">\n        \n\n        <div class=\"preview\">\n          <div class=\"compare-scene compare-overlap\">\n            <div class=\"comparison-mask-left\"></div>\n\n            <div class=\"pinned-overlay pinned-left\">\n              <div class=\"c-card pin-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n            </div>\n\n            <div class=\"scroll-window full-scroll\">\n              <div class=\"scroll-track\">\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n                <div class=\"c-card\"><div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              </div>\n            </div>\n          </div>\n        </div>\n\n        <div class=\"copy\">\n          <h2>Comparison Analysis</h2>\n          <p>\n            View several products side by side. The first product stays fixed while the other products slide underneath it.\n          </p>\n        </div>\n      </article>\n\n      <!-- Aggregate Analysis -->\n      <article class=\"tile active\" tabindex=\"0\" data-kind=\"aggregate\">\n        \n\n        <div class=\"preview\">\n          <div class=\"aggregate-scene aggregate-merge-six\">\n            <div class=\"agg-grid-six\">\n              <div class=\"agg-tile six-1\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              <div class=\"agg-tile six-2\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              <div class=\"agg-tile six-3\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              <div class=\"agg-tile six-4\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              <div class=\"agg-tile six-5\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n              <div class=\"agg-tile six-6\">\n                <div class=\"mini-card-ui\">\n                  <div class=\"mini-pie\"></div>\n                  <div class=\"mini-bars\">\n                    <span style=\"--w:82%\"></span>\n                    <span style=\"--w:64%\"></span>\n                    <span style=\"--w:46%\"></span>\n                  </div>\n                </div></div>\n            </div>\n\n            <div class=\"agg-result-card\">\n              <div class=\"mini-card-ui result-ui\">\n                <div class=\"mini-pie\"></div>\n                <div class=\"mini-bars\">\n                  <span style=\"--w:88%\"></span>\n                  <span style=\"--w:72%\"></span>\n                  <span style=\"--w:54%\"></span>\n                </div>\n              </div>\n            </div>\n          </div>\n        </div>\n\n        <div class=\"copy\">\n          <h2>Aggregate Analysis</h2>\n          <p>\n            Aggregate data from multiple products and present it as a single combined item or result.\n          </p>\n        </div>\n      </article>\n    </section>";
+
+  class AnalysisCapabilities extends HTMLElement {
+    connectedCallback() {
+      if (this.shadowRoot) return;
+
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `<style>${capabilityCss}</style>${capabilityMarkup}`;
+
+      const tiles = root.querySelectorAll('.tile');
+      const animationDurations = {
+        product: 1500,
+        comparison: 7400,
+        aggregate: 3500
+      };
+
+      const replayTile = (tile) => {
+        const duration = animationDurations[tile.dataset.kind] || 1800;
+        if (tile._replayTimer) clearTimeout(tile._replayTimer);
+
+        tile.classList.remove('active');
+        void tile.offsetWidth;
+        tile.classList.add('active');
+
+        tile._replayTimer = setTimeout(() => {
+          tile.classList.remove('active');
+        }, duration);
+      };
+
+      tiles.forEach(tile => tile.classList.remove('active'));
+
+      const arrivalObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            replayTile(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.45 });
+
+      tiles.forEach(tile => {
+        arrivalObserver.observe(tile);
+        tile.addEventListener('mouseenter', () => replayTile(tile));
+      });
+    }
+  }
+
+  if (!customElements.get('analysis-capabilities')) {
+    customElements.define('analysis-capabilities', AnalysisCapabilities);
+  }
+})();
+</script>
+
+</body>
+</html>

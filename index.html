@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cipher Prototype Options</title>
+<meta name="description" content="Choose one of the three Cipher prototype options.">
+<style>
+:root{
+  --bg:#f3f0e8;
+  --paper:#fbfaf6;
+  --ink:#171715;
+  --muted:#6f6a62;
+  --line:rgba(23,23,21,.12);
+  --green:#315f4c;
+  --violet:#9287d8;
+  --peach:#d5a383;
+  --shadow:0 24px 80px rgba(37,32,26,.10);
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 14% 12%,rgba(146,135,216,.26),transparent 26%),
+    radial-gradient(circle at 88% 18%,rgba(49,95,76,.17),transparent 25%),
+    radial-gradient(circle at 72% 86%,rgba(213,163,131,.22),transparent 28%),
+    linear-gradient(180deg,#f3f0e8 0%,#fbfaf6 100%);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+a{color:inherit;text-decoration:none}
+.page{
+  width:min(calc(100% - 48px),1180px);
+  min-height:100svh;
+  margin-inline:auto;
+  padding:32px 0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:34px;
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:780;
+  letter-spacing:-.02em;
+}
+.brand-mark{
+  width:31px;
+  height:31px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#191917,#4f7765);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.24);
+}
+.status{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:680;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);
+  gap:46px;
+  align-items:center;
+}
+.intro{
+  max-width:520px;
+}
+.eyebrow{
+  margin:0 0 14px;
+  color:var(--green);
+  font-size:13px;
+  font-weight:780;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+h1{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(36px,5vw,66px);
+  line-height:.91;
+  letter-spacing:-.045em;
+}
+.intro p{
+  margin:24px 0 0;
+  color:var(--muted);
+  font-size:clamp(16px,1.7vw,19px);
+  line-height:1.65;
+}
+.options{
+  display:grid;
+  gap:16px;
+}
+.option{
+  position:relative;
+  overflow:hidden;
+  padding:23px 24px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:rgba(251,250,246,.76);
+  box-shadow:0 16px 45px rgba(37,32,26,.065);
+  backdrop-filter:blur(18px);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.option::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,rgba(255,255,255,.36),transparent 46%);
+  pointer-events:none;
+}
+.option:hover,
+.option:focus-visible{
+  transform:translateY(-3px);
+  border-color:rgba(23,23,21,.22);
+  box-shadow:var(--shadow);
+  outline:none;
+}
+.option-top{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.number{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:780;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+.arrow{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background:var(--ink);
+  color:#fff;
+  font-size:19px;
+  line-height:1;
+}
+.option h2{
+  position:relative;
+  margin:26px 0 8px;
+  font-size:clamp(24px,3vw,36px);
+  line-height:1;
+  letter-spacing:-.035em;
+}
+.option p{
+  position:relative;
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.55;
+}
+.footer{
+  color:var(--muted);
+  font-size:13px;
+}
+@media (max-width:780px){
+  .page{width:min(calc(100% - 32px),1180px);padding:22px 0;gap:28px}
+  .topbar{align-items:flex-start;flex-direction:column;gap:10px}
+  .hero{grid-template-columns:1fr;gap:30px;align-items:start}
+  .intro{max-width:none}
+  .option{min-height:132px;padding:21px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="topbar" aria-label="Project header">
+    <a class="brand" href="index.html" aria-label="Cipher prototype options home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Cipher Prototype</span>
+    </a>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="intro">
+      <p class="eyebrow">Prototype selector</p>
+      <h1 id="page-title">Choose an option to preview.</h1>
+    </div>
+
+    <nav class="options" aria-label="Prototype options">
+      <a class="option" target="_blank" href="Option%2001%20-%20Login%20Page.html">
+        <span class="option-top">
+          <span class="number">Option 01</span>
+          <span class="arrow" aria-hidden="true">&#8594;</span>
+        </span>
+        <h2>Login Page</h2>
+        <p>Open the MAS sign-in concept.</p>
+      </a>
+
+      <a class="option" target="_blank" href="Option%2002%20-%20Homepage.html">
+        <span class="option-top">
+          <span class="number">Option 02</span>
+          <span class="arrow" aria-hidden="true">&#8594;</span>
+        </span>
+        <h2>Homepage v1</h2>
+        <p>Open the first garment sentiment intelligence homepage concept.</p>
+      </a>
+
+      <a class="option" target="_blank" href="Option%2003%20-%20Homepage.html">
+        <span class="option-top">
+          <span class="number">Option 03</span>
+          <span class="arrow" aria-hidden="true">&#8594;</span>
+        </span>
+        <h2>Homepage v2</h2>
+        <p>Open the animated homepage concept.</p>
+      </a>
+    </nav>
+  </section>
+</main>
+</body>
+</html>
