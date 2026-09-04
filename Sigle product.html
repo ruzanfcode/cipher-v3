@@ -3387,6 +3387,506 @@ body{
 }
 </style>
 
+
+<style id="cipher-single-final-consistency">
+/* =========================================================
+   FINAL — shared nav / Back to compare / stronger selection
+   ========================================================= */
+
+/* Canonical navigation: exact dimensions/design used in Comparison. */
+.cipher-detail-nav-shell{
+  width:min(calc(100% - 48px),1180px) !important;
+  top:16px !important;
+  z-index:500 !important;
+  padding-top:16px !important;
+}
+
+.cipher-detail-nav{
+  min-height:58px !important;
+  grid-template-columns:1fr auto 1fr !important;
+  gap:18px !important;
+  padding:8px 10px 8px 14px !important;
+  border:1px solid rgba(255,255,255,.52) !important;
+  border-radius:999px !important;
+  background:rgba(208,229,242,.37) !important;
+}
+
+.cipher-detail-brand{
+  gap:9px !important;
+  min-height:38px !important;
+  padding:0 9px 0 5px !important;
+}
+
+.cipher-detail-mark{
+  position:relative !important;
+  width:30px !important;
+  height:30px !important;
+  flex:0 0 30px !important;
+  border-radius:9px !important;
+  background:#171717 !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+.cipher-detail-mark::before,
+.cipher-detail-mark::after{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  height:2px;
+  border-radius:999px;
+  background:#fff;
+}
+
+.cipher-detail-mark::before{top:10px;}
+.cipher-detail-mark::after{top:17px;}
+
+.cipher-detail-wordmark{
+  font-size:15px !important;
+  line-height:normal !important;
+  font-weight:760 !important;
+  letter-spacing:-.025em !important;
+}
+
+.cipher-detail-links{
+  gap:52px !important;
+}
+
+.cipher-detail-links a{
+  font-size:12px !important;
+  line-height:normal !important;
+  font-weight:620 !important;
+  letter-spacing:normal !important;
+  padding:8px 2px 11px !important;
+}
+
+.cipher-page-back{
+  min-height:40px !important;
+  gap:7px !important;
+  padding:0 14px !important;
+  border:0 !important;
+  font-size:11px !important;
+  font-weight:680 !important;
+  letter-spacing:normal !important;
+  box-shadow:0 8px 20px rgba(23,23,23,.12) !important;
+}
+
+.cipher-page-back svg{
+  width:16px !important;
+  height:16px !important;
+}
+
+/* Selected horizontal sentiment segment:
+   strong internal ring, no width/height/margin/transform changes. */
+#gsa-v17 .segment.selected-segment,
+#gsa-v17 .return-card-slot .segment.selected-segment,
+#gsa-v17 .return-card-slot .segment.fly-selected-segment{
+  position:relative !important;
+  z-index:4 !important;
+  outline:2px solid #171717 !important;
+  outline-offset:-2px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.96),
+    inset 0 0 0 4px rgba(23,23,23,.92) !important;
+  filter:saturate(1.08) brightness(1.03);
+  transform:none !important;
+}
+
+/* Stacked-bar selected sentiment gets the same strong neutral emphasis. */
+.attr-chart-selected-segment{
+  stroke:#171717 !important;
+  stroke-width:6 !important;
+  paint-order:stroke fill !important;
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.95)) !important;
+}
+
+/* Active review sentiment pill is also clearly selected. */
+#gsa-v17 .sent-filter.active{
+  box-shadow:
+    inset 0 0 0 2px currentColor,
+    0 0 0 2px rgba(255,255,255,.92),
+    0 0 0 3px currentColor !important;
+  transform:none !important;
+}
+
+/* Performance uses a monochrome glyph everywhere. */
+#gsa-v17 .filter-icon[data-attr="performance"],
+#gsa-v17 .heatmap-attr[data-attr="performance"] .heatmap-icon{
+  color:#171717 !important;
+  -webkit-text-fill-color:#171717 !important;
+  filter:grayscale(1) !important;
+}
+
+@media(max-width:820px){
+  .cipher-detail-nav{
+    grid-template-columns:1fr auto !important;
+  }
+
+  .cipher-detail-wordmark{
+    font-size:15px !important;
+  }
+
+  .cipher-page-back{
+    min-height:40px !important;
+    padding:0 14px !important;
+    font-size:11px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-single-final-sentiment-selection">
+/* =========================================================
+   FINAL sentiment selection
+   Thin white ring + sentiment ring + diagonal hatch
+   No geometry/layout movement.
+   ========================================================= */
+
+#gsa-v17 .segment.pos{ --selected-sentiment:#8AA14D; }
+#gsa-v17 .segment.mix{ --selected-sentiment:#C3A061; }
+#gsa-v17 .segment.neg{ --selected-sentiment:#CA5555; }
+
+/* Card sentiment bars normally clip to make the pill.
+   Preserve pill ends on each outer segment and allow the 2px ring. */
+#gsa-v17 #attr-grid .attr-card > .mt-3.flex.h-3,
+#gsa-v17 .return-card-slot .attr-card > .mt-3.flex.h-3{
+  overflow:visible !important;
+}
+
+#gsa-v17 .attr-card .segment:first-child,
+#gsa-v17 .return-card-slot .attr-card .segment:first-child{
+  border-radius:999px 0 0 999px;
+}
+
+#gsa-v17 .attr-card .segment:last-child,
+#gsa-v17 .return-card-slot .attr-card .segment:last-child{
+  border-radius:0 999px 999px 0;
+}
+
+#gsa-v17 .segment{
+  position:relative;
+  overflow:hidden;
+}
+
+/* Override the previous thick black selection. */
+#gsa-v17 .segment.selected-segment,
+#gsa-v17 .return-card-slot .segment.selected-segment,
+#gsa-v17 .return-card-slot .segment.fly-selected-segment{
+  position:relative !important;
+  z-index:5 !important;
+  outline:0 !important;
+  transform:none !important;
+  filter:none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.98),
+    0 0 0 2px var(--selected-sentiment) !important;
+}
+
+/* Subtle diagonal hatch while retaining the original sentiment colour. */
+#gsa-v17 .segment.selected-segment::after,
+#gsa-v17 .return-card-slot .segment.fly-selected-segment::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0 4px,
+      rgba(255,255,255,.58) 4px 5.5px,
+      rgba(255,255,255,0) 5.5px 9px
+    );
+}
+
+/* Stacked SVG bar:
+   selected segment itself gets the white ring;
+   a separate sentiment-colour rect supplies the outer ring;
+   the fill is a sentiment-colour SVG hatch pattern. */
+.attr-chart-selected-segment{
+  stroke:#FFFFFF !important;
+  stroke-width:1.5 !important;
+  paint-order:stroke fill !important;
+  filter:none !important;
+}
+
+.attr-chart-selected-ring{
+  pointer-events:none;
+  vector-effect:non-scaling-stroke;
+}
+
+/* Never shift/resize the selected HTML bars. */
+#gsa-v17 .segment.selected-segment,
+#gsa-v17 .segment.selected-segment:hover{
+  margin:0 !important;
+  padding:0 !important;
+  height:100% !important;
+}
+</style>
+
+
+<style id="cipher-single-pie-selection-refine">
+/* =========================================================
+   Pie / donut selection refinement
+   Remove large focus box and use custom arc selection styling.
+   ========================================================= */
+
+#gsa-v17 .overall-sentiment-donut,
+#gsa-v17 .overall-sentiment-donut:focus,
+#gsa-v17 .overall-sentiment-donut:focus-visible,
+#gsa-v17 .overall-sentiment-donut *:focus,
+#gsa-v17 .overall-sentiment-donut *:focus-visible{
+  outline:none !important;
+}
+
+#gsa-v17 .donut-segment{
+  cursor:pointer;
+  transition:opacity .16s ease, filter .16s ease;
+}
+
+#gsa-v17 .donut-segment.selected-donut-source{
+  opacity:.001;
+}
+
+#gsa-v17 .donut-selection-layer{
+  pointer-events:none;
+}
+</style>
+
+
+<style id="cipher-single-v2-review-context-and-analysis-selection">
+/* =========================================================
+   V2 — compact return context + Radar / Heatmap selection
+   ========================================================= */
+
+/* Keep the return action a fixed compact width at the far right,
+   regardless of whether its text says map, attribute or sentiment. */
+#gsa-v17 .return-bar{
+  grid-template-columns:minmax(180px,312px) minmax(0,1fr) 138px !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:7px 9px !important;
+}
+
+#gsa-v17 .return-btn{
+  justify-self:end !important;
+  align-self:center !important;
+  width:138px !important;
+  min-width:138px !important;
+  max-width:138px !important;
+  min-height:30px !important;
+  height:30px !important;
+  padding:0 8px !important;
+  border-radius:999px !important;
+  font-size:10px !important;
+  font-weight:680 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
+/* Pie and Attention Map use text-only context bars. */
+#gsa-v17 .return-bar.text-only{
+  grid-template-columns:minmax(0,1fr) 138px !important;
+}
+
+#gsa-v17 .return-bar.text-only .return-card-slot{
+  display:none !important;
+}
+
+#gsa-v17 .return-bar.text-only .return-context{
+  grid-column:1 !important;
+  padding-left:5px !important;
+}
+
+#gsa-v17 .return-bar.text-only .return-btn{
+  grid-column:2 !important;
+}
+
+/* Selected Heatmap cell = same visual language as Attribute bar:
+   thin white ring + sentiment-colour ring + diagonal hatch. */
+#gsa-v17 .heatmap-cell[data-sentiment="positive"]{
+  --heatmap-selected-sentiment:#8AA14D;
+}
+#gsa-v17 .heatmap-cell[data-sentiment="mixed"]{
+  --heatmap-selected-sentiment:#C3A061;
+}
+#gsa-v17 .heatmap-cell[data-sentiment="negative"]{
+  --heatmap-selected-sentiment:#CA5555;
+}
+
+#gsa-v17 .heatmap-cell.selected{
+  position:relative !important;
+  z-index:4 !important;
+  outline:0 !important;
+  overflow:hidden !important;
+  transform:none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.98),
+    0 0 0 2px var(--heatmap-selected-sentiment) !important;
+}
+
+#gsa-v17 .heatmap-cell.selected::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0 4px,
+      rgba(255,255,255,.58) 4px 5.5px,
+      rgba(255,255,255,0) 5.5px 9px
+    );
+}
+
+#gsa-v17 .heatmap-cell.selected:hover{
+  transform:none !important;
+}
+
+/* Radar selection ring mirrors the Attribute Attention Map. */
+.radar-selection-ring,
+.radar-attribute-selection-ring{
+  pointer-events:none;
+  vector-effect:non-scaling-stroke;
+}
+
+@media(max-width:760px){
+  #gsa-v17 .return-bar,
+  #gsa-v17 .return-bar.show{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 126px !important;
+    gap:8px !important;
+  }
+
+  #gsa-v17 .return-card-slot{
+    grid-column:1 / -1 !important;
+  }
+
+  #gsa-v17 .return-context{
+    grid-column:1 !important;
+  }
+
+  #gsa-v17 .return-btn{
+    grid-column:2 !important;
+    width:126px !important;
+    min-width:126px !important;
+    max-width:126px !important;
+    font-size:9.5px !important;
+  }
+
+  #gsa-v17 .return-bar.text-only{
+    grid-template-columns:minmax(0,1fr) 126px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-single-v3-heatmap-selected-visibility">
+#gsa-v17 .attribute-heatmap{
+  isolation:isolate;
+}
+#gsa-v17 .heatmap-cell.selected{
+  border-color:transparent !important;
+}
+#gsa-v17 .heatmap-cell.selected::after{
+  mix-blend-mode:normal;
+}
+</style>
+
+
+<style id="cipher-single-v4-bar-ends-heatmap">
+/* =========================================================
+   V4 — visual-order bar ends + reliable Heatmap selection
+   ========================================================= */
+
+/* Sentiment bars: radius follows VISUAL order after sorting,
+   never the original DOM first/last child. */
+#gsa-v17 #attr-grid .attr-card .segment,
+#gsa-v17 .return-card-slot .attr-card .segment{
+  border-radius:0 !important;
+}
+
+#gsa-v17 #attr-grid .attr-card .segment.visual-first,
+#gsa-v17 .return-card-slot .attr-card .segment.visual-first{
+  border-radius:999px 0 0 999px !important;
+}
+
+#gsa-v17 #attr-grid .attr-card .segment.visual-last,
+#gsa-v17 .return-card-slot .attr-card .segment.visual-last{
+  border-radius:0 999px 999px 0 !important;
+}
+
+#gsa-v17 #attr-grid .attr-card .segment.visual-first.visual-last,
+#gsa-v17 .return-card-slot .attr-card .segment.visual-first.visual-last{
+  border-radius:999px !important;
+}
+
+/* Neutralize older DOM-order radius rules completely. */
+#gsa-v17 .attr-card .segment:first-child,
+#gsa-v17 .attr-card .segment:last-child,
+#gsa-v17 .return-card-slot .attr-card .segment:first-child,
+#gsa-v17 .return-card-slot .attr-card .segment:last-child{
+  border-radius:0 !important;
+}
+
+#gsa-v17 .attr-card .segment.visual-first,
+#gsa-v17 .return-card-slot .attr-card .segment.visual-first{
+  border-radius:999px 0 0 999px !important;
+}
+
+#gsa-v17 .attr-card .segment.visual-last,
+#gsa-v17 .return-card-slot .attr-card .segment.visual-last{
+  border-radius:0 999px 999px 0 !important;
+}
+
+/* Heatmap selected cell:
+   thin white ring + sentiment ring + diagonal hatch. */
+#gsa-v17 .heatmap-cell.selected{
+  position:relative !important;
+  z-index:20 !important;
+  outline:0 !important;
+  border-color:transparent !important;
+  overflow:hidden !important;
+  transform:none !important;
+  filter:none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.98),
+    0 0 0 2px var(--heatmap-selected-sentiment) !important;
+}
+
+#gsa-v17 .heatmap-cell.selected::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  display:block !important;
+  pointer-events:none !important;
+  border-radius:inherit !important;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0 4px,
+      rgba(255,255,255,.62) 4px 5.5px,
+      rgba(255,255,255,0) 5.5px 9px
+    ) !important;
+}
+
+/* Keep the value readable over the hatch. */
+#gsa-v17 .heatmap-cell.selected{
+  text-shadow:0 1px 1px rgba(0,0,0,.08);
+}
+
+#gsa-v17 .heatmap-cell.selected:hover{
+  transform:none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.98),
+    0 0 0 2px var(--heatmap-selected-sentiment) !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -3407,7 +3907,7 @@ body{
       <svg viewBox="0 0 20 20" aria-hidden="true">
         <path d="M11.8 4.5 6.3 10l5.5 5.5M6.8 10h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span><span class="back-long-label">Back to </span>search results</span>
+      <span id="page-back-label"><span class="back-long-label">Back to </span>search results</span>
     </button>
   </div>
 </nav>
@@ -3594,14 +4094,40 @@ body{
   <div id="summary" class="mt-4 text-sm font-medium"></div><div id="review-list" class="mt-3 space-y-3"></div>
 </section>
 <script>
-(()=>{const root=document.getElementById('gsa-v17');if(root.dataset.ready)return;root.dataset.ready='1';const total=45;const attrs=[{id:'fit',name:'Fit & Sizing',icon:'↔',m:34,avg:4.4,p:31,pa:4.6,x:0,xa:null,n:3,na:2.4},{id:'material',name:'Material Quality',icon:'▦',m:21,avg:4.5,p:18,pa:4.7,x:1,xa:3,n:2,na:2.5},{id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},{id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},{id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},{id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},{id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},{id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},{id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},{id:'durability',name:'Durability',icon:'◇',m:8,avg:4,p:6,pa:4.7,x:0,xa:null,n:2,na:2}];const pct=(v,d)=>d?Math.round(v/d*100):0;attrs.forEach(a=>{a.c=pct(a.m,total);a.pp=pct(a.p,a.m);a.mp=pct(a.x,a.m);a.np=pct(a.n,a.m)});const color=s=>s==='positive'?'var(--viz-series-2)':s==='mixed'?'var(--viz-series-5)':'var(--viz-series-4)',sname=s=>s.charAt(0).toUpperCase()+s.slice(1);const selectedAttrs=new Set(),selectedSents=new Set();let ratingMode='exact',exactRating=null,rangeStart=null,rangeEnd=null,lastSource=null,returnScrollY=null,mapMode='negative';const tip=root.querySelector('#floating-tip');function showTip(el,a,b=''){tip.innerHTML=`<span>${a}</span>${b?`<span class="tip-second">${b}</span>`:''}`;tip.classList.add('show');const rr=root.getBoundingClientRect(),er=el.getBoundingClientRect(),tw=Math.min(240,tip.offsetWidth||240),th=tip.offsetHeight||48;let left=er.left-rr.left+er.width/2-tw/2;left=Math.max(8,Math.min(left,rr.width-tw-8));let top=er.top-rr.top-th-8;if(top<8)top=er.bottom-rr.top+8;tip.style.left=left+'px';tip.style.top=top+'px'}function hideTip(){tip.classList.remove('show')}function bindTip(el,a,b=''){el.addEventListener('mouseenter',()=>showTip(el,a,b));el.addEventListener('mouseleave',hideTip);el.addEventListener('focus',()=>showTip(el,a,b));el.addEventListener('blur',hideTip)}root.querySelectorAll('.summary-icon').forEach(el=>bindTip(el,el.dataset.name));root.querySelectorAll('.more-btn').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const pop=root.querySelector('#'+btn.dataset.pop);root.querySelectorAll('.more-pop').forEach(p=>{if(p!==pop)p.classList.remove('show')});const opening=!pop.classList.contains('show');if(opening){const parent=btn.offsetParent;const estimatedWidth=Math.min(230,Math.max(150,pop.scrollWidth||180));const maxLeft=Math.max(0,(parent?parent.clientWidth:0)-estimatedWidth);const left=Math.min(btn.offsetLeft,maxLeft);pop.style.left=left+'px';pop.style.right='auto';pop.style.top=(btn.offsetTop+btn.offsetHeight+4)+'px';pop.style.marginTop='0'}pop.classList.toggle('show',opening)}));root.addEventListener('click',e=>{if(!e.target.closest('.more-pop,.more-btn'))root.querySelectorAll('.more-pop').forEach(p=>p.classList.remove('show'))});function setFromInsight(attr,sent,source){
+(()=>{const root=document.getElementById('gsa-v17');if(root.dataset.ready)return;root.dataset.ready='1';const total=45;const attrs=[{id:'fit',name:'Fit & Sizing',icon:'↔',m:34,avg:4.4,p:31,pa:4.6,x:0,xa:null,n:3,na:2.4},{id:'material',name:'Material Quality',icon:'▦',m:21,avg:4.5,p:18,pa:4.7,x:1,xa:3,n:2,na:2.5},{id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},{id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},{id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},{id:'performance',name:'Performance',icon:'ϟ',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},{id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},{id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},{id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},{id:'durability',name:'Durability',icon:'◇',m:8,avg:4,p:6,pa:4.7,x:0,xa:null,n:2,na:2}];const pct=(v,d)=>d?Math.round(v/d*100):0;attrs.forEach(a=>{a.c=pct(a.m,total);a.pp=pct(a.p,a.m);a.mp=pct(a.x,a.m);a.np=pct(a.n,a.m)});const color=s=>s==='positive'?'var(--viz-series-2)':s==='mixed'?'var(--viz-series-5)':'var(--viz-series-4)',sname=s=>s.charAt(0).toUpperCase()+s.slice(1);const selectedAttrs=new Set(),selectedSents=new Set();let ratingMode='exact',exactRating=null,rangeStart=null,rangeEnd=null,lastSource=null,returnScrollY=null,mapMode='negative';const tip=root.querySelector('#floating-tip');function showTip(el,a,b=''){tip.innerHTML=`<span>${a}</span>${b?`<span class="tip-second">${b}</span>`:''}`;tip.classList.add('show');const rr=root.getBoundingClientRect(),er=el.getBoundingClientRect(),tw=Math.min(240,tip.offsetWidth||240),th=tip.offsetHeight||48;let left=er.left-rr.left+er.width/2-tw/2;left=Math.max(8,Math.min(left,rr.width-tw-8));let top=er.top-rr.top-th-8;if(top<8)top=er.bottom-rr.top+8;tip.style.left=left+'px';tip.style.top=top+'px'}function hideTip(){tip.classList.remove('show')}function bindTip(el,a,b=''){el.addEventListener('mouseenter',()=>showTip(el,a,b));el.addEventListener('mouseleave',hideTip);el.addEventListener('focus',()=>showTip(el,a,b));el.addEventListener('blur',hideTip)}root.querySelectorAll('.summary-icon').forEach(el=>bindTip(el,el.dataset.name));root.querySelectorAll('.more-btn').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const pop=root.querySelector('#'+btn.dataset.pop);root.querySelectorAll('.more-pop').forEach(p=>{if(p!==pop)p.classList.remove('show')});const opening=!pop.classList.contains('show');if(opening){const parent=btn.offsetParent;const estimatedWidth=Math.min(230,Math.max(150,pop.scrollWidth||180));const maxLeft=Math.max(0,(parent?parent.clientWidth:0)-estimatedWidth);const left=Math.min(btn.offsetLeft,maxLeft);pop.style.left=left+'px';pop.style.right='auto';pop.style.top=(btn.offsetTop+btn.offsetHeight+4)+'px';pop.style.marginTop='0'}pop.classList.toggle('show',opening)}));root.addEventListener('click',e=>{if(!e.target.closest('.more-pop,.more-btn'))root.querySelectorAll('.more-pop').forEach(p=>p.classList.remove('show'))});function setFromInsight(attr,sent,source){
 returnScrollY=window.scrollY;selectedAttrs.clear();selectedSents.clear();selectedAttrs.add(attr);if(sent)selectedSents.add(sent);lastSource=source;
-const a=attrs.find(x=>x.id===attr),fromMap=source&&source.id==='map-section',bar=root.querySelector('#return-bar'),context=root.querySelector('#return-context'),back=root.querySelector('#back-source');
+const a=attrs.find(x=>x.id===attr),fromMap=source&&source.id==='map-section',bar=root.querySelector('#return-bar'),context=root.querySelector('#return-context'),back=root.querySelector('#back-source'),slot=root.querySelector('#return-card-slot');
 context.textContent=`Viewing reviews from ${fromMap?'Attention map':'Attribute insight'}: ${a?a.name:attr}${sent?` · ${sname(sent)}`:''}`;
 back.textContent=fromMap?'← Return to map':'← Return to attribute';
+bar.classList.toggle('text-only',!!fromMap);
+if(fromMap)slot?.replaceChildren();
 bar.classList.add('show');
-updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelector('#reviews').scrollIntoView({behavior:'smooth',block:'start'}))
-}const grid=root.querySelector('#attr-grid');attrs.forEach(a=>{const top=[['positive',a.pp,a.p,a.pa],['mixed',a.mp,a.x,a.xa],['negative',a.np,a.n,a.na]].sort((u,v)=>v[1]-u[1])[0];const card=document.createElement('article');card.className='attr-card rounded-xl border border-[var(--viz-border)] p-4';card.dataset.attr=a.id;card.tabIndex=0;const segs=[['positive',a.p,a.pp],['mixed',a.x,a.mp],['negative',a.n,a.np]].filter(v=>v[1]>0).map(([s,c,p])=>`<button type="button" class="segment ${s==='positive'?'pos':s==='mixed'?'mix':'neg'}" data-s="${s}" style="width:${p}%"></button>`).join('');card.innerHTML=`<div class="flex items-start justify-between gap-3"><div class="flex min-w-0 gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--viz-card)] text-sm">${a.icon}</span><div><div class="font-medium">${a.name}</div><div class="mt-1 flex items-center gap-2 text-xs text-[var(--viz-muted)]"><span class="rc" tabindex="0">${a.m} reviews</span><span>·</span><span class="cov" tabindex="0">${a.c}%</span><span>·</span><span class="avg" tabindex="0">★ ${a.avg.toFixed(1)}</span></div></div></div><span class="top-tag shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold" tabindex="0" style="color:${color(top[0])};border-color:${color(top[0])}">${top[1]}%</span></div><div class="mt-3 flex h-3 overflow-hidden rounded-full bg-[var(--viz-card)]">${segs}</div>`;bindTip(card.querySelector('.rc'),`${a.m} reviews mention this attribute.`);bindTip(card.querySelector('.cov'),`${a.c}% of all product reviews mention this attribute.`);bindTip(card.querySelector('.avg'),`Average rating of reviews mentioning ${a.name}: ${a.avg.toFixed(1)} / 5.`);bindTip(card.querySelector('.top-tag'),`${sname(top[0])} · ${top[1]}% (${top[2]} reviews)`,`Average rating: ${top[3]===null?'—':top[3].toFixed(1)} / 5`);card.querySelectorAll('.segment').forEach(seg=>{const s=seg.dataset.s,count=s==='positive'?a.p:s==='mixed'?a.x:a.n,per=s==='positive'?a.pp:s==='mixed'?a.mp:a.np,av=s==='positive'?a.pa:s==='mixed'?a.xa:a.na;bindTip(seg,`${sname(s)} · ${per}% (${count} reviews)`,`Average rating: ${av===null?'—':av.toFixed(1)} / 5`);seg.addEventListener('click',e=>{e.stopPropagation();setFromInsight(a.id,s,card)})});card.addEventListener('click',e=>{if(!e.target.closest('.segment'))setFromInsight(a.id,null,card)});grid.appendChild(card)});const filterWrap=root.querySelector('#attribute-filters');attrs.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='filter-icon';b.dataset.attr=a.id;b.textContent=a.icon;bindTip(b,a.name);b.addEventListener('click',()=>{clearSource();selectedAttrs.has(a.id)?selectedAttrs.delete(a.id):selectedAttrs.add(a.id);updateFilters();renderReviews();draw()});filterWrap.appendChild(b)});root.querySelectorAll('.sent-filter').forEach(b=>b.addEventListener('click',()=>{clearSource();const s=b.dataset.sent;selectedSents.has(s)?selectedSents.delete(s):selectedSents.add(s);updateFilters();renderReviews()}));function clearSource(){lastSource=null;returnScrollY=null;root.querySelector('#return-bar').classList.remove('show')}const ratingButtons=[...root.querySelectorAll('.rating-star')];bindTip(root.querySelector('#rating-exact'),'Exact rating','Choose one exact star rating.');bindTip(root.querySelector('#rating-range'),'Rating range','Choose the start and end of a rating range.');function setRatingMode(mode){ratingMode=mode;exactRating=null;rangeStart=null;rangeEnd=null;root.querySelector('#rating-exact').classList.toggle('active',mode==='exact');root.querySelector('#rating-range').classList.toggle('active',mode==='range');updateRatingUI();renderReviews();updateClearState()}root.querySelector('#rating-exact').addEventListener('click',()=>{clearSource();setRatingMode('exact')});root.querySelector('#rating-range').addEventListener('click',()=>{clearSource();setRatingMode('range')});ratingButtons.forEach(b=>{bindTip(b,`${b.dataset.rating} star${b.dataset.rating==='1'?'':'s'}`,'Use this star in the current rating filter.');b.addEventListener('click',()=>{clearSource();const n=Number(b.dataset.rating);if(ratingMode==='exact'){exactRating=exactRating===n?null:n}else{if(rangeStart===null||rangeEnd!==null){rangeStart=n;rangeEnd=null}else{rangeEnd=n;if(rangeEnd<rangeStart){const t=rangeStart;rangeStart=rangeEnd;rangeEnd=t}}}updateRatingUI();renderReviews();updateClearState()})});function updateRatingUI(){ratingButtons.forEach(b=>{const n=Number(b.dataset.rating);let filled=false,start=false,end=false;if(ratingMode==='exact'&&exactRating!==null)filled=n<=exactRating;if(ratingMode==='range'&&rangeStart!==null){if(rangeEnd===null)filled=n===rangeStart;else filled=n>=rangeStart&&n<=rangeEnd;start=n===rangeStart;end=n===rangeEnd}b.textContent=filled?'★':'☆';b.classList.toggle('filled',filled);b.classList.toggle('range-start',start);b.classList.toggle('range-end',end)})}function updateFilters(){root.querySelectorAll('.filter-icon').forEach(b=>b.classList.toggle('active',selectedAttrs.has(b.dataset.attr)));root.querySelectorAll('.sent-filter').forEach(b=>b.classList.toggle('active',selectedSents.has(b.dataset.sent)));root.querySelectorAll('.attr-card').forEach(card=>{const active=selectedAttrs.has(card.dataset.attr);card.classList.toggle('selected',active);card.querySelectorAll('.segment').forEach(seg=>seg.classList.toggle('selected-segment',active&&selectedSents.has(seg.dataset.s)))});updateClearState()}function updateClearState(){const has=selectedAttrs.size||selectedSents.size||exactRating!==null||rangeStart!==null||root.querySelector('#search').value.trim();root.querySelector('#clear-filters').disabled=!has}root.querySelector('#clear-filters').addEventListener('click',()=>{selectedAttrs.clear();selectedSents.clear();exactRating=null;rangeStart=null;rangeEnd=null;ratingMode='exact';root.querySelector('#search').value='';root.querySelector('#rating-exact').classList.add('active');root.querySelector('#rating-range').classList.remove('active');clearSource();updateRatingUI();updateFilters();renderReviews();draw()});root.querySelector('#back-source').addEventListener('click',()=>{if(returnScrollY!==null){window.scrollTo({top:returnScrollY,behavior:'smooth'});if(lastSource){const oldOutline=lastSource.style.outline,oldOffset=lastSource.style.outlineOffset;setTimeout(()=>{lastSource.style.outline='2px solid var(--viz-accent)';lastSource.style.outlineOffset='3px';setTimeout(()=>{lastSource.style.outline=oldOutline;lastSource.style.outlineOffset=oldOffset},1400)},450)}return}if(lastSource?.scrollIntoView)lastSource.scrollIntoView({behavior:'smooth',block:'center'});else root.querySelector('#map-section').scrollIntoView({behavior:'smooth',block:'start'})});const reviews=[{r:1,d:'2026-08-28',t:'Pocket placement is difficult',b:'The pocket position makes the skirt less practical for my dominant hand.',s:{functionality:'negative',workmanship:'positive'}},{r:5,d:'2026-08-20',t:'Great fit',b:'Runs slightly small but the overall shape and look are excellent.',s:{fit:'negative',aesthetic:'positive',quality:'positive'}},{r:4,d:'2026-08-11',t:'Good compression shorts',b:'Comfortable undershort and a classic pleated look. Pocket placement could be better.',s:{fit:'positive',comfort:'positive',aesthetic:'positive',functionality:'negative'}},{r:5,d:'2026-07-29',t:'Very flattering',b:'The length and fit worked well and the skirt performed well during play.',s:{fit:'positive',aesthetic:'positive',performance:'positive',functionality:'positive'}},{r:5,d:'2026-07-14',t:'Comfortable and stylish',b:'Built-in shorts work well and the skirt is comfortable around the waist.',s:{comfort:'positive',aesthetic:'positive',functionality:'positive',quality:'positive'}},{r:3,d:'2026-06-26',t:'Good overall',b:'The fit is comfortable but some functional details could be improved.',s:{fit:'positive',comfort:'positive',functionality:'mixed'}},{r:2,d:'2026-06-03',t:'Fit did not work',b:'The attached shorts were uncomfortable for me and the fit felt off.',s:{fit:'negative',comfort:'negative',functionality:'negative'}}];function stars(n){return '★'.repeat(n)+'☆'.repeat(5-n)}function ratingMatches(r){if(ratingMode==='exact'&&exactRating!==null)return r===exactRating;if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)return r>=rangeStart&&r<=rangeEnd;return true}function formatReviewDate(iso){const [y,m,d]=iso.split('-').map(Number);return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(y,m-1,d))}function renderReviews(){const q=root.querySelector('#search').value.trim().toLowerCase();const rows=reviews.filter(v=>{const entries=Object.entries(v.s);if(selectedAttrs.size&&!entries.some(([id])=>selectedAttrs.has(id)))return false;if(selectedSents.size){const relevant=selectedAttrs.size?entries.filter(([id])=>selectedAttrs.has(id)):entries;if(!relevant.some(([,s])=>selectedSents.has(s)))return false}if(!ratingMatches(v.r))return false;if(q&&!(`${v.t} ${v.b}`.toLowerCase().includes(q)))return false;return true});const parts=[];if(selectedAttrs.size)parts.push(`${selectedAttrs.size} attribute${selectedAttrs.size>1?'s':''}`);if(selectedSents.size)parts.push(`${selectedSents.size} sentiment${selectedSents.size>1?'s':''}`);if(ratingMode==='exact'&&exactRating)parts.push(`exactly ${exactRating}★`);if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)parts.push(`${rangeStart}–${rangeEnd}★`);root.querySelector('#summary').textContent=`${parts.length?parts.join(' · '):'All reviews'} · ${rows.length} shown`;root.querySelector('#review-list').innerHTML=rows.length?rows.map(v=>`<article class="rounded-xl border border-[var(--viz-border)] p-4"><div class="review-card-head"><div class="font-medium">${v.t}</div><time datetime="${v.d}">${formatReviewDate(v.d)}</time></div><div class="mt-2 flex flex-wrap items-center gap-1.5"><span class="mr-1 shrink-0 text-sm">${stars(v.r)}</span>${Object.entries(v.s).map(([id,sn])=>`<button type="button" class="review-icon" data-review-id="${id}" data-review-sent="${sn}" style="color:${color(sn)}"><span style="color:var(--viz-text)">${attrs.find(x=>x.id===id).icon}</span></button>`).join('')}</div><p class="mt-3 text-sm leading-6 text-[var(--viz-muted)]">${v.b}</p></article>`).join(''):'<div class="rounded-xl border border-dashed border-[var(--viz-border)] p-5 text-center text-sm text-[var(--viz-muted)]">No matching reviews.</div>';root.querySelectorAll('[data-review-id]').forEach(el=>bindTip(el,`${attrs.find(a=>a.id===el.dataset.reviewId).name} · ${sname(el.dataset.reviewSent)}`));updateClearState()}root.querySelector('#search').addEventListener('input',()=>{renderReviews();updateClearState()});const svg=root.querySelector('#map'),NS='http://www.w3.org/2000/svg',W=660,H=340,pad={l:50,r:25,t:28,b:36};function draw(){svg.innerHTML='';const sx=v=>pad.l+(v/100)*(W-pad.l-pad.r),sy=v=>H-pad.b-(v/100)*(H-pad.t-pad.b);for(let x=0;x<=100;x+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',sx(x));l.setAttribute('x2',sx(x));l.setAttribute('y1',pad.t);l.setAttribute('y2',H-pad.b);l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',sx(x));t.setAttribute('y',H-9);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=x+'%';svg.appendChild(t)}for(let y=0;y<=100;y+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',pad.l);l.setAttribute('x2',W-pad.r);l.setAttribute('y1',sy(y));l.setAttribute('y2',sy(y));l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',40);t.setAttribute('y',sy(y)+4);t.setAttribute('text-anchor','end');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=y+'%';svg.appendChild(t)}const ordered=[...attrs].sort((a,b)=>selectedAttrs.has(a.id)?1:selectedAttrs.has(b.id)?-1:0);ordered.forEach(a=>{const y=mapMode==='positive'?a.pp:a.np,isSel=selectedAttrs.has(a.id),g=document.createElementNS(NS,'g');g.style.cursor='pointer';if(isSel){const ring=document.createElementNS(NS,'circle');ring.setAttribute('cx',sx(a.c));ring.setAttribute('cy',sy(y));ring.setAttribute('r','21');ring.setAttribute('fill','none');ring.setAttribute('stroke','var(--viz-accent)');ring.setAttribute('stroke-width','3');g.appendChild(ring)}const c=document.createElementNS(NS,'circle');c.setAttribute('cx',sx(a.c));c.setAttribute('cy',sy(y));c.setAttribute('r','16');c.setAttribute('fill','var(--viz-panel)');c.setAttribute('stroke',isSel?'var(--viz-accent)':color(mapMode));c.setAttribute('stroke-width',isSel?'3':'2');g.appendChild(c);const it=document.createElementNS(NS,'text');it.setAttribute('x',sx(a.c));it.setAttribute('y',sy(y)+5);it.setAttribute('text-anchor','middle');it.setAttribute('font-size','16');it.setAttribute('font-weight','700');it.setAttribute('fill','var(--viz-text)');it.textContent=a.icon;g.appendChild(it);const tooltip=`${a.name} · ${a.c}% of reviews mention it · ${y}% ${mapMode} sentiment.`;g.addEventListener('mouseenter',()=>showTip(g,tooltip));g.addEventListener('mouseleave',hideTip);g.addEventListener('click',()=>setFromInsight(a.id,mapMode,root.querySelector('#map-section')));svg.appendChild(g)})}function setMapMode(m){mapMode=m;root.querySelector('#y-label').textContent=m==='positive'?'Positive sentiment share':'Negative sentiment share';[['pos','positive'],['neg','negative']].forEach(([id,val])=>{const b=root.querySelector('#map-'+id),active=val===m;b.style.background=active?'var(--viz-accent-bg)':'transparent';b.style.boxShadow=active?'inset 0 0 0 1px var(--viz-accent)':'none';b.setAttribute('aria-pressed',active?'true':'false')});draw()}root.querySelector('#map-pos').addEventListener('click',()=>setMapMode('positive'));root.querySelector('#map-neg').addEventListener('click',()=>setMapMode('negative'));setRatingMode('exact');setMapMode('negative');updateFilters();renderReviews();})();
+updateFilters();renderReviews();draw();refreshAnalysisSelections();requestAnimationFrame(()=>root.querySelector('#reviews').scrollIntoView({behavior:'smooth',block:'start'}))
+}
+function setFromOverallSentiment(sent,source){
+returnScrollY=window.scrollY;selectedAttrs.clear();selectedSents.clear();if(sent)selectedSents.add(sent);lastSource=source;
+if(source)source.dataset.skipReturnOutline='1';
+const bar=root.querySelector('#return-bar'),context=root.querySelector('#return-context'),back=root.querySelector('#back-source'),slot=root.querySelector('#return-card-slot');
+slot?.replaceChildren();
+context.textContent=`Viewing reviews from Overall sentiment: ${sname(sent)}`;
+back.textContent='← Return to sentiment';
+bar.classList.add('show','text-only');
+updateFilters();renderReviews();draw();refreshAnalysisSelections();requestAnimationFrame(()=>root.querySelector('#reviews').scrollIntoView({behavior:'smooth',block:'start'}))
+}
+window.CipherReviewContext=window.CipherReviewContext||{};
+window.CipherReviewContext.setOverallSentiment=setFromOverallSentiment;
+
+function refreshAnalysisSelections(){
+  requestAnimationFrame(()=>{
+    try{
+      if (document.getElementById('attr-radar-view')?.hidden===false) drawRadar(true);
+      if (document.getElementById('attr-heatmap-view')?.hidden===false) drawHeatmap();
+      if (document.getElementById('attr-chart-view')?.hidden===false) drawChart();
+    }catch(_){}
+  });
+}
+
+const grid=root.querySelector('#attr-grid');attrs.forEach(a=>{const top=[['positive',a.pp,a.p,a.pa],['mixed',a.mp,a.x,a.xa],['negative',a.np,a.n,a.na]].sort((u,v)=>v[1]-u[1])[0];const card=document.createElement('article');card.className='attr-card rounded-xl border border-[var(--viz-border)] p-4';card.dataset.attr=a.id;card.tabIndex=0;const segs=[['positive',a.p,a.pp],['mixed',a.x,a.mp],['negative',a.n,a.np]].filter(v=>v[1]>0).map(([s,c,p])=>`<button type="button" class="segment ${s==='positive'?'pos':s==='mixed'?'mix':'neg'}" data-s="${s}" style="width:${p}%"></button>`).join('');card.innerHTML=`<div class="flex items-start justify-between gap-3"><div class="flex min-w-0 gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--viz-card)] text-sm">${a.icon}</span><div><div class="font-medium">${a.name}</div><div class="mt-1 flex items-center gap-2 text-xs text-[var(--viz-muted)]"><span class="rc" tabindex="0">${a.m} reviews</span><span>·</span><span class="cov" tabindex="0">${a.c}%</span><span>·</span><span class="avg" tabindex="0">★ ${a.avg.toFixed(1)}</span></div></div></div><span class="top-tag shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold" tabindex="0" style="color:${color(top[0])};border-color:${color(top[0])}">${top[1]}%</span></div><div class="mt-3 flex h-3 overflow-hidden rounded-full bg-[var(--viz-card)]">${segs}</div>`;bindTip(card.querySelector('.rc'),`${a.m} reviews mention this attribute.`);bindTip(card.querySelector('.cov'),`${a.c}% of all product reviews mention this attribute.`);bindTip(card.querySelector('.avg'),`Average rating of reviews mentioning ${a.name}: ${a.avg.toFixed(1)} / 5.`);bindTip(card.querySelector('.top-tag'),`${sname(top[0])} · ${top[1]}% (${top[2]} reviews)`,`Average rating: ${top[3]===null?'—':top[3].toFixed(1)} / 5`);card.querySelectorAll('.segment').forEach(seg=>{const s=seg.dataset.s,count=s==='positive'?a.p:s==='mixed'?a.x:a.n,per=s==='positive'?a.pp:s==='mixed'?a.mp:a.np,av=s==='positive'?a.pa:s==='mixed'?a.xa:a.na;bindTip(seg,`${sname(s)} · ${per}% (${count} reviews)`,`Average rating: ${av===null?'—':av.toFixed(1)} / 5`);seg.addEventListener('click',e=>{e.stopPropagation();setFromInsight(a.id,s,card)})});card.addEventListener('click',e=>{if(!e.target.closest('.segment'))setFromInsight(a.id,null,card)});grid.appendChild(card)});const filterWrap=root.querySelector('#attribute-filters');attrs.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='filter-icon';b.dataset.attr=a.id;b.textContent=a.icon;bindTip(b,a.name);b.addEventListener('click',()=>{clearSource();selectedAttrs.has(a.id)?selectedAttrs.delete(a.id):selectedAttrs.add(a.id);updateFilters();renderReviews();draw();refreshAnalysisSelections()});filterWrap.appendChild(b)});root.querySelectorAll('.sent-filter').forEach(b=>b.addEventListener('click',()=>{clearSource();const s=b.dataset.sent;const same=selectedAttrs.size===0&&selectedSents.size===1&&selectedSents.has(s);selectedAttrs.clear();selectedSents.clear();if(!same)selectedSents.add(s);updateFilters();renderReviews();draw();refreshAnalysisSelections()}));function clearSource(){lastSource=null;returnScrollY=null;const bar=root.querySelector('#return-bar');bar.classList.remove('show','text-only');root.querySelector('#return-card-slot')?.replaceChildren();refreshAnalysisSelections()}const ratingButtons=[...root.querySelectorAll('.rating-star')];bindTip(root.querySelector('#rating-exact'),'Exact rating','Choose one exact star rating.');bindTip(root.querySelector('#rating-range'),'Rating range','Choose the start and end of a rating range.');function setRatingMode(mode){ratingMode=mode;exactRating=null;rangeStart=null;rangeEnd=null;root.querySelector('#rating-exact').classList.toggle('active',mode==='exact');root.querySelector('#rating-range').classList.toggle('active',mode==='range');updateRatingUI();renderReviews();updateClearState()}root.querySelector('#rating-exact').addEventListener('click',()=>{clearSource();setRatingMode('exact')});root.querySelector('#rating-range').addEventListener('click',()=>{clearSource();setRatingMode('range')});ratingButtons.forEach(b=>{bindTip(b,`${b.dataset.rating} star${b.dataset.rating==='1'?'':'s'}`,'Use this star in the current rating filter.');b.addEventListener('click',()=>{clearSource();const n=Number(b.dataset.rating);if(ratingMode==='exact'){exactRating=exactRating===n?null:n}else{if(rangeStart===null||rangeEnd!==null){rangeStart=n;rangeEnd=null}else{rangeEnd=n;if(rangeEnd<rangeStart){const t=rangeStart;rangeStart=rangeEnd;rangeEnd=t}}}updateRatingUI();renderReviews();updateClearState()})});function updateRatingUI(){ratingButtons.forEach(b=>{const n=Number(b.dataset.rating);let filled=false,start=false,end=false;if(ratingMode==='exact'&&exactRating!==null)filled=n<=exactRating;if(ratingMode==='range'&&rangeStart!==null){if(rangeEnd===null)filled=n===rangeStart;else filled=n>=rangeStart&&n<=rangeEnd;start=n===rangeStart;end=n===rangeEnd}b.textContent=filled?'★':'☆';b.classList.toggle('filled',filled);b.classList.toggle('range-start',start);b.classList.toggle('range-end',end)})}function updateFilters(){root.querySelectorAll('.filter-icon').forEach(b=>b.classList.toggle('active',selectedAttrs.has(b.dataset.attr)));root.querySelectorAll('.sent-filter').forEach(b=>b.classList.toggle('active',selectedSents.has(b.dataset.sent)));root.querySelectorAll('.attr-card').forEach(card=>{const active=selectedAttrs.has(card.dataset.attr);card.classList.toggle('selected',active);card.querySelectorAll('.segment').forEach(seg=>seg.classList.toggle('selected-segment',active&&selectedSents.has(seg.dataset.s)))});updateClearState()}function updateClearState(){const has=selectedAttrs.size||selectedSents.size||exactRating!==null||rangeStart!==null||root.querySelector('#search').value.trim();root.querySelector('#clear-filters').disabled=!has}root.querySelector('#clear-filters').addEventListener('click',()=>{selectedAttrs.clear();selectedSents.clear();exactRating=null;rangeStart=null;rangeEnd=null;ratingMode='exact';root.querySelector('#search').value='';root.querySelector('#rating-exact').classList.add('active');root.querySelector('#rating-range').classList.remove('active');clearSource();updateRatingUI();updateFilters();renderReviews();draw()});root.querySelector('#back-source').addEventListener('click',()=>{if(returnScrollY!==null){window.scrollTo({top:returnScrollY,behavior:'smooth'});if(lastSource&&!lastSource.dataset?.skipReturnOutline){const oldOutline=lastSource.style.outline,oldOffset=lastSource.style.outlineOffset;setTimeout(()=>{lastSource.style.outline='2px solid var(--viz-accent)';lastSource.style.outlineOffset='3px';setTimeout(()=>{lastSource.style.outline=oldOutline;lastSource.style.outlineOffset=oldOffset},1400)},450)}return}if(lastSource?.scrollIntoView)lastSource.scrollIntoView({behavior:'smooth',block:'center'});else root.querySelector('#map-section').scrollIntoView({behavior:'smooth',block:'start'})});const reviews=[{r:1,d:'2026-08-28',t:'Pocket placement is difficult',b:'The pocket position makes the skirt less practical for my dominant hand.',s:{functionality:'negative',workmanship:'positive'}},{r:5,d:'2026-08-20',t:'Great fit',b:'Runs slightly small but the overall shape and look are excellent.',s:{fit:'negative',aesthetic:'positive',quality:'positive'}},{r:4,d:'2026-08-11',t:'Good compression shorts',b:'Comfortable undershort and a classic pleated look. Pocket placement could be better.',s:{fit:'positive',comfort:'positive',aesthetic:'positive',functionality:'negative'}},{r:5,d:'2026-07-29',t:'Very flattering',b:'The length and fit worked well and the skirt performed well during play.',s:{fit:'positive',aesthetic:'positive',performance:'positive',functionality:'positive'}},{r:5,d:'2026-07-14',t:'Comfortable and stylish',b:'Built-in shorts work well and the skirt is comfortable around the waist.',s:{comfort:'positive',aesthetic:'positive',functionality:'positive',quality:'positive'}},{r:3,d:'2026-06-26',t:'Good overall',b:'The fit is comfortable but some functional details could be improved.',s:{fit:'positive',comfort:'positive',functionality:'mixed'}},{r:2,d:'2026-06-03',t:'Fit did not work',b:'The attached shorts were uncomfortable for me and the fit felt off.',s:{fit:'negative',comfort:'negative',functionality:'negative'}}];function stars(n){return '★'.repeat(n)+'☆'.repeat(5-n)}function ratingMatches(r){if(ratingMode==='exact'&&exactRating!==null)return r===exactRating;if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)return r>=rangeStart&&r<=rangeEnd;return true}function formatReviewDate(iso){const [y,m,d]=iso.split('-').map(Number);return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(y,m-1,d))}function renderReviews(){const q=root.querySelector('#search').value.trim().toLowerCase();const rows=reviews.filter(v=>{const entries=Object.entries(v.s);if(selectedAttrs.size&&!entries.some(([id])=>selectedAttrs.has(id)))return false;if(selectedSents.size){const relevant=selectedAttrs.size?entries.filter(([id])=>selectedAttrs.has(id)):entries;if(!relevant.some(([,s])=>selectedSents.has(s)))return false}if(!ratingMatches(v.r))return false;if(q&&!(`${v.t} ${v.b}`.toLowerCase().includes(q)))return false;return true});const parts=[];if(selectedAttrs.size)parts.push(`${selectedAttrs.size} attribute${selectedAttrs.size>1?'s':''}`);if(selectedSents.size)parts.push(`${selectedSents.size} sentiment${selectedSents.size>1?'s':''}`);if(ratingMode==='exact'&&exactRating)parts.push(`exactly ${exactRating}★`);if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)parts.push(`${rangeStart}–${rangeEnd}★`);root.querySelector('#summary').textContent=`${parts.length?parts.join(' · '):'All reviews'} · ${rows.length} shown`;root.querySelector('#review-list').innerHTML=rows.length?rows.map(v=>`<article class="rounded-xl border border-[var(--viz-border)] p-4"><div class="review-card-head"><div class="font-medium">${v.t}</div><time datetime="${v.d}">${formatReviewDate(v.d)}</time></div><div class="mt-2 flex flex-wrap items-center gap-1.5"><span class="mr-1 shrink-0 text-sm">${stars(v.r)}</span>${Object.entries(v.s).map(([id,sn])=>`<button type="button" class="review-icon" data-review-id="${id}" data-review-sent="${sn}" style="color:${color(sn)}"><span style="color:var(--viz-text)">${attrs.find(x=>x.id===id).icon}</span></button>`).join('')}</div><p class="mt-3 text-sm leading-6 text-[var(--viz-muted)]">${v.b}</p></article>`).join(''):'<div class="rounded-xl border border-dashed border-[var(--viz-border)] p-5 text-center text-sm text-[var(--viz-muted)]">No matching reviews.</div>';root.querySelectorAll('[data-review-id]').forEach(el=>bindTip(el,`${attrs.find(a=>a.id===el.dataset.reviewId).name} · ${sname(el.dataset.reviewSent)}`));updateClearState()}root.querySelector('#search').addEventListener('input',()=>{renderReviews();updateClearState()});const svg=root.querySelector('#map'),NS='http://www.w3.org/2000/svg',W=660,H=340,pad={l:50,r:25,t:28,b:36};function draw(){svg.innerHTML='';const sx=v=>pad.l+(v/100)*(W-pad.l-pad.r),sy=v=>H-pad.b-(v/100)*(H-pad.t-pad.b);for(let x=0;x<=100;x+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',sx(x));l.setAttribute('x2',sx(x));l.setAttribute('y1',pad.t);l.setAttribute('y2',H-pad.b);l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',sx(x));t.setAttribute('y',H-9);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=x+'%';svg.appendChild(t)}for(let y=0;y<=100;y+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',pad.l);l.setAttribute('x2',W-pad.r);l.setAttribute('y1',sy(y));l.setAttribute('y2',sy(y));l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',40);t.setAttribute('y',sy(y)+4);t.setAttribute('text-anchor','end');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=y+'%';svg.appendChild(t)}const ordered=[...attrs].sort((a,b)=>selectedAttrs.has(a.id)?1:selectedAttrs.has(b.id)?-1:0);ordered.forEach(a=>{const y=mapMode==='positive'?a.pp:a.np,isSel=selectedAttrs.has(a.id),g=document.createElementNS(NS,'g');g.style.cursor='pointer';if(isSel){const ring=document.createElementNS(NS,'circle');ring.setAttribute('cx',sx(a.c));ring.setAttribute('cy',sy(y));ring.setAttribute('r','21');ring.setAttribute('fill','none');ring.setAttribute('stroke','var(--viz-accent)');ring.setAttribute('stroke-width','3');g.appendChild(ring)}const c=document.createElementNS(NS,'circle');c.setAttribute('cx',sx(a.c));c.setAttribute('cy',sy(y));c.setAttribute('r','16');c.setAttribute('fill','var(--viz-panel)');c.setAttribute('stroke',isSel?'var(--viz-accent)':color(mapMode));c.setAttribute('stroke-width',isSel?'3':'2');g.appendChild(c);const it=document.createElementNS(NS,'text');it.setAttribute('x',sx(a.c));it.setAttribute('y',sy(y)+5);it.setAttribute('text-anchor','middle');it.setAttribute('font-size','16');it.setAttribute('font-weight','700');it.setAttribute('fill','var(--viz-text)');it.textContent=a.icon;g.appendChild(it);const tooltip=`${a.name} · ${a.c}% of reviews mention it · ${y}% ${mapMode} sentiment.`;g.addEventListener('mouseenter',()=>showTip(g,tooltip));g.addEventListener('mouseleave',hideTip);g.addEventListener('click',()=>setFromInsight(a.id,mapMode,root.querySelector('#map-section')));svg.appendChild(g)})}function setMapMode(m){mapMode=m;root.querySelector('#y-label').textContent=m==='positive'?'Positive sentiment share':'Negative sentiment share';[['pos','positive'],['neg','negative']].forEach(([id,val])=>{const b=root.querySelector('#map-'+id),active=val===m;b.style.background=active?'var(--viz-accent-bg)':'transparent';b.style.boxShadow=active?'inset 0 0 0 1px var(--viz-accent)':'none';b.setAttribute('aria-pressed',active?'true':'false')});draw()}root.querySelector('#map-pos').addEventListener('click',()=>setMapMode('positive'));root.querySelector('#map-neg').addEventListener('click',()=>setMapMode('negative'));setRatingMode('exact');setMapMode('negative');updateFilters();renderReviews();})();
 </script>
 </div>
 
@@ -3623,13 +4149,41 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
 <script id="cipher-product-detail-nav-js">
 (() => {
   const fallbackHome = 'Option%2003%20-%20Homepage%20Refined%20v103%20Larger%20Darker%20Subtext.html';
+  const fallbackCompare = 'Comparison_FINAL_v4_linked.html';
+
+  function cameFromCompare() {
+    try {
+      if (sessionStorage.getItem('cipher.detail.source') === 'compare') return true;
+    } catch (_) {}
+
+    return /comparison/i.test(document.referrer || '');
+  }
 
   function returnToPreviousView() {
-    /*
-      This product detail is intended to be opened from the homepage/search
-      flow. Browser history is used first so search state and scroll position
-      are retained when the user returns.
-    */
+    const fromCompare = cameFromCompare();
+
+    if (fromCompare) {
+      let compareHref = '';
+      try {
+        compareHref = sessionStorage.getItem('cipher.detail.compareHref') || '';
+        sessionStorage.removeItem('cipher.detail.source');
+        sessionStorage.removeItem('cipher.detail.compareHref');
+      } catch (_) {}
+
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+
+      if (compareHref) {
+        window.location.href = compareHref;
+        return;
+      }
+
+      window.location.href = fallbackCompare;
+      return;
+    }
+
     if (window.history.length > 1) {
       window.history.back();
       return;
@@ -3646,7 +4200,13 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
   }
 
   const backBtn = document.getElementById('page-back-btn');
+  const backLabel = document.getElementById('page-back-label');
   const brandBtn = document.getElementById('cipher-home-btn');
+
+  if (cameFromCompare() && backBtn && backLabel) {
+    backLabel.textContent = 'Back to compare';
+    backBtn.setAttribute('aria-label','Back to compare');
+  }
 
   if (backBtn) backBtn.addEventListener('click', returnToPreviousView);
   if (brandBtn) brandBtn.addEventListener('click', returnToPreviousView);
@@ -3656,10 +4216,6 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
       event.preventDefault();
 
       const target = link.dataset.detailNav;
-
-      /* Discover returns to the search/discovery view.
-         Other labels retain the homepage-style selection interaction
-         without disturbing this product-analysis page. */
       if (target === 'discover') {
         returnToPreviousView();
         return;
@@ -3950,7 +4506,7 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
     {id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},
     {id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},
     {id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},
-    {id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
+    {id:'performance',name:'Performance',icon:'ϟ',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
     {id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},
     {id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},
     {id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},
@@ -4086,6 +4642,32 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
     const shouldAnimateLoad = barsView && !barsView.hidden && chart.dataset.visibleLoadAnimated !== '1';
     chart.innerHTML = '';
 
+    /* Selection hatch patterns for stacked sentiment bars. */
+    const selectionDefs = svgEl('defs');
+    [
+      ['positive','var(--viz-series-2)'],
+      ['mixed','var(--viz-series-5)'],
+      ['negative','var(--viz-series-4)']
+    ].forEach(([sentiment,baseColor]) => {
+      const pattern = svgEl('pattern',{
+        id:`cipher-selected-hatch-${sentiment}`,
+        patternUnits:'userSpaceOnUse',
+        width:8,
+        height:8
+      });
+      pattern.appendChild(svgEl('rect',{
+        x:0,y:0,width:8,height:8,fill:baseColor
+      }));
+      pattern.appendChild(svgEl('path',{
+        d:'M-2 2 L2 -2 M0 8 L8 0 M6 10 L10 6',
+        fill:'none',
+        stroke:'rgba(255,255,255,.62)',
+        'stroke-width':1.35
+      }));
+      selectionDefs.appendChild(pattern);
+    });
+    chart.appendChild(selectionDefs);
+
     const W = 1080, H = 500;
     const pad = {l:58,r:22,t:22,b:104};
     const plotW = W-pad.l-pad.r;
@@ -4175,12 +4757,32 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
         const yBottom = y(cumulative);
         const sourceSegment = root.querySelector(`.attr-card[data-attr="${a.id}"] .segment[data-s="${sentiment}"]`);
         const segmentSelected = !!sourceSegment?.classList.contains('selected-segment');
+        const segmentHeight = Math.max(2,yBottom-yTop);
+
+        if (segmentSelected) {
+          /* Thin sentiment-colour ring outside the selected stacked segment. */
+          const sentimentRing = svgEl('rect',{
+            x:cx-barW/2-1.5,
+            y:yTop-1.5,
+            width:barW+3,
+            height:segmentHeight+3,
+            rx:2,
+            fill:'none',
+            stroke:color(sentiment),
+            'stroke-width':2,
+            class:'attr-chart-selected-ring'
+          });
+          stackGroup.appendChild(sentimentRing);
+        }
+
         const rect = svgEl('rect',{
           x:cx-barW/2,
           y:yTop,
           width:barW,
-          height:Math.max(2,yBottom-yTop),
-          fill:color(sentiment),
+          height:segmentHeight,
+          fill:segmentSelected?`url(#cipher-selected-hatch-${sentiment})`:color(sentiment),
+          stroke:segmentSelected?'#FFFFFF':'none',
+          'stroke-width':segmentSelected?1.5:0,
           class:`attr-chart-segment${segmentSelected?' attr-chart-selected-segment':''}`,
           'data-attr':a.id,
           'data-sentiment':sentiment
@@ -4567,7 +5169,7 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
     {id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},
     {id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},
     {id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},
-    {id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
+    {id:'performance',name:'Performance',icon:'ϟ',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
     {id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},
     {id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},
     {id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},
@@ -4652,9 +5254,21 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
       if (!bar) return;
 
       const order = orderList();
-      [...bar.querySelectorAll('.segment[data-s]')].forEach(seg => {
+      const segments=[...bar.querySelectorAll('.segment[data-s]')];
+
+      segments.forEach(seg => {
         seg.style.order = String(order.indexOf(seg.dataset.s));
+        seg.classList.remove('visual-first','visual-last');
       });
+
+      const visualSegments=[...segments].sort(
+        (a,b)=>order.indexOf(a.dataset.s)-order.indexOf(b.dataset.s)
+      );
+
+      if(visualSegments.length){
+        visualSegments[0].classList.add('visual-first');
+        visualSegments[visualSegments.length-1].classList.add('visual-last');
+      }
     });
 
     /* Cards themselves reorder DESCENDING by the chosen sentiment. */
@@ -4794,6 +5408,21 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
         const value=valueFor(a,sentiment);
         const [x,y]=point(radius*(value/100),i);
 
+        const sourceCard=root.querySelector(`.attr-card[data-attr="${a.id}"]`);
+        const sourceSegment=sourceCard?.querySelector(`.segment[data-s="${sentiment}"]`);
+        const pointSelected=!!sourceSegment?.classList.contains('selected-segment');
+
+        if(pointSelected){
+          dataGroup.appendChild(svgEl('circle',{
+            cx:x,cy:y,
+            r:9,
+            fill:'none',
+            stroke:'var(--viz-accent)',
+            'stroke-width':2.2,
+            class:'radar-selection-ring'
+          }));
+        }
+
         const dot=svgEl('circle',{
           cx:x,cy:y,
           r:isProminent ? 4.4 : 2.8,
@@ -4817,7 +5446,13 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
           `${countFor(a,sentiment)} reviews`
         ));
         dot.addEventListener('blur',hideTip);
-        dot.addEventListener('click',()=>filterFromInsight(a.id,sentiment));
+        dot.addEventListener('click',()=>{
+          filterFromInsight(a.id,sentiment);
+          requestAnimationFrame(()=>{
+            drawRadar(true);
+            if (document.getElementById('attr-heatmap-view')?.hidden===false) drawHeatmap();
+          });
+        });
         dataGroup.appendChild(dot);
       });
     });
@@ -4826,6 +5461,20 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
 
     radarAttrs.forEach((a,i)=>{
       const [x,y]=point(labelRadius,i);
+      const sourceCard=root.querySelector(`.attr-card[data-attr="${a.id}"]`);
+      const attrSelected=!!sourceCard?.classList.contains('selected');
+
+      if(attrSelected){
+        radar.appendChild(svgEl('circle',{
+          cx:x,cy:y,
+          r:15,
+          fill:'#F8FBFC',
+          stroke:'var(--viz-accent)',
+          'stroke-width':2.2,
+          class:'radar-attribute-selection-ring'
+        }));
+      }
+
       const icon=svgEl('text',{
         x,y:y+5,
         'text-anchor':'middle',
@@ -4916,7 +5565,7 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
       const attrBtn=document.createElement('button');
       attrBtn.type='button';
       attrBtn.className='heatmap-attr';
-      attrBtn.setAttribute('role','rowheader');
+      attrBtn.setAttribute('role','rowheader');attrBtn.dataset.attr=a.id;
       attrBtn.innerHTML=`<span class="heatmap-icon">${a.icon}</span><span class="heatmap-name">${a.name}</span>`;
       attrBtn.addEventListener('mouseenter',()=>sharedTip(
         attrBtn,
@@ -4951,7 +5600,21 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
           `${count} reviews`
         ));
         cell.addEventListener('mouseleave',hideTip);
-        cell.addEventListener('click',()=>filterFromInsight(a.id,sentiment));
+        cell.addEventListener('click',()=>{
+          /* Immediate visual feedback in the current Heatmap DOM. */
+          heatmap.querySelectorAll('.heatmap-cell.selected').forEach(el=>el.classList.remove('selected'));
+          cell.classList.add('selected');
+
+          /* Update the shared review filter state through the source segment. */
+          filterFromInsight(a.id,sentiment);
+
+          /* The source segment click stops propagation, so explicitly redraw
+             this view after the shared state has updated. */
+          requestAnimationFrame(()=>{
+            drawHeatmap();
+            if (document.getElementById('attr-radar-view')?.hidden===false) drawRadar(true);
+          });
+        });
         heatmap.appendChild(cell);
         animateHeatmapNumber(cell,value);
       });
@@ -4962,10 +5625,11 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
     heatmap.classList.add('heatmap-load');
   }
 
-  /* Redraw heatmap selection if filtering changes. */
+  /* Redraw Radar / Heatmap selection if filtering changes. */
   root.querySelectorAll('.attr-card,.filter-icon,.sent-filter,#clear-filters').forEach(el=>{
     el.addEventListener('click',()=>{
       requestAnimationFrame(()=>{
+        if (document.getElementById('attr-radar-view')?.hidden===false) drawRadar(true);
         if (document.getElementById('attr-heatmap-view')?.hidden===false) drawHeatmap();
       });
     });
@@ -4977,6 +5641,172 @@ updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelec
 
   drawRadar();
   drawHeatmap();
+})();
+</script>
+
+
+<script id="cipher-single-pie-selection-js">
+(() => {
+  const root = document.getElementById('gsa-v17');
+  const donut = root?.querySelector('.overall-sentiment-donut');
+  if (!root || !donut) return;
+
+  const NS = 'http://www.w3.org/2000/svg';
+
+  const getSentimentColor = (sent) => (
+    sent === 'positive' ? '#8AA14D' :
+    sent === 'mixed' ? '#C3A061' :
+    '#CA5555'
+  );
+
+  function svgEl(name, attrs = {}) {
+    const el = document.createElementNS(NS, name);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, String(v)));
+    return el;
+  }
+
+  function ensureDefs(svg) {
+    if (!svg || svg.querySelector('defs[data-cipher-donut-defs="1"]')) return;
+
+    const defs = svgEl('defs', {'data-cipher-donut-defs': '1'});
+    const pattern = svgEl('pattern', {
+      id: 'cipher-single-donut-hatch',
+      patternUnits: 'userSpaceOnUse',
+      width: 8,
+      height: 8
+    });
+
+    pattern.appendChild(svgEl('path', {
+      d: 'M-2 2 L2 -2 M0 8 L8 0 M6 10 L10 6',
+      fill: 'none',
+      stroke: 'rgba(255,255,255,.62)',
+      'stroke-width': 1.35
+    }));
+
+    defs.appendChild(pattern);
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  function cloneArc(source, extra = {}) {
+    const dash =
+      source.getAttribute('stroke-dasharray') ||
+      source.style.getPropertyValue('--dash') ||
+      getComputedStyle(source).strokeDasharray ||
+      '';
+    const offset =
+      source.getAttribute('stroke-dashoffset') ||
+      source.style.getPropertyValue('--offset') ||
+      getComputedStyle(source).strokeDashoffset ||
+      '0';
+
+    const attrs = {
+      cx: source.getAttribute('cx'),
+      cy: source.getAttribute('cy'),
+      r: source.getAttribute('r'),
+      fill: 'none',
+      transform: source.getAttribute('transform') || '',
+      pathLength: source.getAttribute('pathLength') || '100',
+      'stroke-dasharray': dash.trim(),
+      'stroke-dashoffset': offset.trim(),
+      'stroke-linecap': source.getAttribute('stroke-linecap') || 'butt',
+      ...extra
+    };
+    return svgEl('circle', attrs);
+  }
+
+  function sentimentKeyFromArc(arc) {
+    return String(arc.dataset.sentiment || '').trim().toLowerCase();
+  }
+
+  function renderSelection() {
+    ensureDefs(donut);
+    donut.querySelectorAll('.donut-selection-layer').forEach(n => n.remove());
+
+    const hasSelectedAttribute = root.querySelectorAll('.attr-card.selected').length > 0;
+    const active = hasSelectedAttribute ? new Set() : new Set(
+      [...root.querySelectorAll('.sent-filter.active')]
+        .map(btn => btn.dataset.sent)
+        .filter(Boolean)
+    );
+
+    root.querySelectorAll('.donut-segment').forEach(seg => {
+      const selected = active.has(sentimentKeyFromArc(seg));
+      seg.classList.toggle('selected-donut-source', selected);
+    });
+
+    const group = svgEl('g', {'class': 'donut-selection-layer'});
+
+    [...root.querySelectorAll('.donut-segment')].forEach(seg => {
+      const sent = sentimentKeyFromArc(seg);
+      if (!active.has(sent)) return;
+      const color = getSentimentColor(sent);
+
+      group.appendChild(cloneArc(seg, {
+        stroke: color,
+        'stroke-width': 15
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: '#FFFFFF',
+        'stroke-width': 13.5
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: color,
+        'stroke-width': 12
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: 'url(#cipher-single-donut-hatch)',
+        'stroke-width': 12
+      }));
+    });
+
+    donut.appendChild(group);
+  }
+
+  function wireInteractions() {
+    root.querySelectorAll('.donut-segment').forEach(seg => {
+      if (seg.dataset.donutWired === '1') return;
+      seg.dataset.donutWired = '1';
+      seg.setAttribute('tabindex', '0');
+      seg.setAttribute('focusable', 'true');
+
+      const activate = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const sentiment = sentimentKeyFromArc(seg);
+
+        if (window.CipherReviewContext?.setOverallSentiment) {
+          window.CipherReviewContext.setOverallSentiment(
+            sentiment,
+            root.querySelector('.overall-sentiment-card')
+          );
+        } else {
+          const btn = root.querySelector(`.sent-filter[data-sent="${sentiment}"]`);
+          if (btn) btn.click();
+        }
+
+        setTimeout(renderSelection, 0);
+      };
+
+      seg.addEventListener('click', activate);
+      seg.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') activate(e);
+      });
+    });
+  }
+
+  const mo = new MutationObserver(() => {
+    requestAnimationFrame(() => {
+      wireInteractions();
+      renderSelection();
+    });
+  });
+
+  wireInteractions();
+  renderSelection();
+  mo.observe(root, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
 })();
 </script>
 

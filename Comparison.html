@@ -1026,6 +1026,209 @@ body{
 }
 </style>
 
+
+<style id="cipher-comparison-final-consistency">
+/* =========================================================
+   FINAL — shared nav / stronger selection / monochrome icon
+   ========================================================= */
+
+/* Canonical navigation dimensions shared with Single Product. */
+.cipher-compare-nav-shell{
+  width:min(calc(100% - 48px),1180px) !important;
+  top:16px !important;
+  z-index:500 !important;
+  padding-top:16px !important;
+}
+
+.cipher-compare-nav{
+  min-height:58px !important;
+  grid-template-columns:1fr auto 1fr !important;
+  gap:18px !important;
+  padding:8px 10px 8px 14px !important;
+  border:1px solid rgba(255,255,255,.52) !important;
+  border-radius:999px !important;
+  background:rgba(208,229,242,.37) !important;
+}
+
+.cipher-compare-brand{
+  gap:9px !important;
+  min-height:38px !important;
+  padding:0 9px 0 5px !important;
+}
+
+.cipher-compare-mark{
+  width:30px !important;
+  height:30px !important;
+  flex:0 0 30px !important;
+  border-radius:9px !important;
+  background:#171717 !important;
+}
+
+.cipher-compare-wordmark{
+  font-size:15px !important;
+  font-weight:760 !important;
+  letter-spacing:-.025em !important;
+}
+
+.cipher-compare-links{
+  gap:52px !important;
+}
+
+.cipher-compare-links a{
+  font-size:12px !important;
+  font-weight:620 !important;
+  padding:8px 2px 11px !important;
+}
+
+.cipher-compare-back{
+  min-height:40px !important;
+  gap:7px !important;
+  padding:0 14px !important;
+  border:0 !important;
+  font-size:11px !important;
+  font-weight:680 !important;
+  box-shadow:0 8px 20px rgba(23,23,23,.12) !important;
+}
+
+.cipher-compare-back svg{
+  width:16px !important;
+  height:16px !important;
+}
+
+/* Selected sentiment bar: clearly visible but no geometry changes. */
+#compare-v9 .segment.selected{
+  position:relative !important;
+  z-index:4 !important;
+  outline:2px solid #171717 !important;
+  outline-offset:-2px !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.96),
+    inset 0 0 0 4px rgba(23,23,23,.92) !important;
+  filter:saturate(1.08) brightness(1.03);
+  transform:none !important;
+}
+
+/* Also make the active sentiment filter state unmistakable. */
+#compare-v9 .sent.active{
+  box-shadow:
+    inset 0 0 0 2px currentColor,
+    0 0 0 2px rgba(255,255,255,.92),
+    0 0 0 3px currentColor !important;
+  transform:none !important;
+}
+
+/* Performance icon is always monochrome. */
+#compare-v9 .performance-icon,
+#compare-v9 .filter-attr[data-a="performance"],
+#compare-v9 .review-attr[data-a="performance"]{
+  color:#171717 !important;
+  -webkit-text-fill-color:#171717 !important;
+  filter:grayscale(1) !important;
+}
+
+@media(max-width:820px){
+  .cipher-compare-nav{
+    grid-template-columns:1fr auto !important;
+  }
+}
+</style>
+
+
+<style id="cipher-comparison-final-sentiment-selection">
+/* =========================================================
+   FINAL sentiment selection
+   Thin white ring + sentiment ring + diagonal hatch
+   No geometry/layout movement.
+   ========================================================= */
+
+#compare-v9 .segment.pos{ --selected-sentiment:#8AA14D; }
+#compare-v9 .segment.mix{ --selected-sentiment:#C3A061; }
+#compare-v9 .segment.neg{ --selected-sentiment:#CA5555; }
+
+/* Let the very thin outer sentiment ring remain visible.
+   Individual segments preserve the pill ends, so geometry stays fixed. */
+#compare-v9 .bar{
+  overflow:visible !important;
+}
+
+#compare-v9 .bar > .segment:first-child{
+  border-radius:999px 0 0 999px;
+}
+#compare-v9 .bar > .segment:last-child{
+  border-radius:0 999px 999px 0;
+}
+
+#compare-v9 .segment{
+  overflow:hidden;
+}
+
+/* Override the previous thick black selection. */
+#compare-v9 .segment.selected{
+  position:relative !important;
+  z-index:5 !important;
+  outline:0 !important;
+  transform:none !important;
+  filter:none !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.98),
+    0 0 0 2px var(--selected-sentiment) !important;
+}
+
+/* Subtle white diagonal hatch over the original sentiment colour. */
+#compare-v9 .segment.selected::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255,255,255,0) 0 4px,
+      rgba(255,255,255,.58) 4px 5.5px,
+      rgba(255,255,255,0) 5.5px 9px
+    );
+}
+
+/* Selection never changes dimensions/spacing. */
+#compare-v9 .segment.selected,
+#compare-v9 .segment.selected:hover{
+  margin:0 !important;
+  padding:0 !important;
+  height:100% !important;
+}
+</style>
+
+
+<style id="cipher-compare-pie-selection-refine">
+/* =========================================================
+   Pie / donut selection refinement
+   Remove large focus box and use custom arc selection styling.
+   ========================================================= */
+
+#compare-v9 .combined-pie,
+#compare-v9 .combined-pie:focus,
+#compare-v9 .combined-pie:focus-visible,
+#compare-v9 .combined-pie *:focus,
+#compare-v9 .combined-pie *:focus-visible{
+  outline:none !important;
+}
+
+#compare-v9 .combined-pie .pie-seg{
+  cursor:pointer;
+  transition:opacity .16s ease, filter .16s ease;
+}
+
+#compare-v9 .combined-pie .pie-seg.selected-pie-source{
+  opacity:.001;
+}
+
+#compare-v9 .combined-pie .pie-selection-layer{
+  pointer-events:none;
+}
+</style>
+
 </head>
 <body>
 
@@ -1078,7 +1281,7 @@ const products=[
 {id:'adidas',brand:'Adidas',mark:'A',name:'Optime Training Legging',reviews:73,rating:4.4,seed:19,selected:false,image:'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=700&q=88'},
 {id:'alo',brand:'Alo Yoga',mark:'AY',name:'Airlift High-Waist Legging',reviews:65,rating:4.6,seed:23,selected:false,image:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=700&q=88'}
 ];
-const attrs=[{id:'fit',name:'Fit & Sizing',icon:'↔',seed:2},{id:'comfort',name:'Comfort',icon:'♡',seed:3},{id:'material',name:'Material Quality',icon:'▦',seed:5},{id:'aesthetic',name:'Design & Aesthetic',icon:'✦',seed:7},{id:'value',name:'Value Perception',icon:'$',seed:11},{id:'quality',name:'Overall Quality',icon:'✓',seed:13},{id:'durability',name:'Durability',icon:'◇',seed:17},{id:'workmanship',name:'Workmanship',icon:'✂',seed:19},{id:'performance',name:'Performance',icon:'⚡',seed:23},{id:'functionality',name:'Functionality',icon:'⚙',seed:29}];
+const attrs=[{id:'fit',name:'Fit & Sizing',icon:'↔',seed:2},{id:'comfort',name:'Comfort',icon:'♡',seed:3},{id:'material',name:'Material Quality',icon:'▦',seed:5},{id:'aesthetic',name:'Design & Aesthetic',icon:'✦',seed:7},{id:'value',name:'Value Perception',icon:'$',seed:11},{id:'quality',name:'Overall Quality',icon:'✓',seed:13},{id:'durability',name:'Durability',icon:'◇',seed:17},{id:'workmanship',name:'Workmanship',icon:'✂',seed:19},{id:'performance',name:'Performance',icon:'ϟ',seed:23},{id:'functionality',name:'Functionality',icon:'⚙',seed:29}];
 const copy={fit:{positive:'Fit feels balanced and true to size.',mixed:'Fit works in some areas but not others.',negative:'Sizing feels inconsistent.'},comfort:{positive:'Comfort remains good through longer wear.',mixed:'Comfort is inconsistent over time.',negative:'The garment becomes uncomfortable.'},material:{positive:'Fabric feels substantial and pleasant.',mixed:'Material has strengths and drawbacks.',negative:'Fabric feels thinner than expected.'},aesthetic:{positive:'Silhouette looks flattering and current.',mixed:'Styling is appealing but inconsistent.',negative:'Shape looks less flattering in person.'},value:{positive:'Feels worth the price.',mixed:'Value depends on priorities.',negative:'Quality does not justify the price.'},quality:{positive:'Overall construction feels dependable.',mixed:'Some areas feel stronger than others.',negative:'Overall build feels weaker than expected.'},durability:{positive:'Has held its shape after repeated wear.',mixed:'Durability is acceptable but inconsistent.',negative:'Wear appeared earlier than expected.'},workmanship:{positive:'Seams and finishing are clean.',mixed:'Finishing is inconsistent in places.',negative:'Some stitching feels weak.'},performance:{positive:'Performs well during activity.',mixed:'Works better for some activities.',negative:'Performance drops during movement.'},functionality:{positive:'Functional details are useful.',mixed:'Details are useful but could improve.',negative:'Some details make it less practical.'}};
 const filters={},filterOpen={};products.forEach(p=>{filters[p.id]={query:'',attrs:new Set(),sentiments:new Set(),mode:'exact',exact:null,start:null,end:null};filterOpen[p.id]=false});
 let pinned='nike',focusAttr=null,combinedView='pie',returnState=null;
@@ -1098,7 +1301,7 @@ function goBackToPrevious(){if(!returnState)return;const state={...returnState};
 
 function message(t){root.querySelector('#message').textContent=t;clearTimeout(message.t);message.t=setTimeout(()=>root.querySelector('#message').textContent='',1800)}
 function renderSelector(){const w=root.querySelector('#selector');w.innerHTML='';products.forEach(p=>{const b=document.createElement('button');b.type='button';b.className=`selector flex min-h-9 max-w-[185px] items-center gap-2 rounded-lg px-2 py-1.5 ${p.selected?'selected':''}`;b.innerHTML=`<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--viz-border)] text-[9px] font-bold">${p.mark}</span><span class="truncate text-xs font-medium">${p.name}</span>`;bindTip(b,`${p.brand} · ${p.name}`,p.selected?'Selected for comparison.':'Click to include this product in the comparison.');b.addEventListener('click',()=>{const n=selected().length;if(p.selected&&n<=2){message('At least 2 products are required.');return}if(!p.selected&&n>=10){message('Maximum 10 products.');return}p.selected=!p.selected;if(!p.selected&&p.id===pinned)pinned=selected()[0]?.id;render()});w.appendChild(b)});root.querySelector('#selected-count').textContent=selected().length;root.querySelector('#available-count').textContent=products.length}
-function openProductDetail(p){try{sessionStorage.setItem('cipher.compare.returnScroll',String(scroller.scrollLeft));sessionStorage.setItem('cipher.compare.product',p.id)}catch(_){}window.location.href='garment_sentiment_ui_v25_sort_tooltips_no_card_lift.html'}function brandCell(p,isPinned){const c=document.createElement('div');c.className=isPinned?'brand-pin p-3':'brand-cell p-3';c.innerHTML=`<div class="flex items-center gap-2"><button type="button" class="product-thumb product-detail-trigger" aria-label="Open ${p.name} full detail">${productImageSvg(p)}</button><button type="button" class="product-detail-copy min-w-0 flex-1 text-left" aria-label="Open ${p.name} full detail"><div class="text-[9px] font-medium uppercase text-[var(--viz-muted)]">${p.brand}</div><div class="mt-0.5 truncate text-xs font-semibold">${p.name}</div><div class="product-detail-hint">View details</div></button><button type="button" class="pin-icon ${isPinned?'active':''}" aria-label="${isPinned?'Pinned product':'Pin product'}"><svg class="pin-svg" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.1 3.5h5.8M8 3.5l.5 4.1-2.4 2.1v1h7.8v-1l-2.4-2.1.5-4.1M10 10.8v5.7" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`;const thumb=c.querySelector('.product-thumb'),detail=c.querySelector('.product-detail-copy');bindTip(thumb,`${p.brand} · ${p.name}`,'Open full product detail.');bindTip(detail,`${p.brand} · ${p.name}`,'Open full product detail.');thumb.addEventListener('click',()=>openProductDetail(p));detail.addEventListener('click',()=>openProductDetail(p));bindTip(c.querySelector('.pin-icon'),isPinned?'Pinned product':'Pin product',isPinned?'This column stays frozen while other products scroll.':'Pin this product as the frozen comparison column.');c.querySelector('.pin-icon').addEventListener('click',()=>{pinned=p.id;render()});return c}
+function openProductDetail(p){try{sessionStorage.setItem('cipher.compare.returnScroll',String(scroller.scrollLeft));sessionStorage.setItem('cipher.compare.product',p.id);sessionStorage.setItem('cipher.detail.source','compare');sessionStorage.setItem('cipher.detail.compareHref',window.location.href)}catch(_){}window.location.href='Single_Product_FINAL_v4_bar_ends_heatmap.html'}function brandCell(p,isPinned){const c=document.createElement('div');c.className=isPinned?'brand-pin p-3':'brand-cell p-3';c.innerHTML=`<div class="flex items-center gap-2"><button type="button" class="product-thumb product-detail-trigger" aria-label="Open ${p.name} full detail">${productImageSvg(p)}</button><button type="button" class="product-detail-copy min-w-0 flex-1 text-left" aria-label="Open ${p.name} full detail"><div class="text-[9px] font-medium uppercase text-[var(--viz-muted)]">${p.brand}</div><div class="mt-0.5 truncate text-xs font-semibold">${p.name}</div><div class="product-detail-hint">View details</div></button><button type="button" class="pin-icon ${isPinned?'active':''}" aria-label="${isPinned?'Pinned product':'Pin product'}"><svg class="pin-svg" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.1 3.5h5.8M8 3.5l.5 4.1-2.4 2.1v1h7.8v-1l-2.4-2.1.5-4.1M10 10.8v5.7" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`;const thumb=c.querySelector('.product-thumb'),detail=c.querySelector('.product-detail-copy');bindTip(thumb,`${p.brand} · ${p.name}`,'Open full product detail.');bindTip(detail,`${p.brand} · ${p.name}`,'Open full product detail.');thumb.addEventListener('click',()=>openProductDetail(p));detail.addEventListener('click',()=>openProductDetail(p));bindTip(c.querySelector('.pin-icon'),isPinned?'Pinned product':'Pin product',isPinned?'This column stays frozen while other products scroll.':'Pin this product as the frozen comparison column.');c.querySelector('.pin-icon').addEventListener('click',()=>{pinned=p.id;render()});return c}
 function renderBrandRow(){const ps=ordered(),pin=ps[0];root.querySelector('#brand-pin').replaceWith(brandCell(pin,true));const newPin=root.querySelector('.brand-freeze .brand-pin');newPin.id='brand-pin';const track=root.querySelector('#brand-track');track.innerHTML='';ps.slice(1).forEach(p=>track.appendChild(brandCell(p,false)));syncBrand()}
 function syncBrand(){root.querySelector('#brand-track').style.transform=`translateX(${-scroller.scrollLeft}px)`}
 function productImageSvg(p,large=false){return `<img class="${large?'product-photo-large':'product-photo-thumb'}" src="${p.image}" alt="${p.brand} ${p.name}" loading="${large?'eager':'lazy'}" decoding="async">`}
@@ -1110,7 +1313,7 @@ function allFiltersOpen(){const ps=selected();return !!ps.length&&ps.every(p=>fi
 scroller.addEventListener('scroll',syncBrand,{passive:true});
 function attrCell(a,review=false){const c=document.createElement('div');c.className='attr-cell flex flex-col items-center justify-center p-2';if(review){c.className='attr-cell review-rail';c.innerHTML=`<div class="review-filter-level"><div class="text-[10px] font-semibold">Reviews</div><button type="button" id="toggle-all-filters" class="review-expand-btn">${allFiltersOpen()?'Collapse':'Expand'}</button>${returnState?'<button type="button" id="back-view" class="review-rail-btn">← Back</button>':''}<button type="button" id="clear-all" class="review-rail-btn clear-all-filters-btn ${hasAnyFilters()?'':'hidden'}">Clear all filters</button></div>`;return c}const b=document.createElement('button');b.type='button';b.className='flex h-10 w-10 items-center justify-center rounded-full border border-[var(--viz-border)] bg-[var(--viz-card)] text-lg font-semibold';b.textContent=a.icon;bindTip(b,a.name,'Filter review comments in every product column to this attribute.');b.addEventListener('click',()=>{rememberReturn(a.id);focusAttr=a.id;selected().forEach(p=>{filters[p.id].attrs.clear();filters[p.id].attrs.add(a.id)});renderTable();setTimeout(()=>root.querySelector('#reviews-row')?.scrollIntoView({behavior:'smooth',block:'start'}),0)});c.appendChild(b);return c}
 function cellClass(p,x=''){return `prod-cell ${p.id===pinned?'pinned':''} ${x}`}
-function quickRow(){const r=document.createElement('div');r.className='row quick-row border-b border-[var(--viz-border)]';r.style.gridTemplateColumns=template();const l=document.createElement('div');l.className='attr-cell flex flex-col items-center justify-center gap-2 p-2 text-[9px] font-medium uppercase text-[var(--viz-muted)]';l.innerHTML=`<span>Quick view</span><div class="combined-toggle" aria-label="Combined sentiment view"><button type="button" class="bar-view ${combinedView==='bar'?'active':''}" aria-label="Bar view">▰</button><button type="button" class="pie-view ${combinedView==='pie'?'active':''}" aria-label="Circle view">◕</button></div>`;bindTip(l.querySelector('.bar-view'),'Combined sentiment view','Show combined sentiment as a stacked bar.');bindTip(l.querySelector('.pie-view'),'Combined sentiment view','Show combined sentiment as a circular pie.');l.querySelector('.bar-view').addEventListener('click',()=>{combinedView='bar';renderTable()});l.querySelector('.pie-view').addEventListener('click',()=>{combinedView='pie';renderTable()});r.appendChild(l);ordered().forEach(p=>{const all=attrs.map(a=>({a,m:metric(p,a)})),best=[...all].sort((x,y)=>y.m.pos-x.m.pos)[0],worst=[...all].sort((x,y)=>y.m.neg-x.m.neg)[0],combined=combinedSentiment(p),c=document.createElement('div');c.className=cellClass(p,'p-3');const combinedMarkup=combinedView==='bar'?`<div class="combined-viz bar-area"><div class="bar combined-bar"><button type="button" class="segment pos combined-seg" data-s="positive" style="width:${combined.pos}%"></button><button type="button" class="segment mix combined-seg" data-s="mixed" style="width:${combined.mixed}%"></button><button type="button" class="segment neg combined-seg" data-s="negative" style="width:${combined.neg}%"></button></div></div>`:`<div class="combined-viz pie-area"><svg class="combined-pie" viewBox="0 0 64 64" role="img" aria-label="Combined sentiment donut"><g class="combined-donut-load"><circle cx="32" cy="32" r="20" fill="none" stroke="#E8EEF1" stroke-width="10"></circle><circle class="pie-seg combined-seg" data-s="positive" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-2)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.pos} ${100-combined.pos}" stroke-dashoffset="0" transform="rotate(-90 32 32)"></circle><circle class="pie-seg combined-seg" data-s="mixed" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-5)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.mixed} ${100-combined.mixed}" stroke-dashoffset="${-combined.pos}" transform="rotate(-90 32 32)"></circle><circle class="pie-seg combined-seg" data-s="negative" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-4)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.neg} ${100-combined.neg}" stroke-dashoffset="${-(combined.pos+combined.mixed)}" transform="rotate(-90 32 32)"></circle><circle cx="32" cy="32" r="13" fill="#F8FBFC"></circle></g></svg></div>`;c.innerHTML=`<div class="flex items-center justify-between gap-2"><button type="button" class="quick-reviews text-[10px] text-[var(--viz-muted)]">${p.reviews} reviews</button><button type="button" class="quick-rating text-[10px] text-[var(--viz-muted)]">★ ${p.rating.toFixed(1)}</button></div><div class="mt-2 grid grid-cols-2 gap-2"><button type="button" class="best text-left"><div class="text-[9px] uppercase text-[var(--viz-muted)]">Strongest +</div><div class="mt-1 quick-insight-value font-semibold" style="color:var(--viz-series-2)"><span class="quick-insight-icon">${best.a.icon}</span><span>${best.m.pos}%</span> <span class="font-normal text-[var(--viz-muted)]">(${best.m.pc})</span></div></button><button type="button" class="worst text-left"><div class="text-[9px] uppercase text-[var(--viz-muted)]">Highest −</div><div class="mt-1 quick-insight-value font-semibold" style="color:var(--viz-series-4)"><span class="quick-insight-icon">${worst.a.icon}</span><span>${worst.m.neg}%</span> <span class="font-normal text-[var(--viz-muted)]">(${worst.m.nc})</span></div></button></div><div class="mt-3"><div class="mb-1 text-[9px] font-medium text-[var(--viz-muted)]">Combined sentiment</div>${combinedMarkup}</div>`;bindTip(c.querySelector('.quick-reviews'),'Review count',`${p.reviews} product reviews.`);bindTip(c.querySelector('.quick-rating'),'Average rating',`${p.rating.toFixed(1)} / 5 across product reviews.`);bindTip(c.querySelector('.best'),`Strongest positive · ${best.a.name}`,`${best.m.pc} mentions · ${best.m.pos}% positive.`);bindTip(c.querySelector('.worst'),`Highest negative · ${worst.a.name}`,`${worst.m.nc} mentions · ${worst.m.neg}% negative.`);c.querySelectorAll('.combined-seg').forEach(seg=>{const s=seg.dataset.s,count=s==='positive'?combined.pc:s==='mixed'?combined.mc:combined.nc,percent=s==='positive'?combined.pos:s==='mixed'?combined.mixed:combined.neg;bindTip(seg,`${p.name} · ${sn(s)} sentiment`,`${count} mentions · ${percent}% of combined sentiment mentions.`)});c.querySelector('.best').addEventListener('click',()=>{focusAttr=best.a.id;renderTable()});c.querySelector('.worst').addEventListener('click',()=>{focusAttr=worst.a.id;renderTable()});r.appendChild(c)});return r}
+function quickRow(){const r=document.createElement('div');r.className='row quick-row border-b border-[var(--viz-border)]';r.style.gridTemplateColumns=template();const l=document.createElement('div');l.className='attr-cell flex flex-col items-center justify-center gap-2 p-2 text-[9px] font-medium uppercase text-[var(--viz-muted)]';l.innerHTML=`<span>Quick view</span><div class="combined-toggle" aria-label="Combined sentiment view"><button type="button" class="bar-view ${combinedView==='bar'?'active':''}" aria-label="Bar view">▰</button><button type="button" class="pie-view ${combinedView==='pie'?'active':''}" aria-label="Circle view">◕</button></div>`;bindTip(l.querySelector('.bar-view'),'Combined sentiment view','Show combined sentiment as a stacked bar.');bindTip(l.querySelector('.pie-view'),'Combined sentiment view','Show combined sentiment as a circular pie.');l.querySelector('.bar-view').addEventListener('click',()=>{combinedView='bar';renderTable()});l.querySelector('.pie-view').addEventListener('click',()=>{combinedView='pie';renderTable()});r.appendChild(l);ordered().forEach(p=>{const all=attrs.map(a=>({a,m:metric(p,a)})),best=[...all].sort((x,y)=>y.m.pos-x.m.pos)[0],worst=[...all].sort((x,y)=>y.m.neg-x.m.neg)[0],combined=combinedSentiment(p),c=document.createElement('div');c.className=cellClass(p,'p-3');const combinedMarkup=combinedView==='bar'?`<div class="combined-viz bar-area"><div class="bar combined-bar"><button type="button" class="segment pos combined-seg" data-s="positive" style="width:${combined.pos}%"></button><button type="button" class="segment mix combined-seg" data-s="mixed" style="width:${combined.mixed}%"></button><button type="button" class="segment neg combined-seg" data-s="negative" style="width:${combined.neg}%"></button></div></div>`:`<div class="combined-viz pie-area"><svg class="combined-pie" viewBox="0 0 64 64" role="img" aria-label="Combined sentiment donut"><g class="combined-donut-load"><circle cx="32" cy="32" r="20" fill="none" stroke="#E8EEF1" stroke-width="10"></circle><circle class="pie-seg combined-seg" data-s="positive" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-2)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.pos} ${100-combined.pos}" stroke-dashoffset="0" transform="rotate(-90 32 32)"></circle><circle class="pie-seg combined-seg" data-s="mixed" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-5)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.mixed} ${100-combined.mixed}" stroke-dashoffset="${-combined.pos}" transform="rotate(-90 32 32)"></circle><circle class="pie-seg combined-seg" data-s="negative" cx="32" cy="32" r="20" fill="none" stroke="var(--viz-series-4)" stroke-width="10" stroke-linecap="butt" pathLength="100" stroke-dasharray="${combined.neg} ${100-combined.neg}" stroke-dashoffset="${-(combined.pos+combined.mixed)}" transform="rotate(-90 32 32)"></circle><circle cx="32" cy="32" r="13" fill="#F8FBFC"></circle></g></svg></div>`;c.innerHTML=`<div class="flex items-center justify-between gap-2"><button type="button" class="quick-reviews text-[10px] text-[var(--viz-muted)]">${p.reviews} reviews</button><button type="button" class="quick-rating text-[10px] text-[var(--viz-muted)]">★ ${p.rating.toFixed(1)}</button></div><div class="mt-2 grid grid-cols-2 gap-2"><button type="button" class="best text-left"><div class="text-[9px] uppercase text-[var(--viz-muted)]">Strongest +</div><div class="mt-1 quick-insight-value font-semibold" style="color:var(--viz-series-2)"><span class="quick-insight-icon ${best.a.id==='performance'?'performance-icon':''}">${best.a.icon}</span><span>${best.m.pos}%</span> <span class="font-normal text-[var(--viz-muted)]">(${best.m.pc})</span></div></button><button type="button" class="worst text-left"><div class="text-[9px] uppercase text-[var(--viz-muted)]">Highest −</div><div class="mt-1 quick-insight-value font-semibold" style="color:var(--viz-series-4)"><span class="quick-insight-icon ${worst.a.id==='performance'?'performance-icon':''}">${worst.a.icon}</span><span>${worst.m.neg}%</span> <span class="font-normal text-[var(--viz-muted)]">(${worst.m.nc})</span></div></button></div><div class="mt-3"><div class="mb-1 text-[9px] font-medium text-[var(--viz-muted)]">Combined sentiment</div>${combinedMarkup}</div>`;bindTip(c.querySelector('.quick-reviews'),'Review count',`${p.reviews} product reviews.`);bindTip(c.querySelector('.quick-rating'),'Average rating',`${p.rating.toFixed(1)} / 5 across product reviews.`);bindTip(c.querySelector('.best'),`Strongest positive · ${best.a.name}`,`${best.m.pc} mentions · ${best.m.pos}% positive.`);bindTip(c.querySelector('.worst'),`Highest negative · ${worst.a.name}`,`${worst.m.nc} mentions · ${worst.m.neg}% negative.`);c.querySelectorAll('.combined-seg').forEach(seg=>{const s=seg.dataset.s,count=s==='positive'?combined.pc:s==='mixed'?combined.mc:combined.nc,percent=s==='positive'?combined.pos:s==='mixed'?combined.mixed:combined.neg;bindTip(seg,`${p.name} · ${sn(s)} sentiment`,`${count} mentions · ${percent}% of combined sentiment mentions.`);seg.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();rememberReturn(null,p.id);focusAttr=null;const f=filters[p.id];const same=f.attrs.size===0&&f.sentiments.size===1&&f.sentiments.has(s);f.attrs.clear();f.sentiments.clear();if(!same)f.sentiments.add(s);renderTable();setTimeout(()=>root.querySelector('#reviews-row')?.scrollIntoView({behavior:'smooth',block:'start'}),0)})});c.querySelector('.best').addEventListener('click',()=>{focusAttr=best.a.id;renderTable()});c.querySelector('.worst').addEventListener('click',()=>{focusAttr=worst.a.id;renderTable()});r.appendChild(c)});return r}
 function attributeRow(a){const r=document.createElement('div');r.className=`row attribute-row border-b border-[var(--viz-border)] ${a.id===focusAttr?'active':''}`;r.dataset.attr=a.id;r.style.gridTemplateColumns=template();r.appendChild(attrCell(a));ordered().forEach(p=>{const m=metric(p,a),f=filters[p.id],c=document.createElement('div');c.className=cellClass(p,'p-3');c.innerHTML=`<div class="flex items-center justify-between gap-2"><button type="button" class="mention text-xs font-semibold">${m.coverage}% <span class="font-normal text-[var(--viz-muted)]">· ${m.count}</span></button><button type="button" class="rating text-xs">★ ${m.avg.toFixed(1)}</button></div><div class="bar mt-2"><button type="button" data-s="positive" class="segment pos ${f.attrs.has(a.id)&&f.sentiments.has('positive')?'selected':''}" style="width:${m.pos}%"></button><button type="button" data-s="mixed" class="segment mix ${f.attrs.has(a.id)&&f.sentiments.has('mixed')?'selected':''}" style="width:${m.mixed}%"></button><button type="button" data-s="negative" class="segment neg ${f.attrs.has(a.id)&&f.sentiments.has('negative')?'selected':''}" style="width:${m.neg}%"></button></div>`;bindTip(c.querySelector('.mention'),`${p.name} · ${a.name}`,`${m.count} reviews · ${m.coverage}% mention coverage.`);bindTip(c.querySelector('.rating'),`${p.name} · ${a.name}`,`Average rating ${m.avg.toFixed(1)} / 5.`);c.querySelectorAll('.segment').forEach(s=>{const type=s.dataset.s,val=type==='positive'?m.pos:type==='mixed'?m.mixed:m.neg,count=type==='positive'?m.pc:type==='mixed'?m.mc:m.nc;bindTip(s,`${p.name} · ${sn(type)} sentiment`,`${count} mentions · ${val}% of ${a.name} mentions.`);s.addEventListener('click',()=>{rememberReturn(a.id,p.id);focusAttr=a.id;const f=filters[p.id];f.attrs.clear();f.attrs.add(a.id);f.sentiments.clear();f.sentiments.add(type);renderTable();setTimeout(()=>root.querySelector('#reviews-row')?.scrollIntoView({behavior:'smooth',block:'start'}),0)})});r.appendChild(c)});return r}
 function cloneFilter(f){return{query:f.query,attrs:new Set([...f.attrs]),sentiments:new Set([...f.sentiments]),mode:f.mode,exact:f.exact,start:f.start,end:f.end}}
 function ratingMatch(r,f){if(f.mode==='exact'&&f.exact!==null)return r===f.exact;if(f.mode==='range'&&f.start!==null&&f.end!==null)return r>=f.start&&r<=f.end;return true}
@@ -1118,7 +1321,7 @@ function samples(p){const out=[];attrs.forEach((a,i)=>{const m=metric(p,a),types
 function filtered(p){const f=filters[p.id],q=f.query.trim().toLowerCase();return samples(p).filter(x=>(!f.attrs.size||f.attrs.has(x.a))&&(!f.sentiments.size||f.sentiments.has(x.s))&&ratingMatch(x.r,f)&&(!q||x.title.toLowerCase().includes(q)))}
 function updateStars(c,p){const f=filters[p.id];c.querySelectorAll('.star').forEach(b=>{const n=+b.dataset.n;let filled=false,edge=false;if(f.mode==='exact'&&f.exact!==null)filled=n<=f.exact;if(f.mode==='range'&&f.start!==null){if(f.end===null){filled=n===f.start;edge=n===f.start}else{filled=n>=f.start&&n<=f.end;edge=n===f.start||n===f.end}}b.textContent=filled?'★':'☆';b.classList.toggle('filled',filled);b.classList.toggle('edge',edge)})}
 function renderComments(c,p){const rows=filtered(p);c.querySelector('.count').textContent=rows.length>10?`${rows.length} comments · scroll to view more`:`${rows.length} comments`;c.querySelector('.comments').innerHTML=rows.length?rows.map(x=>`<article class="comment ${x.s} rounded-lg bg-[var(--viz-card)] p-2.5"><div class="flex items-center justify-between gap-2"><span class="text-[9px]">${'★'.repeat(x.r)}${'☆'.repeat(5-x.r)}</span><button type="button" class="review-attr flex h-6 w-6 items-center justify-center rounded-full border text-xs" data-a="${x.a}" data-s="${x.s}" style="border-color:${scol(x.s)}">${aBy(x.a).icon}</button></div><p class="mt-2 text-xs leading-5">${x.title}</p></article>`).join(''):`<div class="comments-empty rounded-lg border border-dashed border-[var(--viz-border)] p-3 text-center text-[10px] text-[var(--viz-muted)]">No matching comments</div>`;c.querySelectorAll('.review-attr').forEach(b=>bindTip(b,aBy(b.dataset.a).name,`${sn(b.dataset.s)} sentiment for this review mention.`))}
-function reviewColumn(p){const f=filters[p.id],open=filterOpen[p.id],applied=activeFilterCount(f),c=document.createElement('div');c.className=cellClass(p,'p-3');c.innerHTML=`<div class="filter-shell p-2.5"><div class="filter-head-row"><div class="filter-head-left"><button type="button" class="filter-toggle"><span>${open?'▴':'▾'} Filters</span>${applied?`<span class="filter-badge">${applied}</span>`:''}</button></div><button type="button" class="apply rounded-md border border-[var(--viz-border)] px-2 py-1 text-[9px] font-medium ${open?'':'hidden'}">Apply to all</button></div><div class="filter-panel ${open?'':'hidden'}"><input type="search" class="query mt-2 min-h-9 w-full rounded-md border border-[var(--viz-border)] bg-transparent px-2 text-xs" placeholder="Search comments" value="${f.query.replace(/"/g,'&quot;')}"><div class="mt-2 flex items-center gap-1"><button type="button" class="mode exact rounded-md border border-[var(--viz-border)] ${f.mode==='exact'?'active':''}">Exact</button><button type="button" class="mode range rounded-md border border-[var(--viz-border)] ${f.mode==='range'?'active':''}">Range</button><div class="stars ml-1 flex"></div></div><div class="mt-2 flex gap-1"><button type="button" class="sent" data-s="positive" style="color:var(--viz-series-2)">Positive</button><button type="button" class="sent" data-s="mixed" style="color:var(--viz-series-5)">Mixed</button><button type="button" class="sent" data-s="negative" style="color:var(--viz-series-4)">Negative</button></div><div class="mt-2"><div class="mb-1 text-[9px] text-[var(--viz-muted)]">Attributes</div><div class="attrs flex flex-wrap gap-1"></div></div></div></div><div class="count mt-3 text-[10px] text-[var(--viz-muted)]"></div><div class="comments mt-2 space-y-2"></div>`;bindTip(c.querySelector('.filter-toggle'),'Column filters',`${open?'Hide':'Show'} filters for ${p.name}.`);c.querySelector('.filter-toggle').addEventListener('click',()=>{filterOpen[p.id]=!filterOpen[p.id];renderTable()});const filterShell=c.querySelector('.filter-shell');if(filterShell){filterShell.classList.toggle('collapsed-clickable',!open);filterShell.addEventListener('click',e=>{if(filterOpen[p.id])return;if(e.target.closest('.filter-toggle,.apply,input,button'))return;filterOpen[p.id]=true;renderTable()})}const stars=c.querySelector('.stars');for(let n=1;n<=5;n++){const b=document.createElement('button');b.type='button';b.className='star';b.dataset.n=n;stars.appendChild(b);bindTip(b,`Rating · ${n} star${n>1?'s':''}`,f.mode==='exact'?'Select this exact review rating.':'Use this value as a range boundary.')};const aw=c.querySelector('.attrs');attrs.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='filter-attr';b.dataset.a=a.id;b.textContent=a.icon;b.classList.toggle('active',f.attrs.has(a.id));bindTip(b,a.name,'Toggle this attribute filter for this product.');b.addEventListener('click',()=>{f.attrs.has(a.id)?f.attrs.delete(a.id):f.attrs.add(a.id);b.classList.toggle('active',f.attrs.has(a.id));renderComments(c,p);updateClearAllVisibility()});aw.appendChild(b)});c.querySelectorAll('.sent').forEach(b=>{b.classList.toggle('active',f.sentiments.has(b.dataset.s));bindTip(b,`${sn(b.dataset.s)} sentiment`,'Toggle this sentiment filter for this product.');b.addEventListener('click',()=>{f.sentiments.has(b.dataset.s)?f.sentiments.delete(b.dataset.s):f.sentiments.add(b.dataset.s);renderTable()})});bindTip(c.querySelector('.exact'),'Exact rating','Select one exact review rating.');bindTip(c.querySelector('.range'),'Rating range','Select a start and end review rating.');bindTip(c.querySelector('.apply'),'Apply filters to all columns',`Copy ${p.brand}'s search, rating, sentiment and attribute filters to every selected product.`);c.querySelector('.query').addEventListener('input',e=>{f.query=e.target.value;renderComments(c,p);updateClearAllVisibility()});c.querySelector('.exact').addEventListener('click',()=>{f.mode='exact';f.exact=null;f.start=null;f.end=null;renderTable()});c.querySelector('.range').addEventListener('click',()=>{f.mode='range';f.exact=null;f.start=null;f.end=null;renderTable()});c.querySelectorAll('.star').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.n;if(f.mode==='exact')f.exact=f.exact===n?null:n;else if(f.start===null||f.end!==null){f.start=n;f.end=null}else{f.end=n;if(f.end<f.start){const t=f.start;f.start=f.end;f.end=t}}updateStars(c,p);renderComments(c,p);updateClearAllVisibility()}));c.querySelector('.apply').addEventListener('click',()=>{const src=cloneFilter(f);selected().forEach(x=>filters[x.id]=cloneFilter(src));renderTable()});updateStars(c,p);renderComments(c,p);return c}
+function reviewColumn(p){const f=filters[p.id],open=filterOpen[p.id],applied=activeFilterCount(f),c=document.createElement('div');c.className=cellClass(p,'p-3');c.innerHTML=`<div class="filter-shell p-2.5"><div class="filter-head-row"><div class="filter-head-left"><button type="button" class="filter-toggle"><span>${open?'▴':'▾'} Filters</span>${applied?`<span class="filter-badge">${applied}</span>`:''}</button></div><button type="button" class="apply rounded-md border border-[var(--viz-border)] px-2 py-1 text-[9px] font-medium ${open?'':'hidden'}">Apply to all</button></div><div class="filter-panel ${open?'':'hidden'}"><input type="search" class="query mt-2 min-h-9 w-full rounded-md border border-[var(--viz-border)] bg-transparent px-2 text-xs" placeholder="Search comments" value="${f.query.replace(/"/g,'&quot;')}"><div class="mt-2 flex items-center gap-1"><button type="button" class="mode exact rounded-md border border-[var(--viz-border)] ${f.mode==='exact'?'active':''}">Exact</button><button type="button" class="mode range rounded-md border border-[var(--viz-border)] ${f.mode==='range'?'active':''}">Range</button><div class="stars ml-1 flex"></div></div><div class="mt-2 flex gap-1"><button type="button" class="sent" data-s="positive" style="color:var(--viz-series-2)">Positive</button><button type="button" class="sent" data-s="mixed" style="color:var(--viz-series-5)">Mixed</button><button type="button" class="sent" data-s="negative" style="color:var(--viz-series-4)">Negative</button></div><div class="mt-2"><div class="mb-1 text-[9px] text-[var(--viz-muted)]">Attributes</div><div class="attrs flex flex-wrap gap-1"></div></div></div></div><div class="count mt-3 text-[10px] text-[var(--viz-muted)]"></div><div class="comments mt-2 space-y-2"></div>`;bindTip(c.querySelector('.filter-toggle'),'Column filters',`${open?'Hide':'Show'} filters for ${p.name}.`);c.querySelector('.filter-toggle').addEventListener('click',()=>{filterOpen[p.id]=!filterOpen[p.id];renderTable()});const filterShell=c.querySelector('.filter-shell');if(filterShell){filterShell.classList.toggle('collapsed-clickable',!open);filterShell.addEventListener('click',e=>{if(filterOpen[p.id])return;if(e.target.closest('.filter-toggle,.apply,input,button'))return;filterOpen[p.id]=true;renderTable()})}const stars=c.querySelector('.stars');for(let n=1;n<=5;n++){const b=document.createElement('button');b.type='button';b.className='star';b.dataset.n=n;stars.appendChild(b);bindTip(b,`Rating · ${n} star${n>1?'s':''}`,f.mode==='exact'?'Select this exact review rating.':'Use this value as a range boundary.')};const aw=c.querySelector('.attrs');attrs.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='filter-attr';b.dataset.a=a.id;b.textContent=a.icon;b.classList.toggle('active',f.attrs.has(a.id));bindTip(b,a.name,'Toggle this attribute filter for this product.');b.addEventListener('click',()=>{f.attrs.has(a.id)?f.attrs.delete(a.id):f.attrs.add(a.id);b.classList.toggle('active',f.attrs.has(a.id));renderComments(c,p);updateClearAllVisibility()});aw.appendChild(b)});c.querySelectorAll('.sent').forEach(b=>{b.classList.toggle('active',f.sentiments.has(b.dataset.s));bindTip(b,`${sn(b.dataset.s)} sentiment`,'Show only this sentiment for this product.');b.addEventListener('click',()=>{const same=f.sentiments.size===1&&f.sentiments.has(b.dataset.s);f.sentiments.clear();if(!same)f.sentiments.add(b.dataset.s);renderTable()})});bindTip(c.querySelector('.exact'),'Exact rating','Select one exact review rating.');bindTip(c.querySelector('.range'),'Rating range','Select a start and end review rating.');bindTip(c.querySelector('.apply'),'Apply filters to all columns',`Copy ${p.brand}'s search, rating, sentiment and attribute filters to every selected product.`);c.querySelector('.query').addEventListener('input',e=>{f.query=e.target.value;renderComments(c,p);updateClearAllVisibility()});c.querySelector('.exact').addEventListener('click',()=>{f.mode='exact';f.exact=null;f.start=null;f.end=null;renderTable()});c.querySelector('.range').addEventListener('click',()=>{f.mode='range';f.exact=null;f.start=null;f.end=null;renderTable()});c.querySelectorAll('.star').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.n;if(f.mode==='exact')f.exact=f.exact===n?null:n;else if(f.start===null||f.end!==null){f.start=n;f.end=null}else{f.end=n;if(f.end<f.start){const t=f.start;f.start=f.end;f.end=t}}updateStars(c,p);renderComments(c,p);updateClearAllVisibility()}));c.querySelector('.apply').addEventListener('click',()=>{const src=cloneFilter(f);selected().forEach(x=>filters[x.id]=cloneFilter(src));renderTable()});updateStars(c,p);renderComments(c,p);return c}
 function reviewRow(){const r=document.createElement('div');r.id='reviews-row';r.className='row';r.style.gridTemplateColumns=template();r.appendChild(attrCell(null,true));ordered().forEach(p=>r.appendChild(reviewColumn(p)));setTimeout(()=>{const back=root.querySelector('#back-view');if(back){bindTip(back,'Back to previous view','Return to the attribute icon or sentiment bar that opened these reviews.');back.addEventListener('click',goBackToPrevious)}const toggle=root.querySelector('#toggle-all-filters');if(toggle){bindTip(toggle,'All column filters',`${allFiltersOpen()?'Collapse':'Expand'} filters for every selected product.`);toggle.addEventListener('click',()=>{const next=!allFiltersOpen();selected().forEach(p=>filterOpen[p.id]=next);renderTable()})}const b=root.querySelector('#clear-all');if(b){bindTip(b,'Clear all filters','Reset search, rating, sentiment and attribute filters in every selected product column.');b.addEventListener('click',()=>{selected().forEach(p=>filters[p.id]={query:'',attrs:new Set(),sentiments:new Set(),mode:'exact',exact:null,start:null,end:null});focusAttr=null;returnState=null;renderTable()})}updateClearAllVisibility()},0);return r}
 function renderTable(){const t=root.querySelector('#table');t.innerHTML='';t.appendChild(quickRow());attrs.forEach(a=>t.appendChild(attributeRow(a)));t.appendChild(reviewRow());syncBrand()}
 function render(){if(!pBy(pinned)?.selected)pinned=selected()[0]?.id;renderSelector();renderBrandRow();renderTable()}
@@ -1169,6 +1372,161 @@ render();
       });
     });
   });
+})();
+</script>
+
+
+<script id="cipher-compare-pie-selection-js">
+(() => {
+  const root = document.getElementById('compare-v9');
+  if (!root) return;
+
+  const NS = 'http://www.w3.org/2000/svg';
+
+  const getSentimentColor = (sent) => (
+    sent === 'positive' ? '#8AA14D' :
+    sent === 'mixed' ? '#C3A061' :
+    '#CA5555'
+  );
+
+  function svgEl(name, attrs = {}) {
+    const el = document.createElementNS(NS, name);
+    Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, String(v)));
+    return el;
+  }
+
+  function ensurePieDefs(svg) {
+    if (!svg || svg.querySelector('defs[data-cipher-pie-defs="1"]')) return;
+
+    const defs = svgEl('defs', {'data-cipher-pie-defs': '1'});
+    const pattern = svgEl('pattern', {
+      id: 'cipher-compare-pie-hatch',
+      patternUnits: 'userSpaceOnUse',
+      width: 8,
+      height: 8
+    });
+
+    pattern.appendChild(svgEl('path', {
+      d: 'M-2 2 L2 -2 M0 8 L8 0 M6 10 L10 6',
+      fill: 'none',
+      stroke: 'rgba(255,255,255,.62)',
+      'stroke-width': 1.35
+    }));
+
+    defs.appendChild(pattern);
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  function cloneArc(source, extra = {}) {
+    const attrs = {
+      cx: source.getAttribute('cx'),
+      cy: source.getAttribute('cy'),
+      r: source.getAttribute('r'),
+      fill: 'none',
+      transform: source.getAttribute('transform') || '',
+      pathLength: source.getAttribute('pathLength') || '100',
+      'stroke-dasharray': source.getAttribute('stroke-dasharray') || '',
+      'stroke-dashoffset': source.getAttribute('stroke-dashoffset') || '0',
+      'stroke-linecap': source.getAttribute('stroke-linecap') || 'butt',
+      ...extra
+    };
+    return svgEl('circle', attrs);
+  }
+
+  function renderPieOverlay(svg, selectedSegs) {
+    if (!svg) return;
+    ensurePieDefs(svg);
+    svg.querySelectorAll('.pie-selection-layer').forEach(n => n.remove());
+
+    const group = svgEl('g', {'class': 'pie-selection-layer'});
+    selectedSegs.forEach(seg => {
+      const sent = (seg.dataset.s || '').toLowerCase();
+      const color = getSentimentColor(sent);
+
+      group.appendChild(cloneArc(seg, {
+        stroke: color,
+        'stroke-width': 14
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: '#FFFFFF',
+        'stroke-width': 11
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: color,
+        'stroke-width': 9
+      }));
+
+      group.appendChild(cloneArc(seg, {
+        stroke: 'url(#cipher-compare-pie-hatch)',
+        'stroke-width': 9
+      }));
+    });
+
+    svg.appendChild(group);
+  }
+
+  function getQuickAndReviewCells() {
+    const quickRow = root.querySelector('.quick-row');
+    const reviewRow = root.querySelector('#reviews-row');
+    if (!quickRow || !reviewRow) return {quickCells: [], reviewCells: []};
+
+    return {
+      quickCells: [...quickRow.children].slice(1),
+      reviewCells: [...reviewRow.children].slice(1)
+    };
+  }
+
+  function syncPieSelection() {
+    const {quickCells, reviewCells} = getQuickAndReviewCells();
+
+    quickCells.forEach((cell, index) => {
+      const reviewCell = reviewCells[index];
+      if (!reviewCell) return;
+
+      const hasActiveAttr = reviewCell.querySelectorAll('.filter-attr.active').length > 0;
+      const active = hasActiveAttr ? new Set() : new Set(
+        [...reviewCell.querySelectorAll('.sent.active')]
+          .map(btn => btn.dataset.s)
+          .filter(Boolean)
+      );
+
+      cell.querySelectorAll('.combined-pie').forEach(svg => {
+        const arcs = [...svg.querySelectorAll('.pie-seg')];
+        arcs.forEach(arc => {
+          const isSelected = active.has(arc.dataset.s);
+          arc.classList.toggle('selected-pie-source', isSelected);
+        });
+        renderPieOverlay(svg, arcs.filter(arc => active.has(arc.dataset.s)));
+      });
+    });
+  }
+
+  function wirePieInteractions() {
+    const {quickCells} = getQuickAndReviewCells();
+
+    quickCells.forEach((cell) => {
+      cell.querySelectorAll('.combined-pie .pie-seg').forEach(arc => {
+        if (arc.dataset.pieWired === '1') return;
+        arc.dataset.pieWired = '1';
+        arc.setAttribute('tabindex', '0');
+        arc.setAttribute('focusable', 'true');
+      });
+    });
+  }
+
+  function refresh() {
+    wirePieInteractions();
+    syncPieSelection();
+  }
+
+  const mo = new MutationObserver(() => {
+    requestAnimationFrame(refresh);
+  });
+
+  refresh();
+  mo.observe(root, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
 })();
 </script>
 
