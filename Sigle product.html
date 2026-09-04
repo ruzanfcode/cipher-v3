@@ -1,0 +1,4984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Garment Sentiment Analysis</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:GRAD,opsz,ROND,wdth,wght@0..100,6..144,0..100,25..151,1..1000&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--viz-text:#111827;--viz-muted:#6b7280;--viz-border:#e5e7eb;--viz-panel:#fff;--viz-card:#f3f4f6;--viz-accent:#2563eb;--viz-accent-bg:#eff6ff;--viz-series-2:#8AA14D;--viz-series-3:#6366f1;--viz-series-4:#CA5555;--viz-series-5:#C3A061}
+body{margin:0;background:#fff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#gsa-v17{max-width:1180px;margin:0 auto;padding:24px}
+#gsa-v17 .pos{background:var(--viz-series-2)}#gsa-v17 .mix{background:var(--viz-series-5)}#gsa-v17 .neg{background:var(--viz-series-4)}
+#gsa-v17 .attr-card{cursor:pointer;transition:border-color .15s,box-shadow .15s}#gsa-v17 .attr-card.selected{border-color:var(--viz-accent);box-shadow:inset 0 0 0 1px var(--viz-accent)}
+#gsa-v17 .segment{height:100%;border:0;padding:0;cursor:pointer}#gsa-v17 .segment.selected-segment{box-shadow:inset 0 0 0 2px var(--viz-text)}
+#gsa-v17 .tooltip-box{position:absolute;z-index:100;display:none;width:max-content;max-width:240px;padding:8px 10px;border:1px solid var(--viz-border);border-radius:8px;background:var(--viz-panel);font-size:11px;line-height:1.4;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.1)}#gsa-v17 .tooltip-box.show{display:block}#gsa-v17 .tip-second{display:block;margin-top:3px;color:var(--viz-muted)}
+#gsa-v17 .y-label{writing-mode:vertical-rl;transform:rotate(180deg);width:22px}#gsa-v17 .map-mode-btn{width:68px;height:36px;flex:0 0 36px;font-weight:600}#gsa-v17 .map-mode-wrap{width:76px;flex:0 0 76px}
+#gsa-v17 .filter-icon{width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid var(--viz-border);font-size:16px;font-weight:700;flex:0 0 auto}#gsa-v17 .filter-icon.active{border-color:var(--viz-accent);background:var(--viz-accent-bg);box-shadow:inset 0 0 0 1px var(--viz-accent)}
+#gsa-v17 .sent-filter{width:76px;min-width:76px;height:34px;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;font-weight:500;flex:0 0 76px}#gsa-v17 .sent-filter.active{box-shadow:inset 0 0 0 2px currentColor;background:var(--viz-card)}
+#gsa-v17 .review-icon{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1.5px solid currentColor;font-size:13px;font-weight:700;flex:0 0 auto}
+#gsa-v17 .rating-star{width:29px;height:34px;padding:0;border:0;background:transparent;font-size:25px;line-height:1;color:var(--viz-muted);cursor:pointer;flex:0 0 29px}#gsa-v17 .rating-star.filled{color:var(--viz-text)}#gsa-v17 .rating-star.range-start,#gsa-v17 .rating-star.range-end{border-radius:6px;background:var(--viz-accent-bg)}
+#gsa-v17 .rating-mode{height:30px;width:52px;min-width:52px;box-sizing:border-box;font-weight:600}#gsa-v17 .rating-mode.active{background:var(--viz-accent-bg)}
+#gsa-v17 .return-bar{position:sticky;top:10px;z-index:60;display:none;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:9px 10px;border:1px solid var(--viz-border);border-radius:10px;background:rgba(255,255,255,.96);box-shadow:0 6px 18px rgba(0,0,0,.08);backdrop-filter:blur(8px)}
+#gsa-v17 .return-bar.show{display:flex}
+#gsa-v17 .return-context{min-width:0;font-size:12px;color:var(--viz-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#gsa-v17 .return-btn{flex:0 0 auto;min-height:34px;border-radius:8px;border:1px solid var(--viz-accent);padding:0 11px;background:var(--viz-accent-bg);color:var(--viz-text);font-size:12px;font-weight:600}
+#gsa-v17 .more-pop{position:absolute;z-index:40;display:none;min-width:150px;max-width:230px;padding:8px;border:1px solid var(--viz-border);border-radius:9px;background:var(--viz-panel);box-shadow:0 8px 22px rgba(0,0,0,.12)}#gsa-v17 .more-pop.show{display:block}#gsa-v17 #clear-filters:disabled{opacity:.4;cursor:default}
+</style>
+
+<style id="cipher-product-detail-theme-v5">
+/* =========================================================
+   Cipher Product Detail — current design system
+   Existing product-detail layout and interactions preserved.
+   ========================================================= */
+
+:root{
+  --viz-text:#171717 !important;
+  --viz-muted:#62676A !important;
+  --viz-border:rgba(24,24,24,.12) !important;
+  --viz-panel:#F7FAFB !important;
+  --viz-card:#D0E5F2 !important;
+  --viz-accent:#79BDD9 !important;
+  --viz-accent-bg:#E6F2F7 !important;
+
+  /* Sentiment remains semantically distinguishable,
+     but is intentionally more restrained than the original UI. */
+  --viz-series-2:#8AA14D !important;
+  --viz-series-3:#8FC9E3 !important;
+  --viz-series-4:#CA5555 !important;
+  --viz-series-5:#C3A061 !important;
+
+  --cipher-bg:#F2F2F2;
+  --cipher-blue:#D0E5F2;
+  --cipher-blue-soft:#D0ECF2;
+  --cipher-blue-strong:#8FC9E3;
+  --cipher-ink:#171717;
+  --cipher-muted:#62676A;
+  --cipher-ease:cubic-bezier(.2,.75,.2,1);
+}
+
+/* Typography */
+html,
+body,
+body *,
+body *::before,
+body *::after,
+button,
+input,
+textarea,
+select,
+option{
+  font-family:"Google Sans Flex",Arial,sans-serif !important;
+}
+button,input,textarea,select{font:inherit;}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0 !important;
+  color:var(--cipher-ink) !important;
+  background:
+    radial-gradient(circle at 10% 5%,rgba(208,236,242,.26),transparent 27%),
+    radial-gradient(circle at 92% 12%,rgba(208,229,242,.31),transparent 28%),
+    radial-gradient(circle at 48% 100%,rgba(208,236,242,.16),transparent 32%),
+    #F2F2F2 !important;
+  min-height:100vh;
+}
+
+/* =========================================================
+   FLOATING NAV — same language as current homepage
+   ========================================================= */
+.cipher-detail-nav-shell{
+  width:min(calc(100% - 48px),1180px);
+  margin-inline:auto;
+  position:sticky;
+  top:16px;
+  z-index:250;
+  padding-top:16px;
+}
+
+.cipher-detail-nav{
+  position:relative;
+  overflow:hidden;
+  min-height:58px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  padding:9px 12px 9px 18px;
+  border-radius:999px;
+  background:rgba(208,229,242,.36);
+  border:1px solid rgba(255,255,255,.50);
+  -webkit-backdrop-filter:blur(26px) saturate(118%);
+  backdrop-filter:blur(26px) saturate(118%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.76),
+    inset 0 -1px 0 rgba(106,132,145,.08),
+    0 12px 34px rgba(39,55,64,.055);
+}
+
+.cipher-detail-nav::before{
+  content:"";
+  position:absolute;
+  left:3px;
+  right:3px;
+  top:2px;
+  height:42%;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  z-index:0;
+}
+
+.cipher-detail-nav > *{
+  position:relative;
+  z-index:1;
+}
+
+.cipher-detail-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  justify-self:start;
+  border:0;
+  padding:0;
+  background:transparent;
+  color:#171717;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.cipher-detail-mark{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#171717 4%,#58666D 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 5px 12px rgba(24,24,24,.10);
+}
+
+.cipher-detail-wordmark{
+  font-size:20px;
+  line-height:1;
+  font-weight:760;
+  letter-spacing:-.035em;
+}
+
+.cipher-detail-links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:52px;
+}
+
+.cipher-detail-links a{
+  position:relative;
+  color:#525252;
+  text-decoration:none;
+  font-size:14px;
+  line-height:1;
+  font-weight:620;
+  letter-spacing:-.01em;
+  padding:8px 2px 11px;
+  transition:
+    color .22s ease,
+    font-weight .22s ease,
+    transform .22s ease;
+}
+
+.cipher-detail-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:#111111;
+  transform:scaleX(0);
+  transform-origin:center;
+  opacity:0;
+  transition:
+    transform .24s cubic-bezier(.2,.75,.2,1),
+    opacity .20s ease;
+}
+
+.cipher-detail-links a:hover,
+.cipher-detail-links a:focus-visible{
+  color:#171717;
+  transform:translateY(-1px);
+}
+
+.cipher-detail-links a:hover::after,
+.cipher-detail-links a:focus-visible::after{
+  transform:scaleX(1);
+  opacity:.58;
+}
+
+.cipher-detail-links a.selected{
+  color:#000;
+  font-weight:780;
+}
+
+.cipher-detail-links a.selected::after{
+  transform:scaleX(1);
+  opacity:1;
+}
+
+.cipher-page-back{
+  justify-self:end;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0 16px;
+  border:1px solid rgba(17,17,17,.06);
+  border-radius:999px;
+  background:#171717;
+  color:#FFFFFF;
+  font-size:13px;
+  font-weight:720;
+  letter-spacing:-.01em;
+  cursor:pointer;
+  box-shadow:
+    0 10px 24px rgba(24,24,24,.11),
+    inset 0 1px 0 rgba(255,255,255,.11);
+  transition:
+    transform .24s var(--cipher-ease),
+    box-shadow .24s ease,
+    background .24s ease;
+}
+
+.cipher-page-back:hover{
+  transform:translateY(-2px);
+  background:#252A2D;
+  box-shadow:
+    0 15px 30px rgba(24,24,24,.15),
+    inset 0 1px 0 rgba(255,255,255,.13);
+}
+
+.cipher-page-back:active{
+  transform:translateY(0);
+}
+
+.cipher-page-back svg{
+  width:15px;
+  height:15px;
+}
+
+/* =========================================================
+   PRODUCT DETAIL SURFACE
+   ========================================================= */
+#gsa-v17{
+  color:var(--viz-text) !important;
+  padding-top:26px !important;
+  padding-bottom:54px !important;
+}
+
+#gsa-v17 > section{
+  scroll-margin-top:106px;
+}
+
+/* Product overview */
+#gsa-v17 > section:first-of-type{
+  border:1px solid var(--viz-border) !important;
+  border-radius:28px;
+  padding:24px !important;
+  background:
+    radial-gradient(circle at 90% 12%,rgba(208,236,242,.26),transparent 28%),
+    rgba(255,255,255,.52);
+  box-shadow:
+    0 18px 48px rgba(39,55,64,.045),
+    inset 0 1px 0 rgba(255,255,255,.65);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+}
+
+#gsa-v17 > section:first-of-type > .flex > div:first-child{
+  border:1px solid rgba(24,24,24,.08);
+  background:
+    radial-gradient(circle at 30% 20%,rgba(208,236,242,.60),transparent 42%),
+    linear-gradient(160deg,#D0E5F2,#E7F1F6) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65);
+}
+
+#gsa-v17 > section:first-of-type h2{
+  color:#171717;
+  font-weight:660 !important;
+  letter-spacing:-.035em;
+}
+
+#gsa-v17 > section:first-of-type .rounded-md.border{
+  border-color:rgba(24,24,24,.11) !important;
+  background:rgba(255,255,255,.42);
+  color:#353A3D;
+}
+
+#gsa-v17 .more-btn{
+  color:#31424A !important;
+  background:#D0ECF2 !important;
+  border:1px solid rgba(121,189,217,.26);
+}
+
+#gsa-v17 .more-btn:hover{
+  background:#C5E5EE !important;
+}
+
+#gsa-v17 .more-pop{
+  border-radius:14px !important;
+  border-color:rgba(24,24,24,.12) !important;
+  background:rgba(247,250,251,.96) !important;
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+  box-shadow:0 16px 38px rgba(39,55,64,.11) !important;
+}
+
+/* Product summary metrics */
+#gsa-v17 > section:first-of-type .lg\:grid-cols-4 > div{
+  border-radius:18px;
+  padding:12px 13px;
+  background:rgba(208,229,242,.48);
+  border:1px solid rgba(24,24,24,.075);
+}
+
+#gsa-v17 .summary-icon{
+  background:#F2F2F2 !important;
+  border:1px solid rgba(24,24,24,.09);
+}
+
+/* Section titles */
+#gsa-v17 h3{
+  color:#171717 !important;
+  font-weight:670 !important;
+  letter-spacing:-.025em;
+}
+
+/* =========================================================
+   ATTRIBUTE SENTIMENT
+   ========================================================= */
+#gsa-v17 .attr-card{
+  border-radius:22px !important;
+  border-color:rgba(24,24,24,.11) !important;
+  background:#D0E5F2;
+  box-shadow:0 8px 22px rgba(39,55,64,.025);
+  transition:
+    transform .28s var(--cipher-ease),
+    border-color .28s ease,
+    box-shadow .28s ease,
+    background .28s ease !important;
+}
+
+#gsa-v17 .attr-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(24,24,24,.17) !important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.28),rgba(208,229,242,.94)),
+    #D0E5F2;
+  box-shadow:0 18px 40px rgba(39,55,64,.07);
+}
+
+#gsa-v17 .attr-card.selected{
+  border-color:#79BDD9 !important;
+  box-shadow:
+    inset 0 0 0 1px #79BDD9,
+    0 16px 36px rgba(66,139,169,.09) !important;
+}
+
+#gsa-v17 .attr-card .flex.h-9.w-9{
+  background:#F2F2F2 !important;
+  border:1px solid rgba(24,24,24,.08);
+}
+
+#gsa-v17 .attr-card .flex.h-3{
+  background:rgba(242,242,242,.82) !important;
+}
+
+/* =========================================================
+   ATTENTION MAP
+   ========================================================= */
+#gsa-v17 #map-section{
+  margin-top:2px;
+  border:1px solid rgba(24,24,24,.11) !important;
+  border-radius:28px;
+  padding:24px !important;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(208,236,242,.22),transparent 31%),
+    rgba(255,255,255,.48);
+  box-shadow:
+    0 16px 44px rgba(39,55,64,.04),
+    inset 0 1px 0 rgba(255,255,255,.62);
+}
+
+#gsa-v17 .map-mode-wrap{
+  border-color:rgba(24,24,24,.11) !important;
+  background:#D0E5F2;
+}
+
+#gsa-v17 .map-mode-btn{
+  transition:background .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+
+#gsa-v17 .map-mode-btn:hover{
+  transform:translateY(-1px);
+  background:rgba(255,255,255,.38);
+}
+
+/* =========================================================
+   REVIEWS / FILTERS
+   ========================================================= */
+#gsa-v17 #reviews > .mt-4.rounded-xl{
+  border-radius:24px !important;
+  border-color:rgba(24,24,24,.11) !important;
+  background:#D0E5F2;
+  box-shadow:0 10px 30px rgba(39,55,64,.035);
+}
+
+#gsa-v17 #search{
+  border-color:rgba(24,24,24,.13) !important;
+  background:rgba(255,255,255,.60) !important;
+  color:#171717;
+  outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+
+#gsa-v17 #search:focus{
+  border-color:#79BDD9 !important;
+  background:rgba(255,255,255,.78) !important;
+  box-shadow:0 0 0 3px rgba(121,189,217,.14);
+}
+
+#gsa-v17 .filter-icon{
+  border-color:rgba(24,24,24,.12) !important;
+  background:rgba(242,242,242,.68);
+  color:#31383B;
+  transition:
+    transform .2s var(--cipher-ease),
+    border-color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+#gsa-v17 .filter-icon:hover{
+  transform:translateY(-2px);
+  border-color:rgba(24,24,24,.18) !important;
+  background:#F2F2F2;
+}
+
+#gsa-v17 .filter-icon.active{
+  border-color:#79BDD9 !important;
+  background:#D0ECF2 !important;
+  box-shadow:inset 0 0 0 1px #79BDD9 !important;
+}
+
+#gsa-v17 .rating-mode{
+  color:#51585C;
+}
+
+#gsa-v17 .rating-mode.active{
+  background:#D0ECF2 !important;
+  color:#171717;
+}
+
+#gsa-v17 .rating-star.range-start,
+#gsa-v17 .rating-star.range-end{
+  background:#D0ECF2 !important;
+}
+
+#gsa-v17 #clear-filters{
+  border-color:rgba(24,24,24,.13) !important;
+  background:rgba(255,255,255,.42);
+  color:#3E4548;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+
+#gsa-v17 #clear-filters:not(:disabled):hover{
+  transform:translateY(-1px);
+  border-color:rgba(24,24,24,.19) !important;
+  background:#F2F2F2;
+}
+
+/* Individual reviews */
+#gsa-v17 #review-list article{
+  border-radius:22px !important;
+  border-color:rgba(24,24,24,.11) !important;
+  background:rgba(255,255,255,.54);
+  box-shadow:0 7px 20px rgba(39,55,64,.025);
+  transition:
+    transform .24s var(--cipher-ease),
+    border-color .24s ease,
+    box-shadow .24s ease,
+    background .24s ease;
+}
+
+#gsa-v17 #review-list article:hover{
+  transform:translateY(-2px);
+  border-color:rgba(24,24,24,.17) !important;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 14px 30px rgba(39,55,64,.055);
+}
+
+/* Return-to-insight bar */
+#gsa-v17 .return-bar{
+  top:92px !important;
+  border-radius:16px !important;
+  border-color:rgba(255,255,255,.56) !important;
+  background:rgba(208,229,242,.83) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.74),
+    0 12px 28px rgba(39,55,64,.08) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(115%);
+  backdrop-filter:blur(20px) saturate(115%);
+}
+
+#gsa-v17 .return-btn{
+  border-color:rgba(24,24,24,.09) !important;
+  border-radius:999px !important;
+  background:#171717 !important;
+  color:#FFFFFF !important;
+  font-weight:700 !important;
+}
+
+/* Tooltips */
+#gsa-v17 .tooltip-box{
+  border-radius:12px !important;
+  border-color:rgba(24,24,24,.11) !important;
+  background:rgba(247,250,251,.97) !important;
+  color:#171717;
+  font-size:11px !important;
+  box-shadow:0 12px 30px rgba(39,55,64,.11) !important;
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+}
+
+/* Keep all interactive controls calm and consistent. */
+#gsa-v17 button{
+  transition:
+    transform .20s var(--cipher-ease),
+    background .20s ease,
+    border-color .20s ease,
+    box-shadow .20s ease;
+}
+
+/* =========================================================
+   RESPONSIVE NAV ONLY — product-detail layout remains intact
+   ========================================================= */
+@media(max-width:820px){
+  .cipher-detail-nav-shell{
+    width:min(calc(100% - 28px),1180px);
+    top:10px;
+    padding-top:10px;
+  }
+
+  .cipher-detail-nav{
+    grid-template-columns:1fr auto;
+    padding-left:14px;
+  }
+
+  .cipher-detail-links{
+    display:none;
+  }
+
+  .cipher-page-back{
+    min-height:38px;
+    padding-inline:13px;
+  }
+
+  #gsa-v17{
+    padding-top:20px !important;
+  }
+}
+
+@media(max-width:520px){
+  .cipher-detail-wordmark{
+    font-size:18px;
+  }
+
+  .cipher-page-back{
+    font-size:12px;
+  }
+
+  .cipher-page-back .back-long-label{
+    display:none;
+  }
+
+  #gsa-v17 > section:first-of-type{
+    padding:18px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v6-unified-surfaces">
+/* =========================================================
+   V6 — unified light analysis surfaces + attached reviews
+   ========================================================= */
+
+:root{
+  --cipher-analysis-surface:#F8FBFC;
+  --cipher-analysis-surface-hover:#FBFDFE;
+  --cipher-analysis-border:rgba(24,24,24,.105);
+}
+
+/* ---------------------------------------------------------
+   Actual product photo
+   --------------------------------------------------------- */
+#gsa-v17 > section:first-of-type > .flex > div:first-child{
+  position:relative;
+  overflow:hidden;
+  padding:0 !important;
+  background:var(--cipher-analysis-surface) !important;
+  border:1px solid var(--cipher-analysis-border) !important;
+}
+
+.cipher-product-photo{
+  display:block;
+  width:100%;
+  height:100%;
+  min-width:100%;
+  min-height:100%;
+  object-fit:cover;
+  object-position:center 36%;
+  border-radius:inherit;
+  transform:scale(1.01);
+  transition:transform .35s cubic-bezier(.2,.75,.2,1);
+}
+
+#gsa-v17 > section:first-of-type > .flex > div:first-child:hover .cipher-product-photo{
+  transform:scale(1.045);
+}
+
+/* ---------------------------------------------------------
+   ONE shared light blue-white analysis surface
+   Product summary / attribute cards / map / filters
+   --------------------------------------------------------- */
+#gsa-v17 > section:first-of-type,
+#gsa-v17 .attr-card,
+#gsa-v17 #map-section,
+#gsa-v17 #reviews > .mt-4.rounded-xl{
+  background:var(--cipher-analysis-surface) !important;
+  border-color:var(--cipher-analysis-border) !important;
+}
+
+/* Remove competing tinted fills from the summary container. */
+#gsa-v17 > section:first-of-type{
+  background:var(--cipher-analysis-surface) !important;
+}
+
+/* Summary metric tiles remain subtly differentiated inside the
+   common surface but stay close to white. */
+#gsa-v17 > section:first-of-type .lg\\:grid-cols-4 > div{
+  background:rgba(208,229,242,.25) !important;
+  border-color:rgba(24,24,24,.065) !important;
+}
+
+/* Attribute cards — much lighter than before, close to white. */
+#gsa-v17 .attr-card{
+  background:var(--cipher-analysis-surface) !important;
+  box-shadow:0 7px 20px rgba(39,55,64,.025) !important;
+}
+
+#gsa-v17 .attr-card:hover{
+  background:var(--cipher-analysis-surface-hover) !important;
+  transform:translateY(-3px) !important;
+  border-color:rgba(24,24,24,.16) !important;
+  box-shadow:0 18px 40px rgba(39,55,64,.065) !important;
+}
+
+#gsa-v17 .attr-card.selected{
+  background:var(--cipher-analysis-surface-hover) !important;
+}
+
+/* Attention map uses exactly the same surface as attribute cards. */
+#gsa-v17 #map-section{
+  background:var(--cipher-analysis-surface) !important;
+}
+
+/* Filters use exactly the same shared surface. */
+#gsa-v17 #reviews > .mt-4.rounded-xl{
+  background:var(--cipher-analysis-surface) !important;
+}
+
+/* ---------------------------------------------------------
+   REVIEWS — filters + comments become one attached card stack
+   --------------------------------------------------------- */
+#gsa-v17 #reviews{
+  --review-stack-border:rgba(24,24,24,.11);
+}
+
+/* Filter panel becomes the top of the stack. */
+#gsa-v17 #reviews > .mt-4.rounded-xl{
+  margin-top:16px !important;
+  border-radius:24px 24px 0 0 !important;
+  border:1px solid var(--review-stack-border) !important;
+  border-bottom:0 !important;
+  padding:16px 16px 15px !important;
+  box-shadow:none !important;
+}
+
+/* Summary becomes the small bridge between filters and cards. */
+#gsa-v17 #summary{
+  margin-top:0 !important;
+  padding:10px 16px 9px;
+  border-left:1px solid var(--review-stack-border);
+  border-right:1px solid var(--review-stack-border);
+  border-top:1px solid rgba(24,24,24,.055);
+  background:var(--cipher-analysis-surface);
+  color:#555D61;
+  font-size:12px !important;
+  font-weight:600 !important;
+}
+
+/* Remove Tailwind vertical spacing between generated review cards. */
+#gsa-v17 #review-list{
+  margin-top:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:0 !important;
+}
+
+/* Review cards connect edge-to-edge like an attached stack. */
+#gsa-v17 #review-list article{
+  position:relative;
+  z-index:1;
+  margin:0 !important;
+  border:1px solid var(--review-stack-border) !important;
+  border-bottom:0 !important;
+  border-radius:0 !important;
+  background:rgba(255,255,255,.70) !important;
+  box-shadow:none !important;
+  transform:none;
+  transition:
+    transform .26s cubic-bezier(.2,.75,.2,1),
+    border-color .24s ease,
+    box-shadow .26s ease,
+    background .24s ease !important;
+}
+
+#gsa-v17 #review-list article + article{
+  border-top-color:rgba(24,24,24,.075) !important;
+}
+
+/* Final comment closes the attached stack. */
+#gsa-v17 #review-list article:last-child{
+  border-bottom:1px solid var(--review-stack-border) !important;
+  border-radius:0 0 24px 24px !important;
+}
+
+/* Preserve and strengthen the requested lifting behavior. */
+#gsa-v17 #review-list article:hover{
+  z-index:8;
+  transform:translateY(-4px) scale(1.006) !important;
+  border-color:rgba(24,24,24,.17) !important;
+  border-bottom:1px solid rgba(24,24,24,.17) !important;
+  border-radius:15px !important;
+  background:#FFFFFF !important;
+  box-shadow:0 15px 34px rgba(39,55,64,.10) !important;
+}
+
+/* Keep the stack visually continuous after a lifted card. */
+#gsa-v17 #review-list article:hover + article{
+  border-top-color:var(--review-stack-border) !important;
+}
+
+/* Empty results still close the stack cleanly. */
+#gsa-v17 #review-list > div{
+  margin:0 !important;
+  border-radius:0 0 24px 24px !important;
+  border-color:var(--review-stack-border) !important;
+  background:rgba(255,255,255,.58);
+}
+
+/* Controls remain gentle on the near-white shared surface. */
+#gsa-v17 #search,
+#gsa-v17 #clear-filters,
+#gsa-v17 .filter-icon{
+  background:#FFFFFF !important;
+}
+
+#gsa-v17 .map-mode-wrap{
+  background:rgba(208,229,242,.30) !important;
+}
+
+@media(max-width:767px){
+  .cipher-product-photo{
+    object-position:center 34%;
+  }
+
+  #gsa-v17 #reviews > .mt-4.rounded-xl{
+    border-radius:20px 20px 0 0 !important;
+  }
+
+  #gsa-v17 #review-list article:last-child,
+  #gsa-v17 #review-list > div{
+    border-radius:0 0 20px 20px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v7-interactions">
+/* =========================================================
+   V7 — product gallery, smart option overflow, filter hovers
+   ========================================================= */
+
+/* Product image is visibly interactive. */
+.cipher-product-photo{
+  cursor:zoom-in !important;
+}
+
+.cipher-product-photo-shell{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+.cipher-image-zoom-hint{
+  position:absolute;
+  right:8px;
+  bottom:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:28px;
+  padding:0 9px;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:999px;
+  background:rgba(23,23,23,.76);
+  color:#fff;
+  font-size:10px;
+  font-weight:650;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(4px);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  transition:opacity .22s ease,transform .22s ease;
+}
+
+#gsa-v17 > section:first-of-type > .flex > div:first-child:hover .cipher-image-zoom-hint{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Full-screen image viewer */
+.cipher-product-modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:34px;
+  background:rgba(22,25,27,.60);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+
+.cipher-product-modal.show{
+  display:flex;
+}
+
+.cipher-product-modal-panel{
+  position:relative;
+  width:min(92vw,980px);
+  height:min(86vh,820px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:30px;
+  background:rgba(248,251,252,.96);
+  box-shadow:0 32px 90px rgba(0,0,0,.24);
+  overflow:hidden;
+}
+
+.cipher-product-modal-image{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:28px;
+}
+
+.cipher-product-modal-close,
+.cipher-product-modal-nav{
+  position:absolute;
+  z-index:3;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(24,24,24,.10);
+  background:rgba(255,255,255,.86);
+  color:#171717;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(39,55,64,.10);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  transition:transform .20s cubic-bezier(.2,.75,.2,1),background .2s ease,box-shadow .2s ease;
+}
+
+.cipher-product-modal-close:hover,
+.cipher-product-modal-nav:hover{
+  transform:translateY(-2px);
+  background:#fff;
+  box-shadow:0 13px 28px rgba(39,55,64,.14);
+}
+
+.cipher-product-modal-close{
+  top:16px;
+  right:16px;
+  width:40px;
+  height:40px;
+  border-radius:999px;
+  font-size:20px;
+}
+
+.cipher-product-modal-nav{
+  top:50%;
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  transform:translateY(-50%);
+  font-size:20px;
+}
+
+.cipher-product-modal-nav:hover{
+  transform:translateY(calc(-50% - 2px));
+}
+
+.cipher-product-modal-prev{left:16px;}
+.cipher-product-modal-next{right:16px;}
+
+.cipher-product-modal-nav[hidden]{
+  display:none !important;
+}
+
+/* Smart option rows — visible values consume ~80% of available width. */
+.cipher-option-group{
+  position:relative;
+}
+
+.cipher-option-row{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:center;
+  gap:6px;
+  width:100%;
+  max-width:100%;
+  overflow:visible;
+}
+
+.cipher-option-row > .cipher-option-chip{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+
+.cipher-option-more{
+  flex:0 0 auto;
+  min-width:36px;
+  border:1px solid rgba(121,189,217,.28);
+  background:#D0ECF2;
+  color:#31424A;
+  border-radius:7px;
+  padding:4px 8px;
+  font-size:12px;
+  font-weight:650;
+  cursor:pointer;
+}
+
+.cipher-option-more:hover{
+  background:#C4E4EE;
+  transform:translateY(-1px);
+}
+
+.cipher-option-pop{
+  position:absolute;
+  z-index:80;
+  display:none;
+  left:0;
+  top:calc(100% + 6px);
+  min-width:170px;
+  max-width:min(330px,86vw);
+  padding:9px;
+  border:1px solid rgba(24,24,24,.11);
+  border-radius:14px;
+  background:rgba(248,251,252,.98);
+  box-shadow:0 15px 34px rgba(39,55,64,.12);
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+}
+
+.cipher-option-pop.show{
+  display:block;
+}
+
+.cipher-option-pop-inner{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.cipher-option-pop .cipher-option-chip{
+  background:#fff;
+}
+
+/* Same lift treatment as attribute filter icons. */
+#gsa-v17 .sent-filter,
+#gsa-v17 .rating-star{
+  transition:
+    transform .20s cubic-bezier(.2,.75,.2,1),
+    border-color .20s ease,
+    background .20s ease,
+    box-shadow .20s ease !important;
+}
+
+#gsa-v17 .sent-filter:hover,
+#gsa-v17 .rating-star:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 8px 18px rgba(39,55,64,.09) !important;
+}
+
+#gsa-v17 .rating-star:hover{
+  background:#F8FBFC !important;
+  border-radius:8px;
+}
+
+#gsa-v17 .sent-filter:hover{
+  background:#FFFFFF !important;
+}
+
+/* Completely hide Clear filters until there is an active filter/search. */
+#gsa-v17 #clear-filters:disabled{
+  display:none !important;
+}
+
+#gsa-v17 #clear-filters:not(:disabled){
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+}
+
+@media(max-width:640px){
+  .cipher-product-modal{
+    padding:16px;
+  }
+
+  .cipher-product-modal-panel{
+    width:96vw;
+    height:82vh;
+    border-radius:22px;
+  }
+
+  .cipher-product-modal-image{
+    padding:18px;
+  }
+
+  .cipher-image-zoom-hint{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v8-attribute-views">
+/* =========================================================
+   V8 — attribute stacked chart + decision quadrants
+   ========================================================= */
+
+/* Star hover: move the star only visually — no lifted box. */
+#gsa-v17 .rating-star:hover{
+  transform:translateY(-3px) scale(1.08) !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* If a range endpoint has a selected background, do not add any
+   hover shadow or extra box treatment. */
+#gsa-v17 .rating-star.range-start:hover,
+#gsa-v17 .rating-star.range-end:hover{
+  box-shadow:none !important;
+}
+
+/* ---------------------------------------------------------
+   Attribute view switcher + fixed visualization stage
+   --------------------------------------------------------- */
+.attribute-view-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:14px;
+}
+
+.attribute-view-sub{
+  margin:4px 0 0;
+  color:var(--viz-muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.attribute-view-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:999px;
+  background:rgba(248,251,252,.90);
+}
+
+.attribute-view-btn{
+  min-height:34px;
+  padding:0 13px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#5B6266;
+  font-size:12px;
+  font-weight:650;
+  cursor:pointer;
+}
+
+.attribute-view-btn:hover{
+  transform:translateY(-1px);
+  color:#171717;
+}
+
+.attribute-view-btn.active{
+  background:#171717;
+  color:#fff;
+  box-shadow:0 6px 16px rgba(24,24,24,.11);
+}
+
+.attribute-view-stage{
+  position:relative;
+  height:550px;
+  min-height:550px;
+  max-height:550px;
+  border:1px solid rgba(24,24,24,.105);
+  border-radius:26px;
+  background:#F8FBFC;
+  overflow:hidden;
+}
+
+.attribute-view-panel{
+  width:100%;
+  height:100%;
+}
+
+.attribute-view-panel[hidden]{
+  display:none !important;
+}
+
+#attr-cards-view{
+  overflow-y:auto;
+  padding:14px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(49,66,74,.18) transparent;
+}
+
+/* Cards are already individually surfaced; stage is the fixed frame. */
+#attr-cards-view .attr-card{
+  min-height:0;
+}
+
+#attr-bars-view{
+  position:relative;
+  padding:14px 14px 10px;
+}
+
+.attribute-chart-legend{
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:15px;
+  padding-right:5px;
+  color:#60676B;
+  font-size:11px;
+  font-weight:580;
+}
+
+.attribute-chart-legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.legend-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  display:inline-block;
+}
+.legend-pos{background:var(--viz-series-2);}
+.legend-mix{background:var(--viz-series-5);}
+.legend-neg{background:var(--viz-series-4);}
+
+.attribute-chart-scroll{
+  width:100%;
+  height:calc(100% - 28px);
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+#attribute-stacked-chart{
+  display:block;
+  width:100%;
+  min-width:920px;
+  height:100%;
+  overflow:visible;
+}
+
+.attr-chart-segment{
+  cursor:pointer;
+  transition:opacity .18s ease,filter .18s ease;
+}
+.attr-chart-segment:hover{
+  opacity:.86;
+  filter:brightness(1.02);
+}
+
+.attr-chart-icon-hit{
+  cursor:pointer;
+}
+
+/* ---------------------------------------------------------
+   Decision quadrant map
+   --------------------------------------------------------- */
+.map-heading-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.quadrant-help{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  border:1px solid rgba(24,24,24,.11);
+  border-radius:999px;
+  background:#fff;
+  color:#3F474B;
+  font-size:14px;
+  font-weight:750;
+  cursor:help;
+}
+
+.quadrant-help:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(39,55,64,.08);
+}
+
+#map{
+  border-radius:18px;
+}
+
+.quadrant-guide{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-top:15px;
+}
+
+.quadrant-guide-card{
+  min-height:76px;
+  padding:10px 11px;
+  border:1px solid rgba(24,24,24,.08);
+  border-radius:14px;
+  background:rgba(255,255,255,.58);
+}
+
+.quadrant-guide-title{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#202426;
+  font-size:11px;
+  font-weight:720;
+}
+
+.quadrant-guide-swatch{
+  width:8px;
+  height:8px;
+  flex:0 0 8px;
+  border-radius:3px;
+}
+
+.quadrant-guide-card p{
+  margin:4px 0 0;
+  color:#697075;
+  font-size:10px;
+  line-height:1.35;
+}
+
+@media(max-width:760px){
+  .attribute-view-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .attribute-view-stage{
+    height:590px;
+    min-height:590px;
+    max-height:590px;
+  }
+
+  .quadrant-guide{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v9-refinements">
+/* =========================================================
+   V9 — lighter selection + open cards + clearer quadrants
+   ========================================================= */
+
+/* Selected sentiment segment: light neutral-grey emphasis. */
+#gsa-v17 .segment.selected-segment{
+  box-shadow:
+    inset 0 0 0 2px rgba(92,101,106,.34),
+    inset 0 0 0 999px rgba(242,244,245,.14) !important;
+}
+
+/* Attribute cards should flow naturally — no fixed scroll box. */
+.attribute-view-stage{
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+}
+
+#attr-cards-view{
+  height:auto !important;
+  overflow:visible !important;
+  padding:0 !important;
+}
+
+#attr-grid{
+  gap:10px !important;
+}
+
+/* Stacked-bar view gets its own larger fixed analysis surface. */
+#attr-bars-view{
+  height:620px !important;
+  min-height:620px !important;
+  max-height:620px !important;
+  padding:16px 14px 12px !important;
+  border:1px solid rgba(24,24,24,.105);
+  border-radius:26px;
+  background:#F8FBFC;
+  overflow:hidden;
+}
+
+.attribute-chart-scroll{
+  width:100%;
+  height:100% !important;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+#attribute-stacked-chart{
+  height:100% !important;
+}
+
+/* No legend is needed for the stacked chart. */
+.attribute-chart-legend{
+  display:none !important;
+}
+
+/* Larger, clearer decision-zone indicators below the map. */
+.quadrant-guide-card{
+  min-height:88px !important;
+  padding:12px 13px !important;
+}
+
+.quadrant-guide-title{
+  gap:9px !important;
+  font-size:11.5px !important;
+}
+
+.quadrant-guide-swatch{
+  width:18px !important;
+  height:18px !important;
+  flex:0 0 18px !important;
+  border-radius:6px !important;
+  border:1px solid rgba(24,24,24,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+.quadrant-guide-card p{
+  margin-top:6px !important;
+  font-size:10.5px !important;
+}
+
+/* Light-grey selection outline inside custom stacked chart. */
+.attr-chart-selected-segment{
+  stroke:#B9C0C4;
+  stroke-width:4;
+  paint-order:stroke fill;
+}
+
+@media(max-width:760px){
+  #attr-bars-view{
+    height:650px !important;
+    min-height:650px !important;
+    max-height:650px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v10-bar-selection">
+/* V10 — distinguish sentiment-segment selection from full-attribute selection */
+.attr-chart-selected-segment{
+  stroke:#AEB6BA !important;
+  stroke-width:4 !important;
+  paint-order:stroke fill !important;
+  filter:none !important;
+}
+</style>
+
+
+<style id="cipher-product-detail-v11-attribute-balance">
+/* =========================================================
+   V11 — actual-bar highlight + reliable segment selection
+   + equal Cards / Stacked bar view heights
+   ========================================================= */
+
+:root{
+  --attribute-view-height:520px;
+}
+
+/* Both modes occupy the same visual height. */
+.attribute-view-stage{
+  height:var(--attribute-view-height) !important;
+  min-height:var(--attribute-view-height) !important;
+  max-height:var(--attribute-view-height) !important;
+  overflow:visible !important;
+  border:0 !important;
+  background:transparent !important;
+}
+
+#attr-cards-view,
+#attr-bars-view{
+  height:var(--attribute-view-height) !important;
+  min-height:var(--attribute-view-height) !important;
+  max-height:var(--attribute-view-height) !important;
+}
+
+/* Cards remain an open layout rather than a scrollable box. */
+#attr-cards-view{
+  overflow:visible !important;
+  padding:0 !important;
+}
+
+#attr-grid{
+  height:100%;
+  grid-template-rows:repeat(5,minmax(0,1fr));
+  gap:8px !important;
+}
+
+#attr-grid .attr-card{
+  height:100%;
+  min-height:0 !important;
+  padding:12px 14px !important;
+}
+
+/* Slightly tighten card internals so all 10 cards fit comfortably. */
+#attr-grid .attr-card > .mt-3{
+  margin-top:8px !important;
+}
+#attr-grid .attr-card .flex.h-9.w-9{
+  width:32px !important;
+  height:32px !important;
+}
+#attr-grid .attr-card .font-medium{
+  font-size:13.5px !important;
+}
+
+/* Stacked chart is shorter than the previous 620px treatment. */
+#attr-bars-view{
+  padding:14px 14px 10px !important;
+  border:1px solid rgba(24,24,24,.105);
+  border-radius:26px;
+  background:#F8FBFC;
+  overflow:hidden !important;
+}
+
+.attribute-chart-scroll{
+  height:100% !important;
+}
+
+/* Selected sentiment = ONLY that segment gets a light-grey ring. */
+.attr-chart-selected-segment{
+  stroke:#AEB6BA !important;
+  stroke-width:5 !important;
+  paint-order:stroke fill !important;
+  filter:none !important;
+}
+
+/* Attribute-level selection = neutral halo around actual stacked height. */
+.attr-chart-full-selection{
+  fill:rgba(236,239,240,.42);
+  stroke:#B9C0C4;
+  stroke-width:2;
+}
+
+@media(max-width:760px){
+  :root{
+    --attribute-view-height:570px;
+  }
+
+  #attr-grid{
+    grid-template-rows:none;
+    height:auto;
+  }
+
+  #attr-cards-view{
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+  }
+
+  .attribute-view-stage{
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+  }
+
+  #attr-bars-view{
+    height:570px !important;
+    min-height:570px !important;
+    max-height:570px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v12-motion">
+/* V12 — quick load motion, larger product image, flying insight card */
+
+/* Product photo: approximately 100% larger than the original 144px area. */
+#gsa-v17 > section:first-of-type > .flex > div:first-child{
+  width:288px !important;
+  height:288px !important;
+  flex:0 0 288px !important;
+}
+.cipher-product-photo{width:100% !important;height:100% !important;object-fit:cover !important;}
+
+/* Quick one-time load animation for sentiment bars inside Attribute cards. */
+@keyframes cipherCardBarLoad{
+  from{transform:scaleX(0);opacity:.38}
+  to{transform:scaleX(1);opacity:1}
+}
+#gsa-v17 .attr-card .segment{
+  transform-origin:left center;
+  animation:cipherCardBarLoad .34s cubic-bezier(.2,.75,.2,1) both;
+}
+#gsa-v17 .attr-card .segment:nth-child(2){animation-delay:.035s}
+#gsa-v17 .attr-card .segment:nth-child(3){animation-delay:.07s}
+
+/* Quick one-time load animation for the first visible Stacked bar render. */
+@keyframes cipherStackBarLoad{
+  from{transform:scaleY(0);opacity:.38}
+  to{transform:scaleY(1);opacity:1}
+}
+#attribute-stacked-chart .attr-chart-load-segment{
+  transform-box:fill-box;
+  transform-origin:center bottom;
+  animation:cipherStackBarLoad .38s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Return bar: selected full Attribute card left, Return action right. */
+#gsa-v17 .return-bar{align-items:center !important;gap:14px !important;padding:10px 11px !important;}
+#gsa-v17 .return-bar-source{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:6px;}
+#gsa-v17 .return-context{max-width:100%;font-size:11px !important;color:#626A6E !important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#gsa-v17 .return-card-slot{width:min(100%,590px);min-height:0;}
+#gsa-v17 .return-card-slot:empty{display:none;}
+
+/* Keep the entire Attribute card, only compact its spacing for the sticky bar. */
+#gsa-v17 .return-card-slot .attr-card{
+  width:100%;margin:0 !important;padding:10px 12px !important;
+  border:1px solid rgba(24,24,24,.11) !important;border-radius:15px !important;
+  background:#F8FBFC !important;box-shadow:0 6px 18px rgba(39,55,64,.05) !important;
+  cursor:default !important;transform:none !important;
+}
+#gsa-v17 .return-card-slot .attr-card:hover{transform:none !important;box-shadow:0 6px 18px rgba(39,55,64,.05) !important;}
+#gsa-v17 .return-card-slot .attr-card .flex.h-9.w-9{width:30px !important;height:30px !important;}
+#gsa-v17 .return-card-slot .attr-card .font-medium{font-size:13px !important;}
+#gsa-v17 .return-card-slot .attr-card .text-xs{font-size:10px !important;}
+#gsa-v17 .return-card-slot .attr-card .mt-3{margin-top:7px !important;}
+#gsa-v17 .return-card-slot .attr-card .flex.h-3{height:8px !important;}
+#gsa-v17 .return-card-slot .attr-card,
+#gsa-v17 .return-card-slot .attr-card *{pointer-events:none !important;}
+#gsa-v17 .return-card-slot .segment.fly-selected-segment{
+  box-shadow:inset 0 0 0 2px rgba(92,101,106,.42),inset 0 0 0 999px rgba(242,244,245,.12) !important;
+}
+
+/* Duplicated card that travels to Review evidence. */
+.cipher-flying-attribute-card{
+  position:fixed !important;z-index:700 !important;margin:0 !important;pointer-events:none !important;
+  transform-origin:top left;will-change:transform,width,height,opacity;
+  box-shadow:0 20px 50px rgba(39,55,64,.16) !important;
+  transition:transform .44s cubic-bezier(.18,.78,.20,1),width .44s cubic-bezier(.18,.78,.20,1),height .44s cubic-bezier(.18,.78,.20,1),opacity .3s ease !important;
+}
+
+@media(max-width:900px){
+  #gsa-v17 > section:first-of-type > .flex > div:first-child{width:240px !important;height:240px !important;flex-basis:240px !important;}
+}
+@media(max-width:767px){
+  #gsa-v17 > section:first-of-type > .flex > div:first-child{width:100% !important;height:300px !important;flex:0 0 auto !important;}
+  #gsa-v17 .return-bar{align-items:stretch !important;flex-direction:column !important;}
+  #gsa-v17 .return-bar-source,#gsa-v17 .return-card-slot{width:100%;}
+  #gsa-v17 .return-btn{align-self:flex-end;}
+}
+@media(prefers-reduced-motion:reduce){
+  #gsa-v17 .attr-card .segment,#attribute-stacked-chart .attr-chart-load-segment{animation:none !important;}
+  .cipher-flying-attribute-card{transition:none !important;}
+}
+</style>
+
+
+<style id="cipher-product-detail-v13-unified-loading">
+/* =========================================================
+   V13 — no flying card; unified 0.5s loading animations
+   ========================================================= */
+
+/* Disable V12's separate animation on each sentiment segment. */
+#gsa-v17 .attr-card .segment{
+  animation:none !important;
+  transform:none;
+}
+
+/* One animation for the entire Positive / Mixed / Negative bar. */
+@keyframes cipherWholeSentimentBarLoad{
+  from{
+    transform:scaleX(0);
+    opacity:.42;
+  }
+  to{
+    transform:scaleX(1);
+    opacity:1;
+  }
+}
+
+#gsa-v17 #attr-grid .attr-card > .mt-3.flex.h-3{
+  transform-origin:left center;
+  animation:cipherWholeSentimentBarLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Stacked chart: animate the whole attribute stack, not its pieces. */
+@keyframes cipherWholeStackLoad{
+  from{
+    transform:scaleY(0);
+    opacity:.42;
+  }
+  to{
+    transform:scaleY(1);
+    opacity:1;
+  }
+}
+
+#attribute-stacked-chart .attr-chart-stack-load{
+  transform-box:fill-box;
+  transform-origin:center bottom;
+  animation:cipherWholeStackLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Disable old V12 per-segment SVG animation if the class remains anywhere. */
+#attribute-stacked-chart .attr-chart-load-segment{
+  animation:none !important;
+}
+
+/* Selected card simply appears in the Review context bar. */
+@keyframes cipherPinnedInsightLoad{
+  from{
+    opacity:0;
+    transform:translateY(5px) scale(.985);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+#gsa-v17 .return-card-slot .attr-card{
+  animation:cipherPinnedInsightLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Its sentiment bar also performs one small unified load. */
+#gsa-v17 .return-card-slot .attr-card > .mt-3.flex.h-3{
+  transform-origin:left center;
+  animation:cipherWholeSentimentBarLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Flying duplicate is no longer used. */
+.cipher-flying-attribute-card{
+  display:none !important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  #gsa-v17 #attr-grid .attr-card > .mt-3.flex.h-3,
+  #attribute-stacked-chart .attr-chart-stack-load,
+  #gsa-v17 .return-card-slot .attr-card,
+  #gsa-v17 .return-card-slot .attr-card > .mt-3.flex.h-3{
+    animation:none !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v14-overall-sentiment">
+/* =========================================================
+   V14 — Overall sentiment donut + compact review insight row
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Overall sentiment card
+   --------------------------------------------------------- */
+#gsa-v17 .overall-sentiment-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  min-width:0;
+  padding:10px 12px !important;
+  border:1px solid rgba(24,24,24,.075);
+  border-radius:18px;
+  background:rgba(208,229,242,.24);
+}
+
+.overall-sentiment-copy{
+  min-width:0;
+}
+
+.overall-sentiment-breakdown{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:4px;
+  margin-top:7px;
+}
+
+.overall-sentiment-breakdown span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#626A6E;
+  font-size:10px;
+  white-space:nowrap;
+}
+
+.overall-sentiment-breakdown i{
+  width:8px;
+  height:8px;
+  flex:0 0 8px;
+  border-radius:999px;
+}
+
+.overall-sentiment-breakdown b{
+  min-width:26px;
+  color:#252A2D;
+  font-size:10.5px;
+  font-weight:720;
+}
+
+.overall-sentiment-donut-wrap{
+  position:relative;
+  width:86px;
+  height:86px;
+  flex:0 0 86px;
+}
+
+.overall-sentiment-donut{
+  width:100%;
+  height:100%;
+  display:block;
+  transform:rotate(-90deg);
+  overflow:visible;
+}
+
+.donut-track,
+.donut-segment{
+  fill:none;
+  stroke-width:12;
+}
+
+.donut-track{
+  stroke:rgba(49,66,74,.085);
+}
+
+.donut-segment{
+  stroke-linecap:butt;
+  stroke-dasharray:var(--dash);
+  stroke-dashoffset:var(--offset);
+}
+
+.donut-positive{stroke:var(--viz-series-2);}
+.donut-mixed{stroke:var(--viz-series-5);}
+.donut-negative{stroke:var(--viz-series-4);}
+
+@keyframes cipherDonutLoad{
+  from{
+    stroke-dasharray:0 100;
+    opacity:.35;
+  }
+  to{
+    stroke-dasharray:var(--dash);
+    opacity:1;
+  }
+}
+
+.overall-sentiment-card .donut-positive{
+  animation:cipherDonutLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+.overall-sentiment-card .donut-mixed{
+  animation:cipherDonutLoad .5s .05s cubic-bezier(.2,.75,.2,1) both;
+}
+.overall-sentiment-card .donut-negative{
+  animation:cipherDonutLoad .5s .10s cubic-bezier(.2,.75,.2,1) both;
+}
+
+.overall-sentiment-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+
+.overall-sentiment-center strong{
+  color:#171717;
+  font-size:17px;
+  line-height:1;
+  font-weight:720;
+  letter-spacing:-.04em;
+}
+
+.overall-sentiment-center span{
+  margin-top:2px;
+  color:#737A7E;
+  font-size:8px;
+  line-height:1;
+}
+
+/* ---------------------------------------------------------
+   Review insight bar — compact single row:
+   [attribute card] [context text] [return button]
+   --------------------------------------------------------- */
+#gsa-v17 .return-bar{
+  display:none;
+  grid-template-columns:minmax(300px,520px) minmax(160px,1fr) auto;
+  align-items:center !important;
+  gap:12px !important;
+  padding:8px 9px !important;
+  min-height:0 !important;
+}
+
+#gsa-v17 .return-bar.show{
+  display:grid !important;
+}
+
+#gsa-v17 .return-card-slot{
+  width:100% !important;
+  min-width:0;
+  max-width:none !important;
+}
+
+#gsa-v17 .return-context{
+  min-width:0 !important;
+  max-width:none !important;
+  padding:0 4px;
+  color:#555E62 !important;
+  font-size:11px !important;
+  line-height:1.35;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+/* Make the copied full Attribute card compact enough for the row. */
+#gsa-v17 .return-card-slot .attr-card{
+  padding:7px 9px !important;
+  border-radius:13px !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card > .flex:first-child{
+  align-items:center !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card .flex.h-9.w-9{
+  width:26px !important;
+  height:26px !important;
+  flex-basis:26px !important;
+  font-size:11px !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card .font-medium{
+  font-size:12px !important;
+  line-height:1.1 !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card .mt-1{
+  margin-top:2px !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card .text-xs{
+  font-size:9px !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card .top-tag{
+  padding:3px 7px !important;
+  font-size:9px !important;
+}
+
+#gsa-v17 .return-card-slot .attr-card > .mt-3.flex.h-3{
+  height:6px !important;
+  margin-top:5px !important;
+}
+
+#gsa-v17 .return-btn{
+  align-self:center !important;
+  white-space:nowrap;
+}
+
+/* Remove old column wrapper behavior if older CSS remains. */
+#gsa-v17 .return-bar-source{
+  display:contents !important;
+}
+
+@media(max-width:980px){
+  #gsa-v17 .return-bar{
+    grid-template-columns:minmax(260px,1.2fr) minmax(140px,.8fr) auto;
+  }
+}
+
+@media(max-width:760px){
+  #gsa-v17 .return-bar,
+  #gsa-v17 .return-bar.show{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+  }
+
+  #gsa-v17 .return-context{
+    padding:2px 2px 0;
+  }
+
+  #gsa-v17 .return-btn{
+    align-self:flex-end !important;
+  }
+
+  .overall-sentiment-card{
+    grid-column:span 2;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .overall-sentiment-card .donut-segment{
+    animation:none !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v15-donut">
+/* =========================================================
+   V15 — larger interactive Overall sentiment donut
+   ========================================================= */
+
+#gsa-v17 .overall-sentiment-card{
+  position:relative;
+  min-height:148px;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:12px 16px !important;
+}
+
+.overall-sentiment-title{
+  position:absolute;
+  top:12px;
+  left:14px;
+}
+
+/* Old side legend is removed from the markup; keep legacy selector off. */
+.overall-sentiment-copy,
+.overall-sentiment-breakdown{
+  display:none !important;
+}
+
+/* Larger chart. */
+.overall-sentiment-donut-wrap{
+  position:relative;
+  width:126px !important;
+  height:126px !important;
+  flex:0 0 126px !important;
+}
+
+/* Entire donut loads at once. */
+@keyframes cipherWholeDonutLoad{
+  from{
+    opacity:.25;
+    transform:rotate(-90deg) scale(.72);
+  }
+  to{
+    opacity:1;
+    transform:rotate(-90deg) scale(1);
+  }
+}
+
+.overall-sentiment-donut{
+  width:100%;
+  height:100%;
+  display:block;
+  transform:rotate(-90deg);
+  transform-origin:center;
+  animation:cipherWholeDonutLoad .5s cubic-bezier(.2,.75,.2,1) both;
+  overflow:visible;
+}
+
+/* Disable V14's separate slice loading. */
+.overall-sentiment-card .donut-positive,
+.overall-sentiment-card .donut-mixed,
+.overall-sentiment-card .donut-negative{
+  animation:none !important;
+}
+
+.donut-track,
+.donut-segment{
+  stroke-width:13 !important;
+}
+
+.donut-segment{
+  cursor:pointer;
+  pointer-events:stroke;
+  transition:
+    stroke-width .18s ease,
+    opacity .18s ease,
+    filter .18s ease;
+}
+
+.donut-segment:hover{
+  stroke-width:15 !important;
+  filter:brightness(1.035);
+}
+
+.overall-sentiment-center strong{
+  font-size:24px !important;
+  font-weight:740 !important;
+  letter-spacing:-.045em;
+}
+
+.overall-sentiment-center span{
+  margin-top:4px !important;
+  font-size:9px !important;
+  font-weight:600;
+  color:#697176 !important;
+}
+
+/* Hover detail, no persistent legend needed. */
+.overall-sentiment-tooltip{
+  position:absolute;
+  z-index:20;
+  left:50%;
+  top:-8px;
+  min-width:128px;
+  padding:8px 10px;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:11px;
+  background:rgba(248,251,252,.98);
+  color:#171717;
+  box-shadow:0 10px 26px rgba(39,55,64,.12);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-5px);
+  transition:opacity .14s ease,transform .14s ease;
+  white-space:nowrap;
+}
+
+.overall-sentiment-tooltip.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.overall-sentiment-tooltip strong{
+  display:block;
+  font-size:11px;
+  font-weight:720;
+}
+
+.overall-sentiment-tooltip span{
+  display:block;
+  margin-top:2px;
+  color:#656D71;
+  font-size:10px;
+  font-weight:550;
+}
+
+@media(max-width:760px){
+  #gsa-v17 .overall-sentiment-card{
+    min-height:158px;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:132px !important;
+    height:132px !important;
+    flex-basis:132px !important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .overall-sentiment-donut{
+    animation:none !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v16-product-info">
+/* =========================================================
+   V16 — Product information only
+   ========================================================= */
+
+.product-info-analysis{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 198px;
+  gap:18px;
+  align-items:stretch;
+}
+
+.product-info-left{
+  min-width:0;
+}
+
+.product-option-grid{
+  margin:0 !important;
+  display:none !important;
+}
+
+/* Keep requested two-by-two order:
+   Materials | Fit
+   Sizes     | Colors */
+.product-summary-compact{
+  margin-top:15px;
+  padding-top:13px;
+}
+
+.product-summary-attributes{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+
+.product-average-rating{
+  margin-top:11px;
+}
+
+/* Larger sentiment chart on the right. */
+#gsa-v17 .overall-sentiment-card{
+  min-height:218px !important;
+  padding:28px 12px 12px !important;
+  overflow:visible !important;
+}
+
+.overall-sentiment-title{
+  top:12px !important;
+  left:14px !important;
+}
+
+.overall-sentiment-donut-wrap{
+  width:158px !important;
+  height:158px !important;
+  flex:0 0 158px !important;
+  overflow:visible !important;
+}
+
+.donut-track,
+.donut-segment{
+  stroke-width:12.5px !important;
+}
+
+/* Tooltip sits OUTSIDE the pie so it never hides the chart. */
+.overall-sentiment-tooltip{
+  left:calc(100% + 12px) !important;
+  right:auto !important;
+  top:50% !important;
+  transform:translate(0,-50%) !important;
+  z-index:80 !important;
+}
+
+.overall-sentiment-tooltip.show{
+  transform:translate(0,-50%) !important;
+}
+
+/* Reduce selected Attribute card length ~40%.
+   Context stays between card and Return button. */
+#gsa-v17 .return-bar{
+  grid-template-columns:minmax(180px,312px) minmax(180px,1fr) auto !important;
+}
+
+#gsa-v17 .return-card-slot{
+  max-width:312px !important;
+}
+
+@media(max-width:1100px){
+  .overall-sentiment-tooltip{
+    left:auto !important;
+    right:calc(100% + 10px) !important;
+  }
+}
+
+@media(max-width:900px){
+  .product-info-analysis{
+    grid-template-columns:minmax(0,1fr) 176px;
+    gap:14px;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:145px !important;
+    height:145px !important;
+    flex-basis:145px !important;
+  }
+
+  #gsa-v17 .return-bar{
+    grid-template-columns:minmax(170px,270px) minmax(150px,1fr) auto !important;
+  }
+}
+
+@media(max-width:760px){
+  .product-info-analysis{
+    grid-template-columns:1fr;
+  }
+
+  #gsa-v17 .overall-sentiment-card{
+    min-height:190px !important;
+  }
+
+  .overall-sentiment-tooltip{
+    left:50% !important;
+    right:auto !important;
+    top:calc(100% + 8px) !important;
+    transform:translate(-50%,0) !important;
+  }
+
+  .overall-sentiment-tooltip.show{
+    transform:translate(-50%,0) !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v17-larger-donut">
+/* =========================================================
+   V17 — Larger Overall sentiment donut only
+   ========================================================= */
+
+.product-info-analysis{
+  grid-template-columns:minmax(0,1fr) 236px !important;
+}
+
+#gsa-v17 .overall-sentiment-card{
+  min-height:248px !important;
+  padding:30px 12px 12px !important;
+}
+
+.overall-sentiment-donut-wrap{
+  width:188px !important;
+  height:188px !important;
+  flex:0 0 188px !important;
+}
+
+.overall-sentiment-center strong{
+  font-size:28px !important;
+}
+
+.overall-sentiment-center span{
+  font-size:10px !important;
+}
+
+@media(max-width:900px){
+  .product-info-analysis{
+    grid-template-columns:minmax(0,1fr) 210px !important;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:170px !important;
+    height:170px !important;
+    flex-basis:170px !important;
+  }
+}
+
+@media(max-width:760px){
+  .product-info-analysis{
+    grid-template-columns:1fr !important;
+  }
+
+  #gsa-v17 .overall-sentiment-card{
+    min-height:210px !important;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:176px !important;
+    height:176px !important;
+    flex-basis:176px !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v18-attribute-views">
+/* =========================================================
+   V18 — Cards / Stacked bar / Radar / Heatmap + sentiment order
+   ========================================================= */
+
+.attribute-view-head{
+  align-items:flex-start !important;
+}
+
+.attribute-head-controls{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px 14px;
+}
+
+.attribute-order-control{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:5px;
+}
+
+.attribute-control-label{
+  color:#6A7276;
+  font-size:10px;
+  font-weight:650;
+  letter-spacing:.02em;
+}
+
+.attribute-order-toggle,
+.radar-sentiment-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:999px;
+  background:rgba(248,251,252,.92);
+}
+
+.attribute-order-btn,
+.radar-sentiment-btn{
+  min-height:30px;
+  padding:0 10px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#636B6F;
+  font-size:10.5px;
+  font-weight:650;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,color .18s ease;
+}
+
+.attribute-order-btn:hover,
+.radar-sentiment-btn:hover{
+  transform:translateY(-1px);
+  color:#171717;
+}
+
+.attribute-order-btn.active,
+.radar-sentiment-btn.active{
+  background:#E6ECEF;
+  color:#171717;
+  box-shadow:inset 0 0 0 1px rgba(24,24,24,.07);
+}
+
+/* Existing common stage height is retained. */
+#attr-radar-view,
+#attr-heatmap-view{
+  height:var(--attribute-view-height,520px) !important;
+  min-height:var(--attribute-view-height,520px) !important;
+  max-height:var(--attribute-view-height,520px) !important;
+  border:1px solid rgba(24,24,24,.105);
+  border-radius:26px;
+  background:#F8FBFC;
+  overflow:hidden;
+}
+
+/* ---------------- Radar ---------------- */
+#attr-radar-view{
+  position:relative;
+}
+
+.radar-toolbar{
+  position:absolute;
+  top:12px;
+  right:14px;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.radar-chart-wrap{
+  width:100%;
+  height:100%;
+  padding:10px 12px 4px;
+}
+
+#attribute-radar-chart{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.radar-ring{
+  fill:none;
+  stroke:rgba(49,66,74,.11);
+  stroke-width:1.2;
+}
+
+.radar-axis{
+  stroke:rgba(49,66,74,.09);
+  stroke-width:1;
+}
+
+.radar-polygon{
+  stroke-width:3;
+  stroke-linejoin:round;
+}
+
+.radar-point{
+  cursor:pointer;
+  transition:r .15s ease,stroke-width .15s ease;
+}
+
+.radar-point:hover{
+  r:6.5px;
+  stroke-width:3;
+}
+
+.radar-icon{
+  cursor:pointer;
+  font-size:16px;
+  font-weight:700;
+  fill:#171717;
+}
+
+@keyframes cipherRadarLoad{
+  from{opacity:.15;transform:scale(.72)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.radar-data-group.radar-load{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:cipherRadarLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* ---------------- Heatmap ---------------- */
+.heatmap-wrap{
+  width:100%;
+  height:100%;
+  padding:18px 22px;
+  overflow:auto;
+}
+
+.attribute-heatmap{
+  width:min(100%,760px);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(230px,1fr) repeat(3,minmax(90px,120px));
+  gap:8px 9px;
+  align-items:center;
+}
+
+.heatmap-head{
+  color:#626A6E;
+  font-size:11px;
+  font-weight:760;
+  text-align:center;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.heatmap-head:first-child{
+  text-align:left;
+}
+
+.heatmap-attr{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:2px 0;
+  border:0;
+  background:transparent;
+  color:#171717;
+  text-align:left;
+  cursor:pointer;
+}
+
+.heatmap-attr:hover .heatmap-icon{
+  transform:translateY(-2px);
+  border-color:rgba(24,24,24,.16);
+}
+
+.heatmap-icon{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:999px;
+  background:#fff;
+  font-size:14px;
+  transition:transform .18s ease,border-color .18s ease;
+}
+
+.heatmap-name{
+  min-width:0;
+  font-size:12px;
+  font-weight:620;
+  line-height:1.2;
+}
+
+.heatmap-cell{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(24,24,24,.045);
+  border-radius:11px;
+  color:#fff;
+  font-size:11.5px;
+  font-weight:740;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+}
+
+.heatmap-cell:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(39,55,64,.08);
+  filter:brightness(1.025);
+}
+
+.heatmap-cell.selected{
+  outline:3px solid #B9C0C4;
+  outline-offset:1px;
+}
+
+@keyframes cipherHeatmapLoad{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.attribute-heatmap.heatmap-load > *{
+  animation:cipherHeatmapLoad .5s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Card bar segment reordering should stay visually seamless. */
+#attr-grid .attr-card > .mt-3.flex.h-3{
+  display:flex !important;
+}
+
+/* Make four-view control fit cleanly. */
+.attribute-view-toggle{
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+@media(max-width:860px){
+  .attribute-view-head{
+    flex-direction:column;
+  }
+
+  .attribute-head-controls{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  .attribute-order-control{
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:760px){
+  #attr-radar-view,
+  #attr-heatmap-view{
+    height:570px !important;
+    min-height:570px !important;
+    max-height:570px !important;
+  }
+
+  .radar-toolbar{
+    position:static;
+    padding:12px 12px 0;
+    justify-content:flex-end;
+  }
+
+  .radar-chart-wrap{
+    height:calc(100% - 48px);
+  }
+
+  .attribute-heatmap{
+    min-width:610px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .radar-data-group.radar-load,
+  .attribute-heatmap.heatmap-load > *{
+    animation:none !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v19-fixed-views">
+/* =========================================================
+   V19 — fixed equal graph area, no internal scrolling
+   ========================================================= */
+
+:root{
+  --attribute-view-height:540px !important;
+}
+
+/* Three product summary cards in a single row. */
+.product-summary-three{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+.product-summary-mini-card{
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid rgba(24,24,24,.075);
+  border-radius:14px;
+  background:#F8FBFC;
+}
+
+/* Pie slightly larger again. */
+.product-info-analysis{
+  grid-template-columns:minmax(0,1fr) 258px !important;
+}
+
+#gsa-v17 .overall-sentiment-card{
+  min-height:268px !important;
+}
+
+.overall-sentiment-donut-wrap{
+  width:208px !important;
+  height:208px !important;
+  flex:0 0 208px !important;
+}
+
+/* Every Attribute view uses exactly the same fixed area. */
+.attribute-view-stage{
+  height:var(--attribute-view-height) !important;
+  min-height:var(--attribute-view-height) !important;
+  max-height:var(--attribute-view-height) !important;
+  overflow:hidden !important;
+}
+
+#attr-cards-view,
+#attr-bars-view,
+#attr-radar-view,
+#attr-heatmap-view{
+  height:var(--attribute-view-height) !important;
+  min-height:var(--attribute-view-height) !important;
+  max-height:var(--attribute-view-height) !important;
+  overflow:hidden !important;
+}
+
+/* Cards fit 2 columns × 5 rows exactly; never scroll. */
+#attr-cards-view{
+  padding:0 !important;
+}
+
+#attr-grid{
+  height:100% !important;
+  grid-template-rows:repeat(5,minmax(0,1fr)) !important;
+  gap:8px !important;
+}
+
+#attr-grid .attr-card{
+  min-height:0 !important;
+  overflow:hidden;
+}
+
+/* Stacked chart fills width; no horizontal scroller. */
+.attribute-chart-scroll{
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+}
+
+#attribute-stacked-chart{
+  width:100% !important;
+  min-width:0 !important;
+  height:100% !important;
+}
+
+/* Radar fits completely inside same area. */
+.radar-chart-wrap{
+  height:100% !important;
+  padding:8px 10px 4px !important;
+  overflow:hidden !important;
+}
+
+#attribute-radar-chart{
+  width:100% !important;
+  height:100% !important;
+}
+
+/* Heatmap fits all 10 rows without scrolling. */
+.heatmap-wrap{
+  width:100%;
+  height:100%;
+  padding:12px 18px !important;
+  overflow:hidden !important;
+}
+
+.attribute-heatmap{
+  width:min(100%,800px) !important;
+  height:100%;
+  margin:0 auto;
+  grid-template-columns:minmax(210px,1fr) repeat(3,minmax(78px,110px)) !important;
+  grid-template-rows:28px repeat(10,minmax(0,1fr));
+  gap:5px 8px !important;
+}
+
+.heatmap-icon{
+  width:30px !important;
+  height:30px !important;
+  flex-basis:30px !important;
+}
+
+.heatmap-name{
+  font-size:11px !important;
+}
+
+.heatmap-cell{
+  min-height:0 !important;
+  height:100% !important;
+  border-radius:9px !important;
+}
+
+/* Make quadrant guide swatches reflect the more distinct zone colours. */
+.quadrant-guide-swatch{
+  width:20px !important;
+  height:20px !important;
+  flex:0 0 20px !important;
+}
+
+/* All radar overlays remain readable. */
+.radar-polygon{
+  vector-effect:non-scaling-stroke;
+}
+
+@media(max-width:900px){
+  .product-info-analysis{
+    grid-template-columns:minmax(0,1fr) 226px !important;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:184px !important;
+    height:184px !important;
+    flex-basis:184px !important;
+  }
+}
+
+@media(max-width:760px){
+  :root{
+    --attribute-view-height:570px !important;
+  }
+
+  .product-summary-three{
+    grid-template-columns:1fr !important;
+  }
+
+  .product-info-analysis{
+    grid-template-columns:1fr !important;
+  }
+
+  .attribute-view-stage,
+  #attr-cards-view,
+  #attr-bars-view,
+  #attr-radar-view,
+  #attr-heatmap-view{
+    height:var(--attribute-view-height) !important;
+    min-height:var(--attribute-view-height) !important;
+    max-height:var(--attribute-view-height) !important;
+  }
+
+  #attr-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    grid-template-rows:repeat(5,minmax(0,1fr)) !important;
+  }
+
+  .attribute-heatmap{
+    min-width:0 !important;
+    grid-template-columns:minmax(145px,1fr) repeat(3,minmax(55px,1fr)) !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v20-refinements">
+/* =========================================================
+   V20 — product header balance + corrected sorting + motion
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Product info: move Overall sentiment beside title.
+   This reduces the section height without moving later layouts.
+   --------------------------------------------------------- */
+#gsa-v17 > section:first-of-type > .flex > .min-w-0.flex-1{
+  position:relative;
+}
+
+.product-info-analysis{
+  position:relative !important;
+  display:block !important;
+  padding-right:282px !important;
+  margin-top:10px !important;
+}
+
+@media(min-width:901px){
+  #gsa-v17 > section:first-of-type > .flex > div:first-child{
+    width:250px !important;
+    height:250px !important;
+    flex-basis:250px !important;
+  }
+}
+
+#gsa-v17 .overall-sentiment-card{
+  position:absolute !important;
+  top:-58px !important;
+  right:0 !important;
+  width:260px !important;
+  min-height:250px !important;
+  height:250px !important;
+  padding:28px 10px 10px !important;
+}
+
+.overall-sentiment-donut-wrap{
+  width:218px !important;
+  height:218px !important;
+  flex:0 0 218px !important;
+}
+
+.overall-sentiment-center strong{
+  font-size:30px !important;
+}
+
+/* Tighten left product details so the row finishes close to image height. */
+.product-option-grid{
+  gap:8px 14px !important;
+}
+
+.product-summary-compact{
+  margin-top:10px !important;
+  padding-top:10px !important;
+}
+
+/* Highlight all three requested summary cards. */
+.product-summary-three{
+  gap:8px !important;
+}
+
+.product-summary-mini-card{
+  min-height:76px;
+  padding:10px 11px !important;
+  border:1px solid rgba(79,115,132,.15) !important;
+  border-radius:15px !important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.58),rgba(208,229,242,.40)),
+    #F8FBFC !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
+    0 7px 18px rgba(39,55,64,.045);
+}
+
+.product-summary-mini-card:hover{
+  border-color:rgba(79,115,132,.23) !important;
+  transform:translateY(-2px);
+  box-shadow:0 12px 24px rgba(39,55,64,.065);
+}
+
+/* ---------------------------------------------------------
+   Radar: main Order-by selector controls sentiment.
+   "Show all" only overlays the three shapes.
+   --------------------------------------------------------- */
+.radar-toolbar{
+  gap:9px !important;
+}
+
+.radar-follows-sort{
+  color:#687075;
+  font-size:10.5px;
+  font-weight:580;
+}
+
+.radar-follows-sort b{
+  color:#30373A;
+  font-weight:720;
+}
+
+.radar-show-all-btn{
+  min-height:30px;
+  padding:0 10px;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:999px;
+  background:#FFFFFF;
+  color:#586064;
+  font-size:10.5px;
+  font-weight:660;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+
+.radar-show-all-btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(24,24,24,.16);
+}
+
+.radar-show-all-btn.active{
+  background:#E6ECEF;
+  color:#171717;
+}
+
+/* Small animation each time the selected sentiment changes. */
+@keyframes cipherRadarRefresh{
+  from{
+    opacity:.42;
+    transform:scale(.965);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.radar-data-group.radar-refresh{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:cipherRadarRefresh .30s cubic-bezier(.2,.75,.2,1) both;
+}
+
+/* Heatmap numbers count quickly; row reveal stays subtle. */
+.attribute-heatmap.heatmap-load > *{
+  animation-duration:.30s !important;
+}
+
+/* Make light quadrant fills still easy to distinguish from the map surface. */
+#map{
+  background:#FBFCFC;
+}
+
+/* The larger guide swatches remain clear with lighter zone colours. */
+.quadrant-guide-swatch{
+  border:1px solid rgba(24,24,24,.11) !important;
+}
+
+/* Prevent product summary reflow from affecting smaller screens. */
+@media(max-width:980px){
+  .product-info-analysis{
+    padding-right:236px !important;
+  }
+
+  #gsa-v17 .overall-sentiment-card{
+    width:218px !important;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:182px !important;
+    height:182px !important;
+    flex-basis:182px !important;
+  }
+}
+
+@media(max-width:760px){
+  .product-info-analysis{
+    padding-right:0 !important;
+  }
+
+  #gsa-v17 .overall-sentiment-card{
+    position:relative !important;
+    top:auto !important;
+    right:auto !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:214px !important;
+    margin-top:12px;
+  }
+
+  .overall-sentiment-donut-wrap{
+    width:178px !important;
+    height:178px !important;
+    flex-basis:178px !important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .radar-data-group.radar-refresh{
+    animation:none !important;
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v21-refinements">
+/* =========================================================
+   V21 — product alignment / heatmap readability / map polish
+   ========================================================= */
+
+#gsa-v17 .overall-sentiment-card{
+  top:-58px !important;
+  bottom:0 !important;
+  height:auto !important;
+  min-height:0 !important;
+}
+
+.product-summary-mini-card{
+  background:#F7FAFB !important;
+  background-image:none !important;
+  border-color:rgba(79,115,132,.16) !important;
+}
+
+.product-summary-mini-card:hover{
+  background:#FAFCFD !important;
+  background-image:none !important;
+}
+
+.attribute-order-control{
+  align-items:center !important;
+}
+
+.attribute-order-control .attribute-control-label{
+  width:100%;
+  text-align:center !important;
+}
+
+.attribute-heatmap{
+  width:min(100%,720px) !important;
+  grid-template-columns:180px repeat(3,minmax(82px,108px)) !important;
+  column-gap:5px !important;
+  row-gap:4px !important;
+  justify-content:center;
+}
+
+.heatmap-attr{
+  position:relative;
+  z-index:0;
+  padding-right:3px !important;
+}
+
+
+.heatmap-cell{
+  position:relative;
+  z-index:1;
+}
+
+#map-section #map{
+  background:#FCFDFD !important;
+}
+
+#map-section .quadrant-guide-card{
+  background:rgba(255,255,255,.68) !important;
+}
+
+#map-section .quadrant-guide-swatch{
+  border-color:rgba(24,24,24,.13) !important;
+}
+
+.attribute-chart-scroll,
+.heatmap-wrap,
+.radar-chart-wrap{
+  overflow:hidden !important;
+}
+
+@media(max-width:900px){
+  .attribute-heatmap{
+    grid-template-columns:165px repeat(3,minmax(72px,96px)) !important;
+  }
+
+}
+
+@media(max-width:760px){
+  .attribute-order-control{
+    align-items:center !important;
+  }
+
+  .attribute-heatmap{
+    grid-template-columns:140px repeat(3,minmax(52px,1fr)) !important;
+    column-gap:4px !important;
+  }
+
+}
+</style>
+
+
+<style id="cipher-product-detail-v23-small-refine">
+/* =========================================================
+   V23 — transparent Overall sentiment + centred Order by
+   ========================================================= */
+
+/* Overall sentiment should not have its own coloured fill. */
+#gsa-v17 .overall-sentiment-card{
+  background:transparent !important;
+  background-image:none !important;
+}
+
+/* Centre "Order by" precisely over the complete 3-button control. */
+.attribute-order-control{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  justify-items:center !important;
+  align-items:center !important;
+  width:max-content;
+}
+
+.attribute-order-control .attribute-control-label{
+  display:block !important;
+  width:100% !important;
+  margin:0 0 5px !important;
+  padding:0 !important;
+  text-align:center !important;
+  line-height:1 !important;
+}
+
+.attribute-order-toggle{
+  justify-self:center !important;
+  width:max-content;
+}
+
+#gsa-v17 .attr-card .avg{
+  display:none !important;
+}
+
+#gsa-v17 .attr-card span:has(+ .avg){
+  display:none !important;
+}
+
+@media(min-width:761px){
+  #gsa-v17 .overall-sentiment-card{
+    top:-58px !important;
+    bottom:auto !important;
+    height:250px !important;
+    min-height:250px !important;
+  }
+
+  .overall-sentiment-donut-wrap{
+    transform:translateY(14px);
+  }
+}
+</style>
+
+
+<style id="cipher-product-detail-v24-sort-radar-dates">
+/* =========================================================
+   V24 — view-specific sorting + Radar controls + review dates
+   ========================================================= */
+
+/* Sort help sits beside the centred Order by label. */
+.attribute-order-label-row{
+  position:relative;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:18px;
+}
+
+.attribute-order-label-row .attribute-control-label{
+  width:auto !important;
+}
+
+.attr-sort-help{
+  position:absolute;
+  right:1px;
+  top:50%;
+  width:17px;
+  height:17px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(24,24,24,.11);
+  border-radius:999px;
+  background:#FFFFFF;
+  color:#657075;
+  font-size:9px;
+  font-weight:760;
+  line-height:1;
+  cursor:help;
+}
+
+.attr-sort-help:hover{
+  transform:translateY(-1px);
+  border-color:rgba(24,24,24,.18);
+}
+
+/* Radar view-type selector. */
+.radar-toolbar{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+
+.radar-type-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(24,24,24,.10);
+  border-radius:999px;
+  background:rgba(248,251,252,.94);
+}
+
+.radar-type-btn{
+  min-height:29px;
+  padding:0 9px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#646C70;
+  font-size:10px;
+  font-weight:660;
+  cursor:pointer;
+}
+
+.radar-type-btn:hover{
+  transform:translateY(-1px);
+  color:#171717;
+}
+
+.radar-type-btn.active{
+  background:#E6ECEF;
+  color:#171717;
+  box-shadow:inset 0 0 0 1px rgba(24,24,24,.07);
+}
+
+/* Date appears clearly but quietly on each comment. */
+.review-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.review-card-head time{
+  flex:0 0 auto;
+  color:#7A8286;
+  font-size:10px;
+  font-weight:560;
+  white-space:nowrap;
+}
+
+/* Radar sorting/prominence transition. */
+.radar-polygon,
+.radar-point{
+  transition:
+    opacity .20s ease,
+    fill-opacity .20s ease,
+    stroke-opacity .20s ease,
+    stroke-width .20s ease,
+    r .20s ease;
+}
+
+</style>
+
+
+<style id="cipher-product-detail-v25-small-refine">
+/* =========================================================
+   V25 — static highlight cards + tooltips on sort buttons
+   ========================================================= */
+
+/* No lifting/movement on the three highlighted summary cards. */
+.product-summary-mini-card,
+.product-summary-mini-card:hover{
+  transform:none !important;
+}
+
+.product-summary-mini-card:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
+    0 7px 18px rgba(39,55,64,.045) !important;
+}
+
+/* The old standalone ? help button is no longer used. */
+.attr-sort-help{
+  display:none !important;
+}
+
+/* Keep the Order by label visually centred above the button group. */
+.attribute-order-label-row{
+  justify-content:center !important;
+}
+</style>
+
+
+<style id="cipher-product-detail-v26-user-refinements">
+/* =========================================================
+   V26 — requested refinements
+   ========================================================= */
+
+/* Exact sentiment palette requested by the user. */
+:root{
+  --viz-series-2:#8AA14D !important;
+  --viz-series-4:#CA5555 !important;
+  --viz-series-5:#C3A061 !important;
+}
+
+/* Keep all three highlight cards visually identical in size. */
+.product-summary-three{
+  align-items:stretch !important;
+}
+.product-summary-mini-card{
+  height:78px !important;
+  min-height:78px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+.product-summary-mini-card > .text-xs{
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  font-size:11px !important;
+}
+.product-summary-mini-card > .mt-2{
+  margin-top:6px !important;
+}
+
+/* Make heatmap intensity differences more obvious while retaining hue. */
+.heatmap-cell{
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,opacity .18s ease !important;
+}
+</style>
+
+</head>
+<body>
+
+<nav class="cipher-detail-nav-shell" aria-label="Cipher navigation">
+  <div class="cipher-detail-nav">
+    <button type="button" class="cipher-detail-brand" id="cipher-home-btn" aria-label="Return to Cipher search">
+      <span class="cipher-detail-mark" aria-hidden="true"></span>
+      <span class="cipher-detail-wordmark">Cipher</span>
+    </button>
+
+    <div class="cipher-detail-links" aria-label="Primary navigation">
+      <a href="#" class="selected" data-detail-nav="discover">Discover</a>
+      <a href="#" data-detail-nav="collections">Collections</a>
+      <a href="#" data-detail-nav="activities">Activities</a>
+    </div>
+
+    <button type="button" class="cipher-page-back" id="page-back-btn" aria-label="Back to previous search results">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M11.8 4.5 6.3 10l5.5 5.5M6.8 10h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span><span class="back-long-label">Back to </span>search results</span>
+    </button>
+  </div>
+</nav>
+
+
+<div class="cipher-product-modal" id="cipher-product-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product image viewer">
+  <div class="cipher-product-modal-panel">
+    <button type="button" class="cipher-product-modal-close" id="cipher-product-modal-close" aria-label="Close image viewer">×</button>
+    <button type="button" class="cipher-product-modal-nav cipher-product-modal-prev" id="cipher-product-modal-prev" aria-label="Previous product image">‹</button>
+    <img class="cipher-product-modal-image" id="cipher-product-modal-image" alt="">
+    <button type="button" class="cipher-product-modal-nav cipher-product-modal-next" id="cipher-product-modal-next" aria-label="Next product image">›</button>
+  </div>
+</div>
+
+<div id="gsa-v17" class="relative w-full text-[var(--viz-text)]">
+<div id="floating-tip" class="tooltip-box" role="tooltip"></div>
+<section class="border-b border-[var(--viz-border)] pb-5">
+  <div class="flex flex-col gap-5 md:flex-row">
+    <div class="flex h-36 w-full shrink-0 items-center justify-center rounded-xl bg-[var(--viz-card)] md:w-36">
+      <img
+        class="cipher-product-photo"
+        src="https://www.holabirdsports.com/cdn/shop/files/758406_dbc_2.jpg?v=1763388341&amp;width=1200"
+        alt="Wilson Midtown Tennis Skirt in Classic Navy"
+        loading="eager"
+        referrerpolicy="no-referrer"
+      >
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="text-sm text-[var(--viz-muted)]">Wilson · Women's Skirts</div>
+      <h2 class="mt-1 text-2xl font-semibold">Midtown Tennis Skirt</h2>
+      <div class="product-info-analysis mt-4">
+        <div class="product-info-left">
+          <div class="product-option-grid grid gap-x-6 gap-y-3 sm:grid-cols-2" aria-hidden="true">
+            <div><div class="mb-1 text-xs text-[var(--viz-muted)]">Materials</div><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">80% Recycled Polyester</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">20% Spandex</span></div></div>
+            <div><div class="mb-1 text-xs text-[var(--viz-muted)]">Fit variations</div><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Regular</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Petite</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Tall</span></div></div>
+
+            <div class="relative"><div class="mb-1 text-xs text-[var(--viz-muted)]">Sizes</div><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">2XS</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">XS</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">S</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">M</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">L</span><button type="button" class="more-btn rounded-md bg-[var(--viz-accent-bg)] px-2 py-1 text-xs" data-pop="sizes-pop">+2</button></div><div id="sizes-pop" class="more-pop right-0 top-full mt-1"><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">XL</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">2XL</span></div></div></div>
+            <div class="relative"><div class="mb-1 text-xs text-[var(--viz-muted)]">Colors</div><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Grape Leaf</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Classic Navy</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Black</span><button type="button" class="more-btn rounded-md bg-[var(--viz-accent-bg)] px-2 py-1 text-xs" data-pop="colors-pop">+2</button></div><div id="colors-pop" class="more-pop right-0 top-full mt-1"><div class="flex flex-wrap gap-1.5"><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Field Green</span><span class="rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs">Safari</span></div></div></div>
+          </div>
+
+          <div class="product-summary-compact border-t border-[var(--viz-border)]">
+            <div class="product-summary-three">
+              <div class="product-summary-mini-card">
+                <div class="text-xs text-[var(--viz-muted)]">Most positive attribute</div>
+                <div class="mt-2 flex items-center gap-2"><button type="button" class="summary-icon flex h-8 w-8 items-center justify-center rounded-full bg-[var(--viz-card)] text-base" data-name="Design & Aesthetic">✦</button><span class="text-xl font-semibold" style="color:var(--viz-series-2)">98%</span></div>
+              </div>
+
+              <div class="product-summary-mini-card">
+                <div class="text-xs text-[var(--viz-muted)]">Most negative attribute</div>
+                <div class="mt-2 flex items-center gap-2"><button type="button" class="summary-icon flex h-8 w-8 items-center justify-center rounded-full bg-[var(--viz-card)] text-base" data-name="Functionality">⚙</button><span class="text-xl font-semibold" style="color:var(--viz-series-4)">21%</span></div>
+              </div>
+
+              <div class="product-summary-mini-card">
+                <div class="text-xs text-[var(--viz-muted)]">Average rating</div>
+                <div class="mt-2 text-xl font-semibold">4.7 / 5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="overall-sentiment-card">
+          <div class="overall-sentiment-title text-xs text-[var(--viz-muted)]">Overall sentiment</div>
+
+          <div class="overall-sentiment-donut-wrap">
+            <svg class="overall-sentiment-donut" viewBox="0 0 100 100" role="img" aria-label="Overall sentiment: 36 percent positive, 55 percent mixed, 9 percent negative">
+              <circle class="donut-track" cx="50" cy="50" r="36" pathLength="100"></circle>
+
+              <circle class="donut-segment donut-positive"
+                      cx="50" cy="50" r="36" pathLength="100"
+                      data-sentiment="Positive" data-count="16" data-percentage="36"
+                      style="--dash:36 64;--offset:0"></circle>
+
+              <circle class="donut-segment donut-mixed"
+                      cx="50" cy="50" r="36" pathLength="100"
+                      data-sentiment="Mixed" data-count="25" data-percentage="55"
+                      style="--dash:55 45;--offset:-36"></circle>
+
+              <circle class="donut-segment donut-negative"
+                      cx="50" cy="50" r="36" pathLength="100"
+                      data-sentiment="Negative" data-count="4" data-percentage="9"
+                      style="--dash:9 91;--offset:-91"></circle>
+            </svg>
+
+            <div class="overall-sentiment-center">
+              <strong>45</strong>
+              <span>Total reviews</span>
+            </div>
+
+            <div class="overall-sentiment-tooltip" id="overall-sentiment-tooltip" role="tooltip" aria-hidden="true">
+              <strong></strong>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="attribute-sentiment-section" class="py-6">
+  <div class="attribute-view-head">
+    <div>
+      <h3 class="text-lg font-semibold">Attribute sentiment</h3>
+      <p class="attribute-view-sub">Compare sentiment composition and review volume by attribute.</p>
+    </div>
+    <div class="attribute-head-controls">
+      <div class="attribute-order-control">
+        <div class="attribute-order-label-row">
+          <span class="attribute-control-label">Order by</span>
+        </div>
+        <div class="attribute-order-toggle" role="group" aria-label="Order attributes by sentiment">
+          <button id="attr-order-positive" type="button" class="attribute-order-btn active" data-order-sentiment="positive" aria-pressed="true">Positive</button>
+          <button id="attr-order-mixed" type="button" class="attribute-order-btn" data-order-sentiment="mixed" aria-pressed="false">Mixed</button>
+          <button id="attr-order-negative" type="button" class="attribute-order-btn" data-order-sentiment="negative" aria-pressed="false">Negative</button>
+        </div>
+      </div>
+
+      <div class="attribute-view-toggle" role="group" aria-label="Attribute sentiment view">
+        <button id="attr-view-cards" type="button" class="attribute-view-btn active" aria-pressed="true">Cards</button>
+        <button id="attr-view-bars" type="button" class="attribute-view-btn" aria-pressed="false">Stacked bar</button>
+        <button id="attr-view-radar" type="button" class="attribute-view-btn" aria-pressed="false">Radar</button>
+        <button id="attr-view-heatmap" type="button" class="attribute-view-btn" aria-pressed="false">Heatmap</button>
+      </div>
+    </div>
+  </div>
+  <div class="attribute-view-stage">
+    <div id="attr-cards-view" class="attribute-view-panel active">
+      <div id="attr-grid" class="grid gap-3 md:grid-cols-2"></div>
+    </div>
+    <div id="attr-bars-view" class="attribute-view-panel" hidden>
+      <div class="attribute-chart-scroll">
+        <svg id="attribute-stacked-chart" viewBox="0 0 1080 500" role="img" aria-label="Stacked bar chart of attribute sentiment review counts"></svg>
+      </div>
+    </div>
+
+    <div id="attr-radar-view" class="attribute-view-panel" hidden>
+      <div class="radar-toolbar">
+        <span class="attribute-control-label">Radar</span>
+        <div class="radar-type-toggle" role="group" aria-label="Radar types to show">
+          <button type="button" class="radar-type-btn active" data-radar-type="all" aria-pressed="true">All</button>
+          <button type="button" class="radar-type-btn" data-radar-type="positive" aria-pressed="false">Positive</button>
+          <button type="button" class="radar-type-btn" data-radar-type="mixed" aria-pressed="false">Mixed</button>
+          <button type="button" class="radar-type-btn" data-radar-type="negative" aria-pressed="false">Negative</button>
+        </div>
+      </div>
+      <div class="radar-chart-wrap">
+        <svg id="attribute-radar-chart" viewBox="0 0 900 470" role="img" aria-label="Attribute sentiment radar chart"></svg>
+      </div>
+    </div>
+
+    <div id="attr-heatmap-view" class="attribute-view-panel" hidden>
+      <div class="heatmap-wrap">
+        <div id="attribute-heatmap" class="attribute-heatmap" role="table" aria-label="Attribute sentiment heatmap"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="map-section" class="border-y border-[var(--viz-border)] py-6">
+  <div class="map-heading-row mb-4">
+    <div>
+      <h3 class="text-lg font-semibold">Attribute attention map</h3>
+      <p class="text-sm text-[var(--viz-muted)]">Use the four decision zones to combine mention volume with sentiment strength.</p>
+    </div>
+    <button id="quadrant-help" type="button" class="quadrant-help" aria-label="How to read the decision zones">?</button>
+  </div>
+  <div class="flex min-w-0 items-stretch gap-2"><div class="flex shrink-0 items-center gap-2"><div class="map-mode-wrap flex flex-col items-center rounded-lg border border-[var(--viz-border)] p-1"><button id="map-pos" type="button" class="map-mode-btn rounded-md text-xs">Positive</button><button id="map-neg" type="button" class="map-mode-btn rounded-md text-xs">Negative</button></div><div id="y-label" class="y-label flex shrink-0 items-center justify-center text-xs text-[var(--viz-muted)]">Negative sentiment share</div></div><div class="min-w-0 flex-1 overflow-x-auto"><svg id="map" viewBox="0 0 660 340" class="min-w-[600px] w-full"></svg></div></div>
+  <div class="text-center text-xs text-[var(--viz-muted)]">Reviews mentioning attribute</div>
+  <div id="quadrant-guide" class="quadrant-guide" aria-live="polite"></div>
+</section>
+<section id="reviews" class="py-6">
+  <div class="flex flex-wrap items-center justify-between gap-2"><h3 class="text-lg font-semibold">Review evidence</h3></div>
+  <div id="return-bar" class="return-bar" aria-live="polite">
+    <div id="return-card-slot" class="return-card-slot" aria-label="Selected attribute insight"></div>
+    <div id="return-context" class="return-context">Filtered from an insight above</div>
+    <button id="back-source" type="button" class="return-btn">← Return to insight</button>
+  </div>
+  <div class="mt-4 rounded-xl border border-[var(--viz-border)] p-4">
+    <div class="flex items-center gap-3"><label for="search" class="shrink-0 text-xs font-medium text-[var(--viz-muted)]">Search reviews</label><input id="search" type="search" placeholder="Search comments" class="min-h-10 min-w-0 flex-1 rounded-lg border border-[var(--viz-border)] bg-transparent px-3 text-sm"></div>
+    <div class="mt-3 flex items-center justify-between gap-6 overflow-x-auto pb-1">
+      <div class="flex shrink-0 items-center gap-2"><span class="text-xs font-medium text-[var(--viz-muted)]">Rating</span><div class="flex rounded-lg border border-[var(--viz-border)] p-1"><button id="rating-exact" type="button" class="rating-mode rounded-md px-2 text-xs">Exact</button><button id="rating-range" type="button" class="rating-mode rounded-md px-2 text-xs">Range</button></div><div id="rating-stars" class="flex items-center" aria-label="Rating filter"><button type="button" class="rating-star" data-rating="1">☆</button><button type="button" class="rating-star" data-rating="2">☆</button><button type="button" class="rating-star" data-rating="3">☆</button><button type="button" class="rating-star" data-rating="4">☆</button><button type="button" class="rating-star" data-rating="5">☆</button></div></div>
+      <div class="ml-auto flex shrink-0 items-center gap-2"><span class="text-xs font-medium text-[var(--viz-muted)]">Sentiment</span><button type="button" class="sent-filter rounded-full border text-xs" data-sent="positive" style="color:var(--viz-series-2);border-color:var(--viz-series-2)">Positive</button><button type="button" class="sent-filter rounded-full border text-xs" data-sent="mixed" style="color:var(--viz-series-5);border-color:var(--viz-series-5)">Mixed</button><button type="button" class="sent-filter rounded-full border text-xs" data-sent="negative" style="color:var(--viz-series-4);border-color:var(--viz-series-4)">Negative</button></div>
+    </div>
+    <div class="mt-3 flex items-center gap-3"><span class="shrink-0 text-xs font-medium text-[var(--viz-muted)]">Attributes</span><div id="attribute-filters" class="flex min-w-0 flex-1 flex-wrap gap-2"></div><button id="clear-filters" type="button" class="shrink-0 min-h-8 rounded-md border border-[var(--viz-border)] px-3 text-xs font-medium">Clear filters</button></div>
+  </div>
+  <div id="summary" class="mt-4 text-sm font-medium"></div><div id="review-list" class="mt-3 space-y-3"></div>
+</section>
+<script>
+(()=>{const root=document.getElementById('gsa-v17');if(root.dataset.ready)return;root.dataset.ready='1';const total=45;const attrs=[{id:'fit',name:'Fit & Sizing',icon:'↔',m:34,avg:4.4,p:31,pa:4.6,x:0,xa:null,n:3,na:2.4},{id:'material',name:'Material Quality',icon:'▦',m:21,avg:4.5,p:18,pa:4.7,x:1,xa:3,n:2,na:2.5},{id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},{id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},{id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},{id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},{id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},{id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},{id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},{id:'durability',name:'Durability',icon:'◇',m:8,avg:4,p:6,pa:4.7,x:0,xa:null,n:2,na:2}];const pct=(v,d)=>d?Math.round(v/d*100):0;attrs.forEach(a=>{a.c=pct(a.m,total);a.pp=pct(a.p,a.m);a.mp=pct(a.x,a.m);a.np=pct(a.n,a.m)});const color=s=>s==='positive'?'var(--viz-series-2)':s==='mixed'?'var(--viz-series-5)':'var(--viz-series-4)',sname=s=>s.charAt(0).toUpperCase()+s.slice(1);const selectedAttrs=new Set(),selectedSents=new Set();let ratingMode='exact',exactRating=null,rangeStart=null,rangeEnd=null,lastSource=null,returnScrollY=null,mapMode='negative';const tip=root.querySelector('#floating-tip');function showTip(el,a,b=''){tip.innerHTML=`<span>${a}</span>${b?`<span class="tip-second">${b}</span>`:''}`;tip.classList.add('show');const rr=root.getBoundingClientRect(),er=el.getBoundingClientRect(),tw=Math.min(240,tip.offsetWidth||240),th=tip.offsetHeight||48;let left=er.left-rr.left+er.width/2-tw/2;left=Math.max(8,Math.min(left,rr.width-tw-8));let top=er.top-rr.top-th-8;if(top<8)top=er.bottom-rr.top+8;tip.style.left=left+'px';tip.style.top=top+'px'}function hideTip(){tip.classList.remove('show')}function bindTip(el,a,b=''){el.addEventListener('mouseenter',()=>showTip(el,a,b));el.addEventListener('mouseleave',hideTip);el.addEventListener('focus',()=>showTip(el,a,b));el.addEventListener('blur',hideTip)}root.querySelectorAll('.summary-icon').forEach(el=>bindTip(el,el.dataset.name));root.querySelectorAll('.more-btn').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const pop=root.querySelector('#'+btn.dataset.pop);root.querySelectorAll('.more-pop').forEach(p=>{if(p!==pop)p.classList.remove('show')});const opening=!pop.classList.contains('show');if(opening){const parent=btn.offsetParent;const estimatedWidth=Math.min(230,Math.max(150,pop.scrollWidth||180));const maxLeft=Math.max(0,(parent?parent.clientWidth:0)-estimatedWidth);const left=Math.min(btn.offsetLeft,maxLeft);pop.style.left=left+'px';pop.style.right='auto';pop.style.top=(btn.offsetTop+btn.offsetHeight+4)+'px';pop.style.marginTop='0'}pop.classList.toggle('show',opening)}));root.addEventListener('click',e=>{if(!e.target.closest('.more-pop,.more-btn'))root.querySelectorAll('.more-pop').forEach(p=>p.classList.remove('show'))});function setFromInsight(attr,sent,source){
+returnScrollY=window.scrollY;selectedAttrs.clear();selectedSents.clear();selectedAttrs.add(attr);if(sent)selectedSents.add(sent);lastSource=source;
+const a=attrs.find(x=>x.id===attr),fromMap=source&&source.id==='map-section',bar=root.querySelector('#return-bar'),context=root.querySelector('#return-context'),back=root.querySelector('#back-source');
+context.textContent=`Viewing reviews from ${fromMap?'Attention map':'Attribute insight'}: ${a?a.name:attr}${sent?` · ${sname(sent)}`:''}`;
+back.textContent=fromMap?'← Return to map':'← Return to attribute';
+bar.classList.add('show');
+updateFilters();renderReviews();draw();requestAnimationFrame(()=>root.querySelector('#reviews').scrollIntoView({behavior:'smooth',block:'start'}))
+}const grid=root.querySelector('#attr-grid');attrs.forEach(a=>{const top=[['positive',a.pp,a.p,a.pa],['mixed',a.mp,a.x,a.xa],['negative',a.np,a.n,a.na]].sort((u,v)=>v[1]-u[1])[0];const card=document.createElement('article');card.className='attr-card rounded-xl border border-[var(--viz-border)] p-4';card.dataset.attr=a.id;card.tabIndex=0;const segs=[['positive',a.p,a.pp],['mixed',a.x,a.mp],['negative',a.n,a.np]].filter(v=>v[1]>0).map(([s,c,p])=>`<button type="button" class="segment ${s==='positive'?'pos':s==='mixed'?'mix':'neg'}" data-s="${s}" style="width:${p}%"></button>`).join('');card.innerHTML=`<div class="flex items-start justify-between gap-3"><div class="flex min-w-0 gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--viz-card)] text-sm">${a.icon}</span><div><div class="font-medium">${a.name}</div><div class="mt-1 flex items-center gap-2 text-xs text-[var(--viz-muted)]"><span class="rc" tabindex="0">${a.m} reviews</span><span>·</span><span class="cov" tabindex="0">${a.c}%</span><span>·</span><span class="avg" tabindex="0">★ ${a.avg.toFixed(1)}</span></div></div></div><span class="top-tag shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold" tabindex="0" style="color:${color(top[0])};border-color:${color(top[0])}">${top[1]}%</span></div><div class="mt-3 flex h-3 overflow-hidden rounded-full bg-[var(--viz-card)]">${segs}</div>`;bindTip(card.querySelector('.rc'),`${a.m} reviews mention this attribute.`);bindTip(card.querySelector('.cov'),`${a.c}% of all product reviews mention this attribute.`);bindTip(card.querySelector('.avg'),`Average rating of reviews mentioning ${a.name}: ${a.avg.toFixed(1)} / 5.`);bindTip(card.querySelector('.top-tag'),`${sname(top[0])} · ${top[1]}% (${top[2]} reviews)`,`Average rating: ${top[3]===null?'—':top[3].toFixed(1)} / 5`);card.querySelectorAll('.segment').forEach(seg=>{const s=seg.dataset.s,count=s==='positive'?a.p:s==='mixed'?a.x:a.n,per=s==='positive'?a.pp:s==='mixed'?a.mp:a.np,av=s==='positive'?a.pa:s==='mixed'?a.xa:a.na;bindTip(seg,`${sname(s)} · ${per}% (${count} reviews)`,`Average rating: ${av===null?'—':av.toFixed(1)} / 5`);seg.addEventListener('click',e=>{e.stopPropagation();setFromInsight(a.id,s,card)})});card.addEventListener('click',e=>{if(!e.target.closest('.segment'))setFromInsight(a.id,null,card)});grid.appendChild(card)});const filterWrap=root.querySelector('#attribute-filters');attrs.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='filter-icon';b.dataset.attr=a.id;b.textContent=a.icon;bindTip(b,a.name);b.addEventListener('click',()=>{clearSource();selectedAttrs.has(a.id)?selectedAttrs.delete(a.id):selectedAttrs.add(a.id);updateFilters();renderReviews();draw()});filterWrap.appendChild(b)});root.querySelectorAll('.sent-filter').forEach(b=>b.addEventListener('click',()=>{clearSource();const s=b.dataset.sent;selectedSents.has(s)?selectedSents.delete(s):selectedSents.add(s);updateFilters();renderReviews()}));function clearSource(){lastSource=null;returnScrollY=null;root.querySelector('#return-bar').classList.remove('show')}const ratingButtons=[...root.querySelectorAll('.rating-star')];bindTip(root.querySelector('#rating-exact'),'Exact rating','Choose one exact star rating.');bindTip(root.querySelector('#rating-range'),'Rating range','Choose the start and end of a rating range.');function setRatingMode(mode){ratingMode=mode;exactRating=null;rangeStart=null;rangeEnd=null;root.querySelector('#rating-exact').classList.toggle('active',mode==='exact');root.querySelector('#rating-range').classList.toggle('active',mode==='range');updateRatingUI();renderReviews();updateClearState()}root.querySelector('#rating-exact').addEventListener('click',()=>{clearSource();setRatingMode('exact')});root.querySelector('#rating-range').addEventListener('click',()=>{clearSource();setRatingMode('range')});ratingButtons.forEach(b=>{bindTip(b,`${b.dataset.rating} star${b.dataset.rating==='1'?'':'s'}`,'Use this star in the current rating filter.');b.addEventListener('click',()=>{clearSource();const n=Number(b.dataset.rating);if(ratingMode==='exact'){exactRating=exactRating===n?null:n}else{if(rangeStart===null||rangeEnd!==null){rangeStart=n;rangeEnd=null}else{rangeEnd=n;if(rangeEnd<rangeStart){const t=rangeStart;rangeStart=rangeEnd;rangeEnd=t}}}updateRatingUI();renderReviews();updateClearState()})});function updateRatingUI(){ratingButtons.forEach(b=>{const n=Number(b.dataset.rating);let filled=false,start=false,end=false;if(ratingMode==='exact'&&exactRating!==null)filled=n<=exactRating;if(ratingMode==='range'&&rangeStart!==null){if(rangeEnd===null)filled=n===rangeStart;else filled=n>=rangeStart&&n<=rangeEnd;start=n===rangeStart;end=n===rangeEnd}b.textContent=filled?'★':'☆';b.classList.toggle('filled',filled);b.classList.toggle('range-start',start);b.classList.toggle('range-end',end)})}function updateFilters(){root.querySelectorAll('.filter-icon').forEach(b=>b.classList.toggle('active',selectedAttrs.has(b.dataset.attr)));root.querySelectorAll('.sent-filter').forEach(b=>b.classList.toggle('active',selectedSents.has(b.dataset.sent)));root.querySelectorAll('.attr-card').forEach(card=>{const active=selectedAttrs.has(card.dataset.attr);card.classList.toggle('selected',active);card.querySelectorAll('.segment').forEach(seg=>seg.classList.toggle('selected-segment',active&&selectedSents.has(seg.dataset.s)))});updateClearState()}function updateClearState(){const has=selectedAttrs.size||selectedSents.size||exactRating!==null||rangeStart!==null||root.querySelector('#search').value.trim();root.querySelector('#clear-filters').disabled=!has}root.querySelector('#clear-filters').addEventListener('click',()=>{selectedAttrs.clear();selectedSents.clear();exactRating=null;rangeStart=null;rangeEnd=null;ratingMode='exact';root.querySelector('#search').value='';root.querySelector('#rating-exact').classList.add('active');root.querySelector('#rating-range').classList.remove('active');clearSource();updateRatingUI();updateFilters();renderReviews();draw()});root.querySelector('#back-source').addEventListener('click',()=>{if(returnScrollY!==null){window.scrollTo({top:returnScrollY,behavior:'smooth'});if(lastSource){const oldOutline=lastSource.style.outline,oldOffset=lastSource.style.outlineOffset;setTimeout(()=>{lastSource.style.outline='2px solid var(--viz-accent)';lastSource.style.outlineOffset='3px';setTimeout(()=>{lastSource.style.outline=oldOutline;lastSource.style.outlineOffset=oldOffset},1400)},450)}return}if(lastSource?.scrollIntoView)lastSource.scrollIntoView({behavior:'smooth',block:'center'});else root.querySelector('#map-section').scrollIntoView({behavior:'smooth',block:'start'})});const reviews=[{r:1,d:'2026-08-28',t:'Pocket placement is difficult',b:'The pocket position makes the skirt less practical for my dominant hand.',s:{functionality:'negative',workmanship:'positive'}},{r:5,d:'2026-08-20',t:'Great fit',b:'Runs slightly small but the overall shape and look are excellent.',s:{fit:'negative',aesthetic:'positive',quality:'positive'}},{r:4,d:'2026-08-11',t:'Good compression shorts',b:'Comfortable undershort and a classic pleated look. Pocket placement could be better.',s:{fit:'positive',comfort:'positive',aesthetic:'positive',functionality:'negative'}},{r:5,d:'2026-07-29',t:'Very flattering',b:'The length and fit worked well and the skirt performed well during play.',s:{fit:'positive',aesthetic:'positive',performance:'positive',functionality:'positive'}},{r:5,d:'2026-07-14',t:'Comfortable and stylish',b:'Built-in shorts work well and the skirt is comfortable around the waist.',s:{comfort:'positive',aesthetic:'positive',functionality:'positive',quality:'positive'}},{r:3,d:'2026-06-26',t:'Good overall',b:'The fit is comfortable but some functional details could be improved.',s:{fit:'positive',comfort:'positive',functionality:'mixed'}},{r:2,d:'2026-06-03',t:'Fit did not work',b:'The attached shorts were uncomfortable for me and the fit felt off.',s:{fit:'negative',comfort:'negative',functionality:'negative'}}];function stars(n){return '★'.repeat(n)+'☆'.repeat(5-n)}function ratingMatches(r){if(ratingMode==='exact'&&exactRating!==null)return r===exactRating;if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)return r>=rangeStart&&r<=rangeEnd;return true}function formatReviewDate(iso){const [y,m,d]=iso.split('-').map(Number);return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(y,m-1,d))}function renderReviews(){const q=root.querySelector('#search').value.trim().toLowerCase();const rows=reviews.filter(v=>{const entries=Object.entries(v.s);if(selectedAttrs.size&&!entries.some(([id])=>selectedAttrs.has(id)))return false;if(selectedSents.size){const relevant=selectedAttrs.size?entries.filter(([id])=>selectedAttrs.has(id)):entries;if(!relevant.some(([,s])=>selectedSents.has(s)))return false}if(!ratingMatches(v.r))return false;if(q&&!(`${v.t} ${v.b}`.toLowerCase().includes(q)))return false;return true});const parts=[];if(selectedAttrs.size)parts.push(`${selectedAttrs.size} attribute${selectedAttrs.size>1?'s':''}`);if(selectedSents.size)parts.push(`${selectedSents.size} sentiment${selectedSents.size>1?'s':''}`);if(ratingMode==='exact'&&exactRating)parts.push(`exactly ${exactRating}★`);if(ratingMode==='range'&&rangeStart!==null&&rangeEnd!==null)parts.push(`${rangeStart}–${rangeEnd}★`);root.querySelector('#summary').textContent=`${parts.length?parts.join(' · '):'All reviews'} · ${rows.length} shown`;root.querySelector('#review-list').innerHTML=rows.length?rows.map(v=>`<article class="rounded-xl border border-[var(--viz-border)] p-4"><div class="review-card-head"><div class="font-medium">${v.t}</div><time datetime="${v.d}">${formatReviewDate(v.d)}</time></div><div class="mt-2 flex flex-wrap items-center gap-1.5"><span class="mr-1 shrink-0 text-sm">${stars(v.r)}</span>${Object.entries(v.s).map(([id,sn])=>`<button type="button" class="review-icon" data-review-id="${id}" data-review-sent="${sn}" style="color:${color(sn)}"><span style="color:var(--viz-text)">${attrs.find(x=>x.id===id).icon}</span></button>`).join('')}</div><p class="mt-3 text-sm leading-6 text-[var(--viz-muted)]">${v.b}</p></article>`).join(''):'<div class="rounded-xl border border-dashed border-[var(--viz-border)] p-5 text-center text-sm text-[var(--viz-muted)]">No matching reviews.</div>';root.querySelectorAll('[data-review-id]').forEach(el=>bindTip(el,`${attrs.find(a=>a.id===el.dataset.reviewId).name} · ${sname(el.dataset.reviewSent)}`));updateClearState()}root.querySelector('#search').addEventListener('input',()=>{renderReviews();updateClearState()});const svg=root.querySelector('#map'),NS='http://www.w3.org/2000/svg',W=660,H=340,pad={l:50,r:25,t:28,b:36};function draw(){svg.innerHTML='';const sx=v=>pad.l+(v/100)*(W-pad.l-pad.r),sy=v=>H-pad.b-(v/100)*(H-pad.t-pad.b);for(let x=0;x<=100;x+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',sx(x));l.setAttribute('x2',sx(x));l.setAttribute('y1',pad.t);l.setAttribute('y2',H-pad.b);l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',sx(x));t.setAttribute('y',H-9);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=x+'%';svg.appendChild(t)}for(let y=0;y<=100;y+=25){const l=document.createElementNS(NS,'line');l.setAttribute('x1',pad.l);l.setAttribute('x2',W-pad.r);l.setAttribute('y1',sy(y));l.setAttribute('y2',sy(y));l.setAttribute('stroke','var(--viz-border)');l.setAttribute('opacity','.55');svg.appendChild(l);const t=document.createElementNS(NS,'text');t.setAttribute('x',40);t.setAttribute('y',sy(y)+4);t.setAttribute('text-anchor','end');t.setAttribute('font-size','10');t.setAttribute('fill','var(--viz-muted)');t.textContent=y+'%';svg.appendChild(t)}const ordered=[...attrs].sort((a,b)=>selectedAttrs.has(a.id)?1:selectedAttrs.has(b.id)?-1:0);ordered.forEach(a=>{const y=mapMode==='positive'?a.pp:a.np,isSel=selectedAttrs.has(a.id),g=document.createElementNS(NS,'g');g.style.cursor='pointer';if(isSel){const ring=document.createElementNS(NS,'circle');ring.setAttribute('cx',sx(a.c));ring.setAttribute('cy',sy(y));ring.setAttribute('r','21');ring.setAttribute('fill','none');ring.setAttribute('stroke','var(--viz-accent)');ring.setAttribute('stroke-width','3');g.appendChild(ring)}const c=document.createElementNS(NS,'circle');c.setAttribute('cx',sx(a.c));c.setAttribute('cy',sy(y));c.setAttribute('r','16');c.setAttribute('fill','var(--viz-panel)');c.setAttribute('stroke',isSel?'var(--viz-accent)':color(mapMode));c.setAttribute('stroke-width',isSel?'3':'2');g.appendChild(c);const it=document.createElementNS(NS,'text');it.setAttribute('x',sx(a.c));it.setAttribute('y',sy(y)+5);it.setAttribute('text-anchor','middle');it.setAttribute('font-size','16');it.setAttribute('font-weight','700');it.setAttribute('fill','var(--viz-text)');it.textContent=a.icon;g.appendChild(it);const tooltip=`${a.name} · ${a.c}% of reviews mention it · ${y}% ${mapMode} sentiment.`;g.addEventListener('mouseenter',()=>showTip(g,tooltip));g.addEventListener('mouseleave',hideTip);g.addEventListener('click',()=>setFromInsight(a.id,mapMode,root.querySelector('#map-section')));svg.appendChild(g)})}function setMapMode(m){mapMode=m;root.querySelector('#y-label').textContent=m==='positive'?'Positive sentiment share':'Negative sentiment share';[['pos','positive'],['neg','negative']].forEach(([id,val])=>{const b=root.querySelector('#map-'+id),active=val===m;b.style.background=active?'var(--viz-accent-bg)':'transparent';b.style.boxShadow=active?'inset 0 0 0 1px var(--viz-accent)':'none';b.setAttribute('aria-pressed',active?'true':'false')});draw()}root.querySelector('#map-pos').addEventListener('click',()=>setMapMode('positive'));root.querySelector('#map-neg').addEventListener('click',()=>setMapMode('negative'));setRatingMode('exact');setMapMode('negative');updateFilters();renderReviews();})();
+</script>
+</div>
+
+<script>
+(() => {
+  const tip = document.getElementById('floating-tip');
+  if (!tip) return;
+
+  const removeRatingTooltip = () => {
+    tip.querySelectorAll('.tip-second').forEach(detail => {
+      if (detail.textContent.trim().startsWith('Average rating')) detail.remove();
+    });
+  };
+
+  new MutationObserver(removeRatingTooltip).observe(tip, {childList:true, subtree:true});
+})();
+</script>
+
+<script id="cipher-product-detail-nav-js">
+(() => {
+  const fallbackHome = 'Option%2003%20-%20Homepage%20Refined%20v103%20Larger%20Darker%20Subtext.html';
+
+  function returnToPreviousView() {
+    /*
+      This product detail is intended to be opened from the homepage/search
+      flow. Browser history is used first so search state and scroll position
+      are retained when the user returns.
+    */
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    if (document.referrer) {
+      try {
+        window.location.href = document.referrer;
+        return;
+      } catch (_) {}
+    }
+
+    window.location.href = fallbackHome;
+  }
+
+  const backBtn = document.getElementById('page-back-btn');
+  const brandBtn = document.getElementById('cipher-home-btn');
+
+  if (backBtn) backBtn.addEventListener('click', returnToPreviousView);
+  if (brandBtn) brandBtn.addEventListener('click', returnToPreviousView);
+
+  document.querySelectorAll('[data-detail-nav]').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+
+      const target = link.dataset.detailNav;
+
+      /* Discover returns to the search/discovery view.
+         Other labels retain the homepage-style selection interaction
+         without disturbing this product-analysis page. */
+      if (target === 'discover') {
+        returnToPreviousView();
+        return;
+      }
+
+      document.querySelectorAll('[data-detail-nav]').forEach(item => {
+        item.classList.toggle('selected', item === link);
+      });
+    });
+  });
+})();
+</script>
+
+
+<script id="cipher-product-detail-v7-js">
+(() => {
+  /* =======================================================
+     PRODUCT IMAGE POPUP / GALLERY
+     ======================================================= */
+  const modal = document.getElementById('cipher-product-modal');
+  const modalImage = document.getElementById('cipher-product-modal-image');
+  const closeBtn = document.getElementById('cipher-product-modal-close');
+  const prevBtn = document.getElementById('cipher-product-modal-prev');
+  const nextBtn = document.getElementById('cipher-product-modal-next');
+
+  const productImages = Array.from(document.querySelectorAll('.cipher-product-photo'));
+  let activeImageIndex = 0;
+
+  productImages.forEach((img, index) => {
+    const parent = img.parentElement;
+    if (parent && !parent.classList.contains('cipher-product-photo-shell')) {
+      const shell = document.createElement('div');
+      shell.className = 'cipher-product-photo-shell';
+      parent.insertBefore(shell, img);
+      shell.appendChild(img);
+
+      const hint = document.createElement('span');
+      hint.className = 'cipher-image-zoom-hint';
+      hint.innerHTML = '⌕ View larger';
+      shell.appendChild(hint);
+    }
+
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', `Open product image ${index + 1} larger`);
+
+    const open = () => openProductModal(index);
+    img.addEventListener('click', open);
+    img.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
+
+  function syncGalleryControls() {
+    const multiple = productImages.length > 1;
+    prevBtn.hidden = !multiple;
+    nextBtn.hidden = !multiple;
+  }
+
+  function showGalleryImage(index) {
+    if (!productImages.length) return;
+    activeImageIndex = (index + productImages.length) % productImages.length;
+    const source = productImages[activeImageIndex];
+
+    modalImage.src = source.currentSrc || source.src;
+    modalImage.alt = source.alt || `Product image ${activeImageIndex + 1}`;
+    syncGalleryControls();
+  }
+
+  function openProductModal(index) {
+    if (!modal || !productImages.length) return;
+    showGalleryImage(index);
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => closeBtn?.focus());
+  }
+
+  function closeProductModal() {
+    if (!modal) return;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    productImages[activeImageIndex]?.focus();
+  }
+
+  closeBtn?.addEventListener('click', closeProductModal);
+  prevBtn?.addEventListener('click', () => showGalleryImage(activeImageIndex - 1));
+  nextBtn?.addEventListener('click', () => showGalleryImage(activeImageIndex + 1));
+
+  modal?.addEventListener('click', event => {
+    if (event.target === modal) closeProductModal();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!modal?.classList.contains('show')) return;
+
+    if (event.key === 'Escape') closeProductModal();
+    if (event.key === 'ArrowLeft' && productImages.length > 1) showGalleryImage(activeImageIndex - 1);
+    if (event.key === 'ArrowRight' && productImages.length > 1) showGalleryImage(activeImageIndex + 1);
+  });
+
+  /* =======================================================
+     SMART MATERIAL / SIZE / FIT / COLOR OVERFLOW
+     ======================================================= */
+  const optionLabels = new Set(['Materials', 'Sizes', 'Fit variations', 'Colors']);
+  const optionGroups = [];
+
+  function getGroupValues(group) {
+    const values = [];
+
+    /* Current visible chips */
+    group.querySelectorAll(':scope > div:nth-child(2) > span').forEach(span => {
+      const text = span.textContent.trim();
+      if (text && !values.includes(text)) values.push(text);
+    });
+
+    /* Existing hidden +N popup values from the source UI */
+    group.querySelectorAll('.more-pop span').forEach(span => {
+      const text = span.textContent.trim();
+      if (text && !values.includes(text)) values.push(text);
+    });
+
+    return values;
+  }
+
+  function makeChip(text) {
+    const span = document.createElement('span');
+    span.className = 'cipher-option-chip rounded-md border border-[var(--viz-border)] px-2 py-1 text-xs';
+    span.textContent = text;
+    return span;
+  }
+
+  document.querySelectorAll('#gsa-v17 section:first-of-type .grid > div').forEach(group => {
+    const label = group.firstElementChild?.textContent?.trim();
+    if (!optionLabels.has(label)) return;
+
+    const oldRow = group.children[1];
+    if (!oldRow) return;
+
+    const values = getGroupValues(group);
+    if (!values.length) return;
+
+    group.classList.add('cipher-option-group');
+
+    /* Remove old static +N popup; all values are now controlled dynamically. */
+    group.querySelectorAll('.more-pop').forEach(pop => pop.remove());
+
+    const row = document.createElement('div');
+    row.className = 'cipher-option-row';
+    oldRow.replaceWith(row);
+
+    const pop = document.createElement('div');
+    pop.className = 'cipher-option-pop';
+    const popInner = document.createElement('div');
+    popInner.className = 'cipher-option-pop-inner';
+    pop.appendChild(popInner);
+    group.appendChild(pop);
+
+    optionGroups.push({group, row, pop, popInner, values});
+  });
+
+  function measureWidth(node) {
+    const rect = node.getBoundingClientRect();
+    return rect.width;
+  }
+
+  function renderOptionGroup(item) {
+    const {group, row, pop, popInner, values} = item;
+
+    row.innerHTML = '';
+    popInner.innerHTML = '';
+    pop.classList.remove('show');
+
+    /*
+      "Around 80%" of the space allocated to this product-detail field.
+      We intentionally leave the remaining ~20% as breathing room and
+      space for the +N control.
+    */
+    const totalAvailable = Math.max(140, group.clientWidth);
+    const budget = totalAvailable * 0.80;
+    const gap = 6;
+
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:absolute;visibility:hidden;display:flex;gap:6px;white-space:nowrap;';
+    group.appendChild(probe);
+
+    const widths = values.map(value => {
+      const chip = makeChip(value);
+      probe.appendChild(chip);
+      const width = measureWidth(chip);
+      chip.remove();
+      return width;
+    });
+
+    const moreProbe = document.createElement('button');
+    moreProbe.className = 'cipher-option-more';
+    moreProbe.textContent = `+${values.length}`;
+    probe.appendChild(moreProbe);
+    const moreWidth = measureWidth(moreProbe);
+    probe.remove();
+
+    let used = 0;
+    let visibleCount = 0;
+
+    for (let i = 0; i < values.length; i++) {
+      const remainingAfter = values.length - (i + 1);
+      const widthWithGap = widths[i] + (visibleCount ? gap : 0);
+      const reserveMore = remainingAfter > 0 ? moreWidth + gap : 0;
+
+      if (used + widthWithGap + reserveMore <= budget || visibleCount === 0) {
+        used += widthWithGap;
+        visibleCount++;
+      } else {
+        break;
+      }
+    }
+
+    const hiddenCount = values.length - visibleCount;
+
+    values.slice(0, visibleCount).forEach(value => {
+      row.appendChild(makeChip(value));
+    });
+
+    if (hiddenCount > 0) {
+      const more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'cipher-option-more';
+      more.textContent = `+${hiddenCount}`;
+      more.setAttribute('aria-expanded', 'false');
+      more.setAttribute('aria-label', `Show ${hiddenCount} more ${group.firstElementChild?.textContent?.trim() || 'options'}`);
+
+      values.slice(visibleCount).forEach(value => {
+        popInner.appendChild(makeChip(value));
+      });
+
+      more.addEventListener('click', event => {
+        event.stopPropagation();
+
+        document.querySelectorAll('.cipher-option-pop.show').forEach(other => {
+          if (other !== pop) other.classList.remove('show');
+        });
+
+        const opening = !pop.classList.contains('show');
+        pop.classList.toggle('show', opening);
+        more.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      });
+
+      row.appendChild(more);
+    }
+  }
+
+  function renderAllOptionGroups() {
+    optionGroups.forEach(renderOptionGroup);
+  }
+
+  renderAllOptionGroups();
+
+  let optionResizeFrame = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(optionResizeFrame);
+    optionResizeFrame = requestAnimationFrame(renderAllOptionGroups);
+  }, {passive:true});
+
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.cipher-option-group')) {
+      document.querySelectorAll('.cipher-option-pop.show').forEach(pop => pop.classList.remove('show'));
+    }
+  });
+
+  /* The existing review logic controls #clear-filters.disabled.
+     CSS above converts that existing state into true hidden/visible UI. */
+})();
+</script>
+
+
+<script id="cipher-product-detail-v8-js">
+(() => {
+  const root = document.getElementById('gsa-v17');
+  if (!root) return;
+
+  const attrsV8 = [
+    {id:'fit',name:'Fit & Sizing',icon:'↔',m:34,avg:4.4,p:31,pa:4.6,x:0,xa:null,n:3,na:2.4},
+    {id:'material',name:'Material Quality',icon:'▦',m:21,avg:4.5,p:18,pa:4.7,x:1,xa:3,n:2,na:2.5},
+    {id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},
+    {id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},
+    {id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},
+    {id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
+    {id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},
+    {id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},
+    {id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},
+    {id:'durability',name:'Durability',icon:'◇',m:8,avg:4,p:6,pa:4.7,x:0,xa:null,n:2,na:2}
+  ];
+
+  const pct = (v,d) => d ? Math.round(v/d*100) : 0;
+  attrsV8.forEach(a => {
+    a.c = pct(a.m,45);
+    a.pp = pct(a.p,a.m);
+    a.mp = pct(a.x,a.m);
+    a.np = pct(a.n,a.m);
+  });
+
+  const color = sentiment => sentiment === 'positive'
+    ? 'var(--viz-series-2)'
+    : sentiment === 'mixed'
+      ? 'var(--viz-series-5)'
+      : 'var(--viz-series-4)';
+
+  const sname = sentiment => sentiment.charAt(0).toUpperCase() + sentiment.slice(1);
+  const NS = 'http://www.w3.org/2000/svg';
+  const tip = root.querySelector('#floating-tip');
+
+  function showSharedTip(el, first, second='') {
+    if (!tip) return;
+    tip.innerHTML = `<span>${first}</span>${second ? `<span class="tip-second">${second}</span>` : ''}`;
+    tip.classList.add('show');
+    const rr = root.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const tw = Math.min(240, tip.offsetWidth || 240);
+    const th = tip.offsetHeight || 48;
+    let left = er.left - rr.left + er.width/2 - tw/2;
+    left = Math.max(8, Math.min(left, rr.width - tw - 8));
+    let top = er.top - rr.top - th - 8;
+    if (top < 8) top = er.bottom - rr.top + 8;
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  }
+
+  function hideSharedTip() {
+    tip?.classList.remove('show');
+  }
+
+  function activateExistingInsight(attrId, sentiment=null) {
+    const card = root.querySelector(`.attr-card[data-attr="${attrId}"]`);
+    if (!card) return;
+
+    if (sentiment) {
+      const segment = card.querySelector(`.segment[data-s="${sentiment}"]`);
+      if (segment) {
+        segment.click();
+
+        /*
+          The original filter handler updates selected-segment in the DOM.
+          Redraw after that state has settled so the custom chart always
+          shows the selected sentiment segment immediately.
+        */
+        requestAnimationFrame(() => requestAnimationFrame(drawAttributeChart));
+        return;
+      }
+    }
+
+    card.click();
+    requestAnimationFrame(() => requestAnimationFrame(drawAttributeChart));
+  }
+
+  /* =======================================================
+     CARDS / STACKED BAR SWITCHER
+     ======================================================= */
+  const cardsBtn = document.getElementById('attr-view-cards');
+  const barsBtn = document.getElementById('attr-view-bars');
+  const radarBtn = document.getElementById('attr-view-radar');
+  const heatmapBtn = document.getElementById('attr-view-heatmap');
+
+  const cardsView = document.getElementById('attr-cards-view');
+  const barsView = document.getElementById('attr-bars-view');
+  const radarView = document.getElementById('attr-radar-view');
+  const heatmapView = document.getElementById('attr-heatmap-view');
+  const chart = document.getElementById('attribute-stacked-chart');
+
+  let attributeOrderSentiment = 'positive';
+
+  function currentSentimentOrder() {
+    const base = ['positive','mixed','negative'];
+    return [
+      attributeOrderSentiment,
+      ...base.filter(s => s !== attributeOrderSentiment)
+    ];
+  }
+
+  function setAttributeView(view) {
+    const views = {
+      cards:[cardsBtn,cardsView],
+      bars:[barsBtn,barsView],
+      radar:[radarBtn,radarView],
+      heatmap:[heatmapBtn,heatmapView]
+    };
+
+    Object.entries(views).forEach(([key,[btn,panel]]) => {
+      const active = key === view;
+      btn?.classList.toggle('active',active);
+      btn?.setAttribute('aria-pressed',active?'true':'false');
+      if (panel) panel.hidden = !active;
+    });
+
+    if (view === 'bars') requestAnimationFrame(drawAttributeChart);
+    if (view === 'radar') requestAnimationFrame(() => window.CipherAttributeViews?.drawRadar?.());
+    if (view === 'heatmap') requestAnimationFrame(() => window.CipherAttributeViews?.drawHeatmap?.());
+  }
+
+  cardsBtn?.addEventListener('click', () => setAttributeView('cards'));
+  barsBtn?.addEventListener('click', () => setAttributeView('bars'));
+  radarBtn?.addEventListener('click', () => setAttributeView('radar'));
+  heatmapBtn?.addEventListener('click', () => setAttributeView('heatmap'));
+
+  window.CipherAttributeViews = window.CipherAttributeViews || {};
+  window.CipherAttributeViews.setView = setAttributeView;
+  window.CipherAttributeViews.getOrder = () => attributeOrderSentiment;
+  window.CipherAttributeViews.setOrder = sentiment => {
+    attributeOrderSentiment = sentiment;
+    if (barsView && !barsView.hidden) requestAnimationFrame(drawAttributeChart);
+  };
+
+  function svgEl(name, attrs={}) {
+    const el = document.createElementNS(NS,name);
+    Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,String(v)));
+    return el;
+  }
+
+  function drawAttributeChart() {
+    if (!chart) return;
+    const shouldAnimateLoad = barsView && !barsView.hidden && chart.dataset.visibleLoadAnimated !== '1';
+    chart.innerHTML = '';
+
+    const W = 1080, H = 500;
+    const pad = {l:58,r:22,t:22,b:104};
+    const plotW = W-pad.l-pad.r;
+    const plotH = H-pad.t-pad.b;
+    const maxReviews = 45;
+    const y = value => pad.t + plotH - (value/maxReviews)*plotH;
+
+    /* horizontal review-count grid */
+    [0,10,20,30,40].forEach(value => {
+      const gy = y(value);
+      chart.appendChild(svgEl('line',{
+        x1:pad.l,x2:W-pad.r,y1:gy,y2:gy,
+        stroke:'var(--viz-border)','stroke-width':1,opacity:.72
+      }));
+      const label = svgEl('text',{
+        x:pad.l-10,y:gy+4,'text-anchor':'end','font-size':10,fill:'var(--viz-muted)'
+      });
+      label.textContent = value;
+      chart.appendChild(label);
+    });
+
+    const axisTitle = svgEl('text',{
+      x:15,y:pad.t+plotH/2,
+      transform:`rotate(-90 15 ${pad.t+plotH/2})`,
+      'text-anchor':'middle','font-size':10,fill:'var(--viz-muted)'
+    });
+    axisTitle.textContent='Review count';
+    chart.appendChild(axisTitle);
+
+    const slot = plotW / attrsV8.length;
+    const barW = Math.min(54, slot*.56);
+
+    const orderedAttrsV8 = [...attrsV8].sort((a,b) => {
+      const av = attributeOrderSentiment === 'positive' ? a.p : attributeOrderSentiment === 'mixed' ? a.x : a.n;
+      const bv = attributeOrderSentiment === 'positive' ? b.p : attributeOrderSentiment === 'mixed' ? b.x : b.n;
+
+      /* Stacked bars rank by selected sentiment REVIEW COUNT, descending. */
+      return bv - av || a.name.localeCompare(b.name);
+    });
+
+    orderedAttrsV8.forEach((a,index) => {
+      const cx = pad.l + slot*index + slot/2;
+      const sourceCard = root.querySelector(`.attr-card[data-attr="${a.id}"]`);
+      const selected = !!sourceCard?.classList.contains('selected');
+      const hasSelectedSentiment = !!sourceCard?.querySelector('.segment.selected-segment');
+
+      /*
+        Selection hierarchy:
+        - sentiment clicked/filtered -> highlight only that sentiment segment
+        - attribute selected without a sentiment -> highlight the full attribute bar
+      */
+      const fullBarSelected = selected && !hasSelectedSentiment;
+
+      if (fullBarSelected) {
+        /*
+          Highlight only the bar that actually exists:
+          top = total attribute review count, bottom = zero baseline.
+          This avoids outlining the unused/potential chart height.
+        */
+        const stackTop = y(a.m);
+        const stackBottom = y(0);
+        const selection = svgEl('rect',{
+          x:cx-barW/2-7,
+          y:stackTop-6,
+          width:barW+14,
+          height:(stackBottom-stackTop)+12,
+          rx:10,
+          class:'attr-chart-full-selection'
+        });
+        chart.appendChild(selection);
+      }
+
+      let cumulative = 0;
+      const stackGroup = svgEl('g',{
+        class: shouldAnimateLoad ? 'attr-chart-stack-load' : ''
+      });
+      const partMap = {
+        positive:['positive',a.p,a.pp,a.pa],
+        mixed:['mixed',a.x,a.mp,a.xa],
+        negative:['negative',a.n,a.np,a.na]
+      };
+      const parts = currentSentimentOrder().map(s => partMap[s]);
+
+      parts.forEach(([sentiment,count,percentage,avg]) => {
+        if (!count) return;
+        const yTop = y(cumulative + count);
+        const yBottom = y(cumulative);
+        const sourceSegment = root.querySelector(`.attr-card[data-attr="${a.id}"] .segment[data-s="${sentiment}"]`);
+        const segmentSelected = !!sourceSegment?.classList.contains('selected-segment');
+        const rect = svgEl('rect',{
+          x:cx-barW/2,
+          y:yTop,
+          width:barW,
+          height:Math.max(2,yBottom-yTop),
+          fill:color(sentiment),
+          class:`attr-chart-segment${segmentSelected?' attr-chart-selected-segment':''}`,
+          'data-attr':a.id,
+          'data-sentiment':sentiment
+        });
+        rect.addEventListener('mouseenter',() => {
+          showSharedTip(
+            rect,
+            `${sname(sentiment)} · ${percentage}% (${count} reviews)`,
+            `Average rating: ${avg===null?'—':avg.toFixed(1)} / 5`
+          );
+        });
+        rect.addEventListener('mouseleave',hideSharedTip);
+        rect.addEventListener('click',() => activateExistingInsight(a.id,sentiment));
+        stackGroup.appendChild(rect);
+        cumulative += count;
+      });
+
+      chart.appendChild(stackGroup);
+
+      /* total count */
+      const totalLabel = svgEl('text',{
+        x:cx,y:y(a.m)-8,'text-anchor':'middle','font-size':10,'font-weight':650,fill:'#596166'
+      });
+      totalLabel.textContent = a.m;
+      chart.appendChild(totalLabel);
+
+      /* attribute icon is the x-axis label */
+      const iconBg = svgEl('circle',{
+        cx,cy:H-69,r:18,fill:'#FFFFFF',stroke:'rgba(24,24,24,.10)','stroke-width':1,
+        class:'attr-chart-icon-hit'
+      });
+      const icon = svgEl('text',{
+        x:cx,y:H-64,'text-anchor':'middle','font-size':15,'font-weight':700,fill:'var(--viz-text)',
+        class:'attr-chart-icon-hit'
+      });
+      icon.textContent = a.icon;
+
+      [iconBg,icon].forEach(el => {
+        el.addEventListener('mouseenter',() => showSharedTip(el,a.name,`${a.m} reviews mention this attribute.`));
+        el.addEventListener('mouseleave',hideSharedTip);
+        el.addEventListener('click',() => activateExistingInsight(a.id,null));
+      });
+      chart.appendChild(iconBg);
+      chart.appendChild(icon);
+
+      /* attribute rating under the icon */
+    });
+    if (shouldAnimateLoad) chart.dataset.visibleLoadAnimated = '1';
+  }
+
+  /* Keep chart selection state current if filters change while chart is open. */
+  function scheduleAttributeChart() {
+    if (barsView && !barsView.hidden) requestAnimationFrame(drawAttributeChart);
+  }
+  root.querySelectorAll('.attr-card,.filter-icon,.sent-filter,#clear-filters').forEach(el => {
+    el.addEventListener('click',scheduleAttributeChart);
+  });
+
+  /* =======================================================
+     FOUR-QUADRANT DECISION MAP
+     Positive mode: stronger positive goes UP.
+     Negative mode: stronger negative goes DOWN, so the
+     bottom-right square is high-volume + strong-negative.
+     ======================================================= */
+  const map = document.getElementById('map');
+  const posMode = document.getElementById('map-pos');
+  const negMode = document.getElementById('map-neg');
+  const yLabel = document.getElementById('y-label');
+  const guide = document.getElementById('quadrant-guide');
+  const help = document.getElementById('quadrant-help');
+
+  const quadrantCopy = {
+    positive: [
+      {key:'tl',title:'Niche strength',desc:'Fewer mentions + strong positive sentiment. Potential differentiator.',fill:'#F0F8FA'},
+      {key:'tr',title:'Proven strength',desc:'Many mentions + strong positive sentiment. Protect and lean into it.',fill:'#EEF7F1'},
+      {key:'bl',title:'Low-signal opportunity',desc:'Fewer mentions + weaker positive sentiment. Monitor before prioritizing.',fill:'#F7F8F8'},
+      {key:'br',title:'High-confidence opportunity',desc:'Many mentions + weaker positive sentiment. Improvement can affect more users.',fill:'#FBF5E9'}
+    ],
+    negative: [
+      {key:'tl',title:'Emerging issue',desc:'Fewer mentions + strong negative sentiment. Investigate before it grows.',fill:'#FAF2EB'},
+      {key:'tr',title:'High-confidence issue',desc:'Many mentions + strong negative sentiment. Highest-priority problem area.',fill:'#F9ECEC'},
+      {key:'bl',title:'Low-signal / low risk',desc:'Fewer mentions + low negative sentiment. Lowest immediate concern.',fill:'#F7F8F8'},
+      {key:'br',title:'Broadly stable',desc:'Many mentions + low negative sentiment. Stronger confidence that risk is limited.',fill:'#EEF8F4'}
+    ]
+  };
+
+  function currentMapMode() {
+    return posMode?.getAttribute('aria-pressed') === 'true' ? 'positive' : 'negative';
+  }
+
+  function renderQuadrantGuide(mode) {
+    if (!guide) return;
+    guide.innerHTML = quadrantCopy[mode].map(q => `
+      <div class="quadrant-guide-card">
+        <div class="quadrant-guide-title"><span class="quadrant-guide-swatch" style="background:${q.fill.replace(/\.\d+\)/, '1)')}"></span>${q.title}</div>
+        <p>${q.desc}</p>
+      </div>
+    `).join('');
+  }
+
+  function drawDecisionMap() {
+    if (!map) return;
+    const mode = currentMapMode();
+    const W=660,H=340,pad={l:50,r:25,t:28,b:36};
+    const plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b;
+    const sx=v=>pad.l+(v/100)*plotW;
+    const syPositive=v=>H-pad.b-(v/100)*plotH;
+    const syNegative=v=>H-pad.b-(v/100)*plotH;
+    const sy=v=>mode==='positive'?syPositive(v):syNegative(v);
+
+    map.innerHTML='';
+
+    const midX=sx(50), midY=pad.t+plotH/2;
+    const qByKey = Object.fromEntries(quadrantCopy[mode].map(q=>[q.key,q]));
+    const zones = [
+      ['tl',pad.l,pad.t,plotW/2,plotH/2],
+      ['tr',midX,pad.t,plotW/2,plotH/2],
+      ['bl',pad.l,midY,plotW/2,plotH/2],
+      ['br',midX,midY,plotW/2,plotH/2]
+    ];
+
+    zones.forEach(([key,x,y,w,h]) => {
+      const q=qByKey[key];
+      map.appendChild(svgEl('rect',{x,y,width:w,height:h,fill:q.fill}));
+      const title=svgEl('text',{
+        x:x+12,y:y+20,'font-size':10,'font-weight':720,fill:'#555E62',opacity:.78
+      });
+      title.textContent=q.title;
+      map.appendChild(title);
+    });
+
+    /* equal 50/50 decision thresholds */
+    map.appendChild(svgEl('line',{x1:midX,x2:midX,y1:pad.t,y2:H-pad.b,stroke:'rgba(49,66,74,.24)','stroke-width':1.5,'stroke-dasharray':'5 5'}));
+    map.appendChild(svgEl('line',{x1:pad.l,x2:W-pad.r,y1:midY,y2:midY,stroke:'rgba(49,66,74,.24)','stroke-width':1.5,'stroke-dasharray':'5 5'}));
+
+    /* x ticks */
+    [0,25,50,75,100].forEach(v=>{
+      const x=sx(v);
+      const tick=svgEl('text',{x,y:H-9,'text-anchor':'middle','font-size':10,fill:'var(--viz-muted)'});
+      tick.textContent=`${v}%`;
+      map.appendChild(tick);
+    });
+
+    /* y ticks; negative values intentionally increase downward */
+    [0,25,50,75,100].forEach(v=>{
+      const yy=sy(v);
+      const tick=svgEl('text',{x:40,y:yy+4,'text-anchor':'end','font-size':10,fill:'var(--viz-muted)'});
+      tick.textContent=`${v}%`;
+      map.appendChild(tick);
+    });
+
+    attrsV8.forEach(a=>{
+      const sentimentValue=mode==='positive'?a.pp:a.np;
+
+      /*
+        Keep every attribute marker fully inside the plotted rectangle.
+        The selected halo uses r=21, so reserve 23px from each edge.
+      */
+      const markerInset = 23;
+      const rawCx = sx(a.c);
+      const rawCy = sy(sentimentValue);
+      const cx = Math.max(
+        pad.l + markerInset,
+        Math.min(W - pad.r - markerInset, rawCx)
+      );
+      const cy = Math.max(
+        pad.t + markerInset,
+        Math.min(H - pad.b - markerInset, rawCy)
+      );
+
+      const selected=!!root.querySelector(`.attr-card[data-attr="${a.id}"].selected`);
+      const g=svgEl('g',{});
+      g.style.cursor='pointer';
+
+      if(selected){
+        g.appendChild(svgEl('circle',{cx,cy,r:21,fill:'none',stroke:'var(--viz-accent)','stroke-width':3}));
+      }
+      g.appendChild(svgEl('circle',{
+        cx,cy,r:16,fill:'#F8FBFC',stroke:selected?'var(--viz-accent)':color(mode),'stroke-width':selected?3:2
+      }));
+      const it=svgEl('text',{x:cx,y:cy+5,'text-anchor':'middle','font-size':16,'font-weight':700,fill:'var(--viz-text)'});
+      it.textContent=a.icon;
+      g.appendChild(it);
+
+      g.addEventListener('mouseenter',()=>showSharedTip(g,`${a.name} · ${a.c}% of reviews mention it · ${sentimentValue}% ${mode} sentiment.`,mode==='negative'?'More negative sentiment moves upward from 0 at the bottom.':'More positive sentiment moves upward.'));
+      g.addEventListener('mouseleave',hideSharedTip);
+      g.addEventListener('click',()=>activateExistingInsight(a.id,mode));
+      map.appendChild(g);
+    });
+
+    if (yLabel) {
+      yLabel.textContent = mode==='positive'
+        ? 'Positive sentiment share ↑'
+        : 'Negative sentiment share ↓';
+    }
+    renderQuadrantGuide(mode);
+  }
+
+  help?.addEventListener('mouseenter',()=>showSharedTip(help,'How to read the four decision zones','Right = mentioned in more reviews. Both sentiment axes start at 0 at the bottom and increase upward.'));
+  help?.addEventListener('mouseleave',hideSharedTip);
+  help?.addEventListener('focus',()=>showSharedTip(help,'How to read the four decision zones','Right = mentioned in more reviews. Both sentiment axes start at 0 at the bottom and increase upward.'));
+  help?.addEventListener('blur',hideSharedTip);
+
+  function scheduleDecisionMap(){requestAnimationFrame(drawDecisionMap);}
+  posMode?.addEventListener('click',scheduleDecisionMap);
+  negMode?.addEventListener('click',scheduleDecisionMap);
+  root.querySelectorAll('.attr-card,.filter-icon,#clear-filters').forEach(el=>el.addEventListener('click',scheduleDecisionMap));
+
+  /* Original script has already initialized the UI before this script runs. */
+  requestAnimationFrame(()=>{
+    drawAttributeChart();
+    drawDecisionMap();
+  });
+})();
+</script>
+
+
+<script id="cipher-product-detail-v13-pin-card-js">
+(() => {
+  const root = document.getElementById('gsa-v17');
+  const section = document.getElementById('attribute-sentiment-section');
+  const returnBar = document.getElementById('return-bar');
+  const slot = document.getElementById('return-card-slot');
+
+  if (!root || !section || !returnBar || !slot) return;
+
+  const getCard = id => root.querySelector(`.attr-card[data-attr="${id}"]`);
+
+  function cleanClone(clone, sentiment){
+    clone.removeAttribute('tabindex');
+    clone.classList.remove('selected');
+
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    clone.querySelectorAll('[tabindex]').forEach(el => el.removeAttribute('tabindex'));
+
+    clone.querySelectorAll('.segment').forEach(seg => {
+      seg.classList.remove('selected-segment');
+      seg.classList.toggle(
+        'fly-selected-segment',
+        !!sentiment && seg.dataset.s === sentiment
+      );
+    });
+
+    return clone;
+  }
+
+  function pinCard(attrId, sentiment){
+    const source = getCard(attrId);
+    if (!source) return;
+
+    const clone = cleanClone(source.cloneNode(true), sentiment);
+
+    /*
+      Replace the previous pinned insight card.
+      Inserting a fresh clone retriggers the small 0.5s reveal/loading
+      animation without moving or hiding the original source card.
+    */
+    slot.replaceChildren(clone);
+  }
+
+  function resolveChartIcon(target){
+    const x = Number(target.getAttribute('cx') || target.getAttribute('x'));
+    const cards = [...root.querySelectorAll('.attr-card[data-attr]')];
+
+    if (!Number.isFinite(x) || !cards.length) return null;
+
+    const slotWidth = (1080 - 58 - 22) / cards.length;
+    const index = Math.max(
+      0,
+      Math.min(cards.length - 1, Math.floor((x - 58) / slotWidth))
+    );
+
+    return cards[index]?.dataset.attr || null;
+  }
+
+  function detectSelection(event){
+    const target = event.target;
+
+    /* Attribute cards view */
+    const card = target.closest?.('.attr-card[data-attr]');
+    if (card && section.contains(card) && !slot.contains(card)){
+      const segment = target.closest('.segment[data-s]');
+      return {
+        attr: card.dataset.attr,
+        sentiment: segment?.dataset.s || null
+      };
+    }
+
+    /* Stacked chart sentiment segment */
+    const chartSegment = target.closest?.('.attr-chart-segment[data-attr]');
+    if (chartSegment){
+      return {
+        attr: chartSegment.getAttribute('data-attr'),
+        sentiment: chartSegment.getAttribute('data-sentiment') || null
+      };
+    }
+
+    /* Stacked chart attribute icon */
+    const icon = target.closest?.('.attr-chart-icon-hit');
+    if (icon){
+      const attr = resolveChartIcon(icon);
+      if (attr) return {attr, sentiment:null};
+    }
+
+    return null;
+  }
+
+  section.addEventListener('click', event => {
+    const info = detectSelection(event);
+    if (!info?.attr) return;
+
+    /*
+      Let the existing source handler update the Review context bar first,
+      then insert the cloned full Attribute card directly into it.
+    */
+    setTimeout(() => {
+      if (returnBar.classList.contains('show')){
+        pinCard(info.attr, info.sentiment);
+      }
+    }, 25);
+  }, true);
+
+  const observer = new MutationObserver(() => {
+    if (!returnBar.classList.contains('show')){
+      slot.replaceChildren();
+    }
+  });
+
+  observer.observe(returnBar, {
+    attributes:true,
+    attributeFilter:['class']
+  });
+})();
+</script>
+
+
+<script id="cipher-product-detail-v15-donut-js">
+(() => {
+  const wrap = document.querySelector('.overall-sentiment-donut-wrap');
+  const tooltip = document.getElementById('overall-sentiment-tooltip');
+  if (!wrap || !tooltip) return;
+
+  const title = tooltip.querySelector('strong');
+  const detail = tooltip.querySelector('span');
+
+  wrap.querySelectorAll('.donut-segment').forEach(segment => {
+    const show = () => {
+      const sentiment = segment.dataset.sentiment || '';
+      const count = Number(segment.dataset.count || 0);
+      const percentage = Number(segment.dataset.percentage || 0);
+
+      title.textContent = sentiment;
+      detail.textContent = `${count} ${count === 1 ? 'review' : 'reviews'} · ${percentage}%`;
+      tooltip.classList.add('show');
+      tooltip.setAttribute('aria-hidden','false');
+    };
+
+    const hide = () => {
+      tooltip.classList.remove('show');
+      tooltip.setAttribute('aria-hidden','true');
+    };
+
+    segment.addEventListener('mouseenter', show);
+    segment.addEventListener('mouseleave', hide);
+    segment.addEventListener('focus', show);
+    segment.addEventListener('blur', hide);
+    segment.setAttribute('tabindex','0');
+  });
+})();
+</script>
+
+
+<script id="cipher-product-detail-v18-attribute-views-js">
+(() => {
+  const root = document.getElementById('gsa-v17');
+  const section = document.getElementById('attribute-sentiment-section');
+  if (!root || !section) return;
+
+  const NS = 'http://www.w3.org/2000/svg';
+
+  const attrs = [
+    {id:'fit',name:'Fit & Sizing',icon:'↔',m:34,avg:4.4,p:31,pa:4.6,x:0,xa:null,n:3,na:2.4},
+    {id:'material',name:'Material Quality',icon:'▦',m:21,avg:4.5,p:18,pa:4.7,x:1,xa:3,n:2,na:2.5},
+    {id:'comfort',name:'Comfort',icon:'♡',m:27,avg:4.6,p:24,pa:4.8,x:2,xa:3.5,n:1,na:2},
+    {id:'aesthetic',name:'Design & Aesthetic',icon:'✦',m:43,avg:4.8,p:42,pa:4.9,x:0,xa:null,n:1,na:2},
+    {id:'value',name:'Value Perception',icon:'$',m:26,avg:4.4,p:23,pa:4.6,x:1,xa:3,n:2,na:2.5},
+    {id:'performance',name:'Performance',icon:'⚡',m:24,avg:4.6,p:20,pa:4.8,x:2,xa:3.5,n:2,na:2.5},
+    {id:'functionality',name:'Functionality',icon:'⚙',m:24,avg:4.1,p:16,pa:4.7,x:3,xa:3.3,n:5,na:1.8},
+    {id:'workmanship',name:'Workmanship',icon:'✂',m:15,avg:4.7,p:14,pa:4.8,x:0,xa:null,n:1,na:2},
+    {id:'quality',name:'Overall Quality',icon:'✓',m:43,avg:4.6,p:38,pa:4.8,x:2,xa:3.5,n:3,na:2.3},
+    {id:'durability',name:'Durability',icon:'◇',m:8,avg:4,p:6,pa:4.7,x:0,xa:null,n:2,na:2}
+  ];
+
+  const pct = (v,d) => d ? Math.round(v/d*100) : 0;
+  attrs.forEach(a => {
+    a.pp = pct(a.p,a.m);
+    a.mp = pct(a.x,a.m);
+    a.np = pct(a.n,a.m);
+  });
+
+  const color = sentiment => sentiment === 'positive'
+    ? 'var(--viz-series-2)'
+    : sentiment === 'mixed'
+      ? 'var(--viz-series-5)'
+      : 'var(--viz-series-4)';
+
+  const sname = sentiment => sentiment.charAt(0).toUpperCase()+sentiment.slice(1);
+  const valueFor = (a,s) => s==='positive' ? a.pp : s==='mixed' ? a.mp : a.np;
+  const countFor = (a,s) => s==='positive' ? a.p : s==='mixed' ? a.x : a.n;
+
+  function sharedTip(el, first, second='') {
+    const tip = root.querySelector('#floating-tip');
+    if (!tip) return;
+    tip.innerHTML = `<span>${first}</span>${second?`<span class="tip-second">${second}</span>`:''}`;
+    tip.classList.add('show');
+
+    const rr = root.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    const tw = Math.min(250, tip.offsetWidth || 250);
+    const th = tip.offsetHeight || 48;
+
+    let left = er.left - rr.left + er.width/2 - tw/2;
+    left = Math.max(8,Math.min(left,rr.width-tw-8));
+    let top = er.top - rr.top - th - 8;
+    if (top < 8) top = er.bottom - rr.top + 8;
+
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  }
+
+  function hideTip(){
+    root.querySelector('#floating-tip')?.classList.remove('show');
+  }
+
+  function filterFromInsight(attrId,sentiment=null){
+    const card = root.querySelector(`.attr-card[data-attr="${attrId}"]`);
+    if (!card) return;
+
+    if (sentiment){
+      const seg = card.querySelector(`.segment[data-s="${sentiment}"]`);
+      if (seg){
+        seg.click();
+        return;
+      }
+    }
+    card.click();
+  }
+
+  /* -------------------------------------------------------
+     Sentiment ordering
+     ------------------------------------------------------- */
+  let orderSentiment = window.CipherAttributeViews?.getOrder?.() || 'positive';
+
+  function orderList(){
+    const base=['positive','mixed','negative'];
+    return [orderSentiment,...base.filter(s=>s!==orderSentiment)];
+  }
+
+  function reorderCardBars(){
+    const grid = root.querySelector('#attr-grid');
+    if (!grid) return;
+
+    const cards = [...grid.querySelectorAll('.attr-card[data-attr]')];
+    const byId = Object.fromEntries(attrs.map(a => [a.id,a]));
+
+    /* Chosen sentiment moves to the left within each card bar. */
+    cards.forEach(card => {
+      const bar = card.querySelector(':scope > .mt-3.flex.h-3');
+      if (!bar) return;
+
+      const order = orderList();
+      [...bar.querySelectorAll('.segment[data-s]')].forEach(seg => {
+        seg.style.order = String(order.indexOf(seg.dataset.s));
+      });
+    });
+
+    /* Cards themselves reorder DESCENDING by the chosen sentiment. */
+    cards
+      .sort((ca,cb) => {
+        const a = byId[ca.dataset.attr];
+        const b = byId[cb.dataset.attr];
+        return valueFor(b,orderSentiment) - valueFor(a,orderSentiment) || a.name.localeCompare(b.name);
+      })
+      .forEach(card => grid.appendChild(card));
+  }
+
+  function syncOrderButtons(){
+    section.querySelectorAll('[data-order-sentiment]').forEach(btn => {
+      const active = btn.dataset.orderSentiment === orderSentiment;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',active?'true':'false');
+    });
+  }
+
+  section.querySelectorAll('[data-order-sentiment]').forEach(btn => {
+    btn.addEventListener('click',() => {
+      orderSentiment = btn.dataset.orderSentiment;
+      syncOrderButtons();
+      reorderCardBars();
+      window.CipherAttributeViews?.setOrder?.(orderSentiment);
+
+      /*
+        Main Order by determines Radar attribute order and which radar
+        is prominent when the All radar view is selected.
+      */
+      drawHeatmap();
+      if (radarView && !radarView.hidden) drawRadar(true);
+    });
+  });
+
+  reorderCardBars();
+  syncOrderButtons();
+
+  section.querySelectorAll('[data-order-sentiment]').forEach(btn => {
+    const showSortTip = () => {
+      const sentiment = sname(btn.dataset.orderSentiment);
+      sharedTip(
+        btn,
+        `${sentiment} sorting`,
+        `Cards, Heatmap and Radar: highest ${sentiment.toLowerCase()} % first. Stacked bar: highest ${sentiment.toLowerCase()} review count first.`
+      );
+    };
+
+    btn.addEventListener('mouseenter',showSortTip);
+    btn.addEventListener('mouseleave',hideTip);
+    btn.addEventListener('focus',showSortTip);
+    btn.addEventListener('blur',hideTip);
+  });
+
+  /* -------------------------------------------------------
+     Radar
+     ------------------------------------------------------- */
+  const radar = document.getElementById('attribute-radar-chart');
+  const radarView = document.getElementById('attr-radar-view');
+  let radarType = 'all';
+
+  function svgEl(name,attrs={}){
+    const el=document.createElementNS(NS,name);
+    Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,String(v)));
+    return el;
+  }
+
+  function drawRadar(refresh=false){
+    if (!radar) return;
+
+    const W=900,H=470;
+    const cx=450,cy=245;
+    const radius=155;
+    const labelRadius=194;
+
+    /*
+      Radar attributes are arranged AROUND THE CIRCLE by the selected
+      Order-by sentiment percentage, highest percentage first.
+    */
+    const radarAttrs=[...attrs].sort((a,b)=>
+      valueFor(b,orderSentiment)-valueFor(a,orderSentiment)
+      || a.name.localeCompare(b.name)
+    );
+
+    const n=radarAttrs.length;
+    const angleAt=i => -Math.PI/2 + i*(Math.PI*2/n);
+    const point=(r,i)=>[
+      cx+Math.cos(angleAt(i))*r,
+      cy+Math.sin(angleAt(i))*r
+    ];
+
+    radar.innerHTML='';
+
+    [20,40,60,80,100].forEach(level=>{
+      const pts=radarAttrs.map((_,i)=>point(radius*(level/100),i).join(',')).join(' ');
+      radar.appendChild(svgEl('polygon',{points:pts,class:'radar-ring'}));
+    });
+
+    radarAttrs.forEach((_,i)=>{
+      const [x,y]=point(radius,i);
+      radar.appendChild(svgEl('line',{x1:cx,y1:cy,x2:x,y2:y,class:'radar-axis'}));
+    });
+
+    const dataGroup=svgEl('g',{
+      class:`radar-data-group ${refresh ? 'radar-refresh' : 'radar-load'}`
+    });
+
+    const sentimentsToDraw =
+      radarType === 'all'
+        ? ['positive','mixed','negative']
+        : [radarType];
+
+    sentimentsToDraw.forEach(sentiment => {
+      const isProminent =
+        radarType !== 'all' || sentiment === orderSentiment;
+
+      const polyPoints=radarAttrs.map((a,i)=>{
+        const value=valueFor(a,sentiment);
+        return point(radius*(value/100),i).join(',');
+      }).join(' ');
+
+      const poly=svgEl('polygon',{
+        points:polyPoints,
+        class:'radar-polygon',
+        fill:color(sentiment),
+        'fill-opacity':radarType === 'all'
+          ? (isProminent ? '.13' : '.025')
+          : '.14',
+        stroke:color(sentiment),
+        'stroke-width':isProminent ? 3.2 : 1.5,
+        'stroke-opacity':isProminent ? 1 : .34
+      });
+      dataGroup.appendChild(poly);
+
+      radarAttrs.forEach((a,i)=>{
+        const value=valueFor(a,sentiment);
+        const [x,y]=point(radius*(value/100),i);
+
+        const dot=svgEl('circle',{
+          cx:x,cy:y,
+          r:isProminent ? 4.4 : 2.8,
+          class:'radar-point',
+          fill:'#F8FBFC',
+          stroke:color(sentiment),
+          'stroke-width':isProminent ? 2.2 : 1.3,
+          'stroke-opacity':isProminent ? 1 : .38,
+          tabindex:0
+        });
+
+        dot.addEventListener('mouseenter',()=>sharedTip(
+          dot,
+          `${a.name} · ${value}% ${sentiment}`,
+          `${countFor(a,sentiment)} reviews`
+        ));
+        dot.addEventListener('mouseleave',hideTip);
+        dot.addEventListener('focus',()=>sharedTip(
+          dot,
+          `${a.name} · ${value}% ${sentiment}`,
+          `${countFor(a,sentiment)} reviews`
+        ));
+        dot.addEventListener('blur',hideTip);
+        dot.addEventListener('click',()=>filterFromInsight(a.id,sentiment));
+        dataGroup.appendChild(dot);
+      });
+    });
+
+    radar.appendChild(dataGroup);
+
+    radarAttrs.forEach((a,i)=>{
+      const [x,y]=point(labelRadius,i);
+      const icon=svgEl('text',{
+        x,y:y+5,
+        'text-anchor':'middle',
+        class:'radar-icon',
+        tabindex:0
+      });
+      icon.textContent=a.icon;
+
+      const detail =
+        radarType === 'all'
+          ? `Positive ${a.pp}% · Mixed ${a.mp}% · Negative ${a.np}%`
+          : `${valueFor(a,radarType)}% ${radarType}`;
+
+      icon.addEventListener('mouseenter',()=>sharedTip(icon,a.name,detail));
+      icon.addEventListener('mouseleave',hideTip);
+      icon.addEventListener('focus',()=>sharedTip(icon,a.name,detail));
+      icon.addEventListener('blur',hideTip);
+      icon.addEventListener('click',()=>filterFromInsight(a.id,null));
+      radar.appendChild(icon);
+    });
+  }
+
+  section.querySelectorAll('[data-radar-type]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      radarType=btn.dataset.radarType;
+
+      section.querySelectorAll('[data-radar-type]').forEach(item=>{
+        const active=item===btn;
+        item.classList.toggle('active',active);
+        item.setAttribute('aria-pressed',active?'true':'false');
+      });
+
+      drawRadar(true);
+    });
+  });
+
+  /* -------------------------------------------------------
+     Heatmap
+     ------------------------------------------------------- */
+  const heatmap=document.getElementById('attribute-heatmap');
+
+  function animateHeatmapNumber(cell,target){
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced){
+      cell.textContent = `${target}%`;
+      return;
+    }
+
+    const duration = 280;
+    const start = performance.now();
+
+    function frame(now){
+      const t = Math.min(1,(now-start)/duration);
+      const eased = 1-Math.pow(1-t,3);
+      cell.textContent = `${Math.round(target*eased)}%`;
+      if (t < 1) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  function heatmapBackground(sentiment,value){
+    const strength=Math.max(0,Math.min(100,value));
+    return `color-mix(in srgb, ${color(sentiment)} ${strength}%, transparent)`;
+  }
+
+  function drawHeatmap(){
+    if (!heatmap) return;
+
+    const ordered=[...attrs].sort((a,b)=>{
+      const d=valueFor(b,orderSentiment)-valueFor(a,orderSentiment);
+      return d || a.name.localeCompare(b.name);
+    });
+
+    heatmap.classList.remove('heatmap-load');
+    heatmap.innerHTML='';
+
+    const heads=['Attribute','POS','MIX','NEG'];
+    heads.forEach(label=>{
+      const div=document.createElement('div');
+      div.className='heatmap-head';
+      div.setAttribute('role','columnheader');
+      div.textContent=label;
+      heatmap.appendChild(div);
+    });
+
+    ordered.forEach(a=>{
+      const attrBtn=document.createElement('button');
+      attrBtn.type='button';
+      attrBtn.className='heatmap-attr';
+      attrBtn.setAttribute('role','rowheader');
+      attrBtn.innerHTML=`<span class="heatmap-icon">${a.icon}</span><span class="heatmap-name">${a.name}</span>`;
+      attrBtn.addEventListener('mouseenter',()=>sharedTip(
+        attrBtn,
+        a.name,
+        `${a.m} reviews`
+      ));
+      attrBtn.addEventListener('mouseleave',hideTip);
+      attrBtn.addEventListener('click',()=>filterFromInsight(a.id,null));
+      heatmap.appendChild(attrBtn);
+
+      ['positive','mixed','negative'].forEach(sentiment=>{
+        const value=valueFor(a,sentiment);
+        const count=countFor(a,sentiment);
+        const cell=document.createElement('button');
+        cell.type='button';
+        cell.className='heatmap-cell';
+        cell.dataset.attr=a.id;
+        cell.dataset.sentiment=sentiment;
+        cell.textContent='0%';
+        /* Heatmap colour strength maps directly to the percentage value:
+           0% = transparent, 50% = 50% sentiment colour, 100% = full colour. */
+        cell.style.background=heatmapBackground(sentiment,value);
+        cell.style.opacity='1';
+        cell.style.color=value>=55?'#FFFFFF':'#3E4548';
+
+        const sourceSeg=root.querySelector(`.attr-card[data-attr="${a.id}"] .segment[data-s="${sentiment}"]`);
+        if (sourceSeg?.classList.contains('selected-segment')) cell.classList.add('selected');
+
+        cell.addEventListener('mouseenter',()=>sharedTip(
+          cell,
+          `${a.name} · ${sname(sentiment)} ${value}%`,
+          `${count} reviews`
+        ));
+        cell.addEventListener('mouseleave',hideTip);
+        cell.addEventListener('click',()=>filterFromInsight(a.id,sentiment));
+        heatmap.appendChild(cell);
+        animateHeatmapNumber(cell,value);
+      });
+    });
+
+    heatmap.classList.remove('heatmap-load');
+    void heatmap.offsetWidth;
+    heatmap.classList.add('heatmap-load');
+  }
+
+  /* Redraw heatmap selection if filtering changes. */
+  root.querySelectorAll('.attr-card,.filter-icon,.sent-filter,#clear-filters').forEach(el=>{
+    el.addEventListener('click',()=>{
+      requestAnimationFrame(()=>{
+        if (document.getElementById('attr-heatmap-view')?.hidden===false) drawHeatmap();
+      });
+    });
+  });
+
+  window.CipherAttributeViews = window.CipherAttributeViews || {};
+  window.CipherAttributeViews.drawRadar=drawRadar;
+  window.CipherAttributeViews.drawHeatmap=drawHeatmap;
+
+  drawRadar();
+  drawHeatmap();
+})();
+</script>
+
+</body>
+</html>
