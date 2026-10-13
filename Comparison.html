@@ -1241,7 +1241,7 @@ body{
 
     <div class="cipher-compare-links" aria-label="Primary navigation">
       <a href="#" class="selected" data-compare-nav="discover">Discover</a>
-      <a href="#" data-compare-nav="collections">Collections</a>
+      <a href="Collection.html" data-compare-nav="collections">Collections</a>
       <a href="#" data-compare-nav="activities">Activities</a>
     </div>
 
@@ -1359,6 +1359,8 @@ render();
 
   document.querySelectorAll('[data-compare-nav]').forEach(link => {
     link.addEventListener('click', event => {
+      const href = link.getAttribute('href') || '';
+      if (href && !href.startsWith('#')) return;
       event.preventDefault();
 
       const target = link.dataset.compareNav;

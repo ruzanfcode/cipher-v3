@@ -3899,7 +3899,7 @@ body{
 
     <div class="cipher-detail-links" aria-label="Primary navigation">
       <a href="#" class="selected" data-detail-nav="discover">Discover</a>
-      <a href="#" data-detail-nav="collections">Collections</a>
+      <a href="Collection.html" data-detail-nav="collections">Collections</a>
       <a href="#" data-detail-nav="activities">Activities</a>
     </div>
 
@@ -4213,6 +4213,8 @@ const grid=root.querySelector('#attr-grid');attrs.forEach(a=>{const top=[['posit
 
   document.querySelectorAll('[data-detail-nav]').forEach(link => {
     link.addEventListener('click', event => {
+      const href = link.getAttribute('href') || '';
+      if (href && !href.startsWith('#')) return;
       event.preventDefault();
 
       const target = link.dataset.detailNav;

@@ -4522,9 +4522,9 @@ select{
       <img class="cipher-logo" src="cipher-logo.png" alt="Cipher" />
     </a>
     <div class="links">
-      <a href="#" class="nav-choice selected" data-nav="discover">Discover</a>
-      <a href="#" class="nav-choice" data-nav="collections">Collections</a>
-      <a href="#" class="nav-choice" data-nav="activities">Activities</a>
+      <a href="#discover" class="nav-choice selected" data-nav="discover">Discover</a>
+      <a href="Collection.html" class="nav-choice" data-nav="collections">Collections</a>
+      <a href="#activities" class="nav-choice" data-nav="activities">Activities</a>
     </div>
   </div>
 </nav>
@@ -5212,6 +5212,8 @@ document.querySelectorAll('.pill[data-brand]').forEach(btn=>{
    They intentionally do not scroll, navigate, or change page sections. */
 document.querySelectorAll('.nav-choice').forEach(link=>{
   link.addEventListener('click',event=>{
+    const href=link.getAttribute('href')||'';
+    if(href && !href.startsWith('#')) return;
     event.preventDefault();
 
     document.querySelectorAll('.nav-choice').forEach(item=>{

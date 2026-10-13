@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cipher Collections</title>
+<meta name="description" content="Browse garment sentiment collections and product listings in Cipher." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:GRAD,opsz,ROND,wdth,wght@0..100,6..144,0..100,25..151,1..1000&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cipher-bg:#F2F2F2;
+  --cipher-surface:#F8FBFC;
+  --cipher-blue:#D0E5F2;
+  --cipher-blue-soft:#D0ECF2;
+  --cipher-accent:#79BDD9;
+  --cipher-ink:#171717;
+  --cipher-muted:#62676A;
+  --cipher-line:rgba(24,24,24,.11);
+  --cipher-ease:cubic-bezier(.2,.75,.2,1);
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--cipher-ink);
+  background:
+    radial-gradient(circle at 10% 5%,rgba(208,236,242,.26),transparent 27%),
+    radial-gradient(circle at 92% 12%,rgba(208,229,242,.31),transparent 28%),
+    radial-gradient(circle at 48% 100%,rgba(208,236,242,.15),transparent 32%),
+    var(--cipher-bg);
+  font-family:"Google Sans Flex",Arial,sans-serif;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.shell{width:min(calc(100% - 48px),var(--max));margin-inline:auto}
+.serif{font-family:"Google Sans Flex",Arial,sans-serif;letter-spacing:-.04em}
+
+.cipher-collection-nav-shell{
+  position:sticky;
+  top:16px;
+  z-index:50;
+  padding-top:16px;
+}
+.cipher-collection-nav{
+  position:relative;
+  overflow:hidden;
+  min-height:58px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:18px;
+  padding:8px 10px 8px 14px;
+  border:1px solid rgba(255,255,255,.52);
+  border-radius:999px;
+  background:rgba(208,229,242,.37);
+  -webkit-backdrop-filter:blur(26px) saturate(118%);
+  backdrop-filter:blur(26px) saturate(118%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.76),inset 0 -1px 0 rgba(106,132,145,.08),0 12px 34px rgba(39,55,64,.055);
+}
+.cipher-collection-nav::before{
+  content:"";
+  position:absolute;
+  left:3px;
+  right:3px;
+  top:2px;
+  height:42%;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+}
+.cipher-collection-nav > *{position:relative;z-index:1}
+.cipher-brand{
+  justify-self:start;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  min-height:38px;
+  padding:0 9px 0 5px;
+}
+.cipher-mark{
+  width:30px;
+  height:30px;
+  border-radius:9px;
+  background:#171717;
+  position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.cipher-mark::before,
+.cipher-mark::after{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  height:2px;
+  border-radius:999px;
+  background:#fff;
+}
+.cipher-mark::before{top:10px}
+.cipher-mark::after{top:17px}
+.cipher-wordmark{font-size:15px;font-weight:760;letter-spacing:-.025em}
+.cipher-links{justify-self:center;display:flex;align-items:center;gap:52px}
+.cipher-links a{
+  position:relative;
+  color:#525252;
+  font-size:12px;
+  font-weight:620;
+  padding:8px 2px 11px;
+  transition:color .22s ease,transform .22s ease,font-weight .22s ease;
+}
+.cipher-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:#111;
+  transform:scaleX(0);
+  transform-origin:center;
+  opacity:0;
+  transition:transform .24s var(--cipher-ease),opacity .2s ease;
+}
+.cipher-links a:hover,
+.cipher-links a:focus-visible{color:#171717;transform:translateY(-1px);outline:none}
+.cipher-links a:hover::after,
+.cipher-links a:focus-visible::after{transform:scaleX(1);opacity:.58}
+.cipher-links a.selected{color:#000;font-weight:780}
+.cipher-links a.selected::after{transform:scaleX(1);opacity:1}
+.cipher-action{
+  justify-self:end;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+  border-radius:999px;
+  background:#171717;
+  color:#fff;
+  font-size:13px;
+  font-weight:720;
+  box-shadow:0 10px 24px rgba(24,24,24,.11),inset 0 1px 0 rgba(255,255,255,.11);
+  transition:transform .24s var(--cipher-ease),background .24s ease,box-shadow .24s ease;
+}
+.cipher-action:hover{transform:translateY(-2px);background:#252A2D;box-shadow:0 15px 30px rgba(24,24,24,.15),inset 0 1px 0 rgba(255,255,255,.13)}
+
+.collection-hero{padding:54px 0 28px}
+.hero-panel{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--cipher-line);
+  border-radius:34px;
+  padding:44px;
+  background:rgba(255,255,255,.58);
+  box-shadow:0 24px 70px rgba(39,55,64,.07),inset 0 1px 0 rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.hero-panel::before,
+.hero-panel::after{
+  content:"";
+  position:absolute;
+  border-radius:999px;
+  pointer-events:none;
+  filter:blur(30px);
+}
+.hero-panel::before{width:280px;height:280px;right:-86px;top:-118px;background:rgba(208,236,242,.55)}
+.hero-panel::after{width:220px;height:220px;left:46%;bottom:-126px;background:rgba(208,229,242,.42)}
+.hero-content{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.56fr);gap:34px;align-items:end}
+.eyebrow{margin:0 0 14px;color:#62676A;font-size:11px;font-weight:820;letter-spacing:.22em;text-transform:uppercase}
+h1{margin:0;font-size:clamp(48px,6vw,86px);line-height:.9;font-weight:470;letter-spacing:-.06em}
+.hero-copy{margin:22px 0 0;max-width:650px;color:#444;font-size:clamp(16px,1.35vw,20px);line-height:1.5;font-weight:500}
+.collection-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{
+  min-height:104px;
+  border:1px solid rgba(24,24,24,.09);
+  border-radius:22px;
+  padding:16px;
+  background:rgba(248,251,252,.70);
+  box-shadow:0 8px 22px rgba(39,55,64,.035);
+}
+.stat b{display:block;font-size:clamp(28px,3vw,44px);line-height:.95;letter-spacing:-.05em;font-weight:520}
+.stat span{display:block;margin-top:9px;color:#62676A;font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:760}
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:14px auto 20px;
+}
+.filter-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.filter-tabs a,
+.sort-pill{
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  padding:0 13px;
+  border:1px solid var(--cipher-line);
+  border-radius:999px;
+  background:rgba(255,255,255,.58);
+  color:#4F4F4F;
+  font-size:12px;
+  font-weight:720;
+}
+.filter-tabs a.selected{background:#171717;color:#fff;border-color:#171717}
+
+.products{padding:0 0 74px}
+.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.product-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--cipher-line);
+  border-radius:26px;
+  background:rgba(248,251,252,.76);
+  box-shadow:0 12px 34px rgba(39,55,64,.045);
+  transition:transform .28s var(--cipher-ease),box-shadow .28s ease,border-color .28s ease,background .28s ease;
+}
+.product-card:hover,
+.product-card:focus-visible{transform:translateY(-7px);border-color:rgba(24,24,24,.19);background:#FBFDFE;box-shadow:0 24px 58px rgba(39,55,64,.11);outline:none}
+.photo{position:relative;aspect-ratio:4/3.45;overflow:hidden;background:var(--cipher-blue)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.01);transition:transform .65s var(--cipher-ease)}
+.product-card:hover .photo img{transform:scale(1.06)}
+.tag{
+  position:absolute;
+  top:12px;
+  right:12px;
+  min-height:28px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.78);
+  color:#171717;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+.product-body{padding:20px}
+.meta{display:flex;justify-content:space-between;gap:12px;color:#7A7F82;font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:800}
+.product-body h2{margin:12px 0 17px;font-size:20px;line-height:1.14;letter-spacing:-.035em;font-weight:640;min-height:46px}
+.product-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sentiment{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 10px;background:var(--cipher-blue-soft);color:#31424A;font-weight:750;font-size:12px}
+.sentiment::before{content:"";width:7px;height:7px;border-radius:50%;background:#4F806A}
+.reviews{color:#868686;font-size:12px;white-space:nowrap}
+.compare-strip{
+  margin-top:18px;
+  border:1px solid var(--cipher-line);
+  border-radius:24px;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  background:rgba(208,229,242,.32);
+}
+.compare-strip strong{font-size:17px;letter-spacing:-.02em}
+.compare-strip span{display:block;margin-top:3px;color:#62676A;font-size:13px}
+.compare-link{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 15px;border-radius:999px;background:#171717;color:#fff;font-size:12px;font-weight:760}
+footer{padding:0 0 44px;color:#737373;font-size:13px}
+
+@media(max-width:1020px){
+  .hero-content{grid-template-columns:1fr}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .shell{width:min(calc(100% - 28px),var(--max))}
+  .cipher-collection-nav-shell{top:10px;padding-top:10px}
+  .cipher-collection-nav{grid-template-columns:1fr auto;padding-left:14px}
+  .cipher-links{display:none}
+  .cipher-action{font-size:12px;padding-inline:13px}
+  .collection-hero{padding-top:34px}
+  .hero-panel{border-radius:28px;padding:28px 18px}
+  .collection-stats{grid-template-columns:1fr 1fr}
+  .toolbar{align-items:flex-start}
+  .product-grid{grid-template-columns:1fr}
+  .photo{aspect-ratio:5/3.35}
+  .compare-strip{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<nav class="cipher-collection-nav-shell shell" aria-label="Cipher navigation">
+  <div class="cipher-collection-nav">
+    <a class="cipher-brand" href="Option 02 - Homepage.html" aria-label="Cipher home">
+      <span class="cipher-mark" aria-hidden="true"></span>
+      <span class="cipher-wordmark">Cipher</span>
+    </a>
+
+    <div class="cipher-links" aria-label="Primary navigation">
+      <a href="Option 02 - Homepage.html#discover">Discover</a>
+      <a href="Collection.html" class="selected">Collections</a>
+      <a href="Option 02 - Homepage.html#activities">Activities</a>
+    </div>
+
+    <a class="cipher-action" href="Option 02 - Homepage.html">Back to search</a>
+  </div>
+</nav>
+
+<main>
+  <section class="collection-hero shell">
+    <div class="hero-panel">
+      <div class="hero-content">
+        <div>
+          <p class="eyebrow">Collection overview</p>
+          <h1 class="serif">Garment sentiment collections</h1>
+          <p class="hero-copy">Browse product groups that are already analyzed across fit, comfort, material, quality and value signals.</p>
+        </div>
+        <div class="collection-stats" aria-label="Collection statistics">
+          <div class="stat"><b>128</b><span>Products</span></div>
+          <div class="stat"><b>42K</b><span>Reviews</span></div>
+          <div class="stat"><b>9</b><span>Brands</span></div>
+          <div class="stat"><b>84%</b><span>Positive</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="products shell" aria-label="Product listing">
+    <div class="toolbar">
+      <div class="filter-tabs" aria-label="Collection filters">
+        <a href="#" class="selected">All products</a>
+        <a href="#">Activewear</a>
+        <a href="#">Essentials</a>
+        <a href="#">Outerwear</a>
+      </div>
+      <div class="sort-pill">Sorted by recent analysis</div>
+    </div>
+
+    <div class="product-grid">
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://www.holabirdsports.com/cdn/shop/files/758406_dbc_2.jpg?v=1763388341&amp;width=1200" alt="Wilson Midtown Tennis Skirt" loading="lazy"><span class="tag">01</span></div>
+        <div class="product-body"><div class="meta"><span>Wilson</span><span>Skirt</span></div><h2>Midtown Tennis Skirt</h2><div class="product-foot"><span class="sentiment">Positive</span><span class="reviews">812 reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1595885274237-038dc6b1504e?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Black high-rise leggings" loading="lazy"><span class="tag">02</span></div>
+        <div class="product-body"><div class="meta"><span>Lululemon</span><span>Legging</span></div><h2>Align High-Rise Pant</h2><div class="product-foot"><span class="sentiment">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1616279968481-f8717a710ef6?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Black athletic leggings" loading="lazy"><span class="tag">03</span></div>
+        <div class="product-body"><div class="meta"><span>Nike</span><span>Legging</span></div><h2>Dri-FIT High-Waist Running Legging</h2><div class="product-foot"><span class="sentiment">Positive</span><span class="reviews">500+ reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1578932750355-5eb30ece487a?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="White cotton crew neck t-shirt" loading="lazy"><span class="tag">04</span></div>
+        <div class="product-body"><div class="meta"><span>Uniqlo</span><span>T-Shirt</span></div><h2>AIRism Cotton Crew Neck T-Shirt</h2><div class="product-foot"><span class="sentiment">Mostly Positive</span><span class="reviews">500+ reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Grey pullover hoodie" loading="lazy"><span class="tag">05</span></div>
+        <div class="product-body"><div class="meta"><span>Champion</span><span>Hoodie</span></div><h2>Reverse Weave Pullover Hoodie</h2><div class="product-foot"><span class="sentiment">Positive</span><span class="reviews">420 reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Training leggings in studio" loading="lazy"><span class="tag">06</span></div>
+        <div class="product-body"><div class="meta"><span>Adidas</span><span>Training</span></div><h2>Optime Training Legging</h2><div class="product-foot"><span class="sentiment">Positive</span><span class="reviews">386 reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Yoga apparel on mat" loading="lazy"><span class="tag">07</span></div>
+        <div class="product-body"><div class="meta"><span>Alo</span><span>Yoga</span></div><h2>Airlift High-Waist Legging</h2><div class="product-foot"><span class="sentiment">Mostly Positive</span><span class="reviews">312 reviews</span></div></div>
+      </a>
+
+      <a class="product-card" href="Sigle product.html">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Black sports apparel flatlay" loading="lazy"><span class="tag">08</span></div>
+        <div class="product-body"><div class="meta"><span>Gymshark</span><span>Seamless</span></div><h2>Vital Seamless 2.0 Legging</h2><div class="product-foot"><span class="sentiment">Mixed Positive</span><span class="reviews">284 reviews</span></div></div>
+      </a>
+    </div>
+
+    <div class="compare-strip">
+      <div><strong>Compare this collection</strong><span>Review the selected products side by side across sentiment attributes.</span></div>
+      <a class="compare-link" href="Comparison.html">Open comparison</a>
+    </div>
+  </section>
+</main>
+
+<footer class="shell">Cipher collection prototype</footer>
+</body>
+</html>
